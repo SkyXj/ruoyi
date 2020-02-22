@@ -3,6 +3,7 @@ package com.ruoyi.project.system.controller;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,7 +43,7 @@ public class SysLoginController
      * 
      * @param username 用户名
      * @param password 密码
-     * @param captcha 验证码
+     * @param code 验证码
      * @param uuid 唯一标识
      * @return 结果
      */
@@ -90,5 +91,12 @@ public class SysLoginController
         SysUser user = loginUser.getUser();
         List<SysMenu> menus = menuService.selectMenuTreeByUserId(user.getUserId());
         return AjaxResult.success(menuService.buildMenus(menus));
+    }
+
+    @GetMapping("test")
+    public AjaxResult test(){
+        AjaxResult ajax = AjaxResult.success();
+        ajax.put("data", "test");
+        return ajax;
     }
 }

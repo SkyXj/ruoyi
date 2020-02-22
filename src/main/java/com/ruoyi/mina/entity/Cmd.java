@@ -1,17 +1,17 @@
 package com.ruoyi.mina.entity;
 
 public enum Cmd {
-    GetMethod("获取方法", 2,(byte)2),
-    StartCollect("开始采集", 4,(byte)4),
-    MIC_Collect("返回开始采集MIC数据", 5,(byte)5),
-    StopCollect("停止采集", 6,(byte)6),
-    StartGps("开始gps", 13,(byte)13),
-    StopGps("停止gps", 14,(byte)14),
-    StartWeather("开始获取天气", 15,(byte)15),
-    StopWeather("停止获取天气", 16,(byte)16),
-    StartCorrect("开始校正", 22,(byte)22),
-    StartCorrectStatus("校正状态", 23,(byte)23),
-    GetWeather("天气数据", 26,(byte)26);
+    GetMethod("获取方法", 0x2,(byte)0x2),
+    StartCollect("开始采集", 0x4,(byte)0x4),
+    MIC_Collect("返回开始采集MIC数据", 0x5,(byte)0x5),
+    StopCollect("停止采集", 0x6,(byte)0x6),
+    StartGps("开始gps", 0x13,(byte)0x13),
+    StopGps("停止gps", 0x14,(byte)0x14),
+    StartWeather("开始获取天气", 0x15,(byte)0x15),
+    StopWeather("停止获取天气", 0x16,(byte)0x16),
+    StartCorrect("开始校正", 0x22,(byte)0x22),
+    StartCorrectStatus("校正状态", 0x23,(byte)0x23),
+    GetWeather("天气数据", 0x26,(byte)0x26);
 
     private String name;
     private int value;

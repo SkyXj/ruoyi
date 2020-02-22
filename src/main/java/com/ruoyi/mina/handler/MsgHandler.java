@@ -4,7 +4,10 @@ import com.ruoyi.common.utils.ByteUtils;
 import com.ruoyi.mina.entity.Cmd;
 import com.ruoyi.mina.entity.Material;
 import com.ruoyi.mina.entity.Msg;
+import com.ruoyi.webSocket.WebSocketServer;
+import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
 
 //消息处理
@@ -24,7 +27,6 @@ public class MsgHandler {
         msg.setCmd(cmd[0]);
         msg.setDataLen(datalength);
         byte[] msgbody=ByteUtils.subByte(bytes,16,datalength);
-
         //开始采集
         if(cmd[0]== Cmd.StartCollect.getValue()){
             msg.setBytes(msgbody);
@@ -61,6 +63,7 @@ public class MsgHandler {
         }else if(cmd[0]== Cmd.GetMethod.getCmd()){
             System.out.println("获取方法");
         }else if(cmd[0]== Cmd.StartGps.getCmd()){
+            String gpsinfo=new String(ByteUtils.subByte(msgbody,17,datalength-17));
             System.out.println("开始获取GPS状态");
         }else if(cmd[0]== Cmd.StopGps.getCmd()){
             System.out.println("GPS停止状态");
@@ -91,10 +94,18 @@ public class MsgHandler {
     public static void startCollect(Msg msg){
         byte[] bytes = msg.getBytes();
         byte status=bytes[0];
+        String message="";
         if(status==1){
             System.out.println("开始采集成功");
+            message="开始采集成功";
         }else{
             System.out.println("开始采集失败");
+            message="开始采集失败";
+        }
+        try {
+            WebSocketServer.sendInfo(message,null);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

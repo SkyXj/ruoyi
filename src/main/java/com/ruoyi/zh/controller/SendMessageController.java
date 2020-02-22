@@ -1,5 +1,6 @@
 package com.ruoyi.zh.controller;
 
+import com.ruoyi.framework.web.domain.AjaxResult;
 import com.ruoyi.mina.config.SessionManage;
 import com.ruoyi.mina.entity.Cmd;
 import com.ruoyi.mina.entity.Msg;
@@ -15,18 +16,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/send")
+@RequestMapping("send")
 @Api(tags = "发送消息")
 public class SendMessageController {
 //    @GetMapping("/test")
 //    public void test(@RequestParam(name="msg") String msg){
 //        SessionManage.sendMsg(msg);
 //    }
-
-//    @PreAuthorize("@ss.hasPermi('config:global:index')")
-    @GetMapping("/start")
+    @GetMapping("start")
     @ApiOperation("开始 4")
-    public void start(){
+    public AjaxResult start(){
         Msg msg=new Msg();
         //经纬度
         msg.setBody("");
@@ -38,6 +37,9 @@ public class SendMessageController {
         byte[] lat_bytes=new byte[10];
         msg.setBytes(ByteUtils.concat(lng_bytes,lat_bytes));
         SessionManage.sendMsg(msg);
+
+        AjaxResult ajax = AjaxResult.success();
+        return ajax;
     }
 
     @GetMapping("/stop")
