@@ -2,6 +2,7 @@ package com.ruoyi.mina.entity;
 
 public enum Cmd {
     GetMethod("获取方法", 0x2,(byte)0x2),
+    SetMethod("设置方法", 0x4,(byte)0x4),
     StartCollect("开始采集", 0x4,(byte)0x4),
     MIC_Collect("返回开始采集MIC数据", 0x5,(byte)0x5),
     StopCollect("停止采集", 0x6,(byte)0x6),
@@ -11,6 +12,8 @@ public enum Cmd {
     StopWeather("停止获取天气", 0x16,(byte)0x16),
     StartCorrect("开始校正", 0x22,(byte)0x22),
     StartCorrectStatus("校正状态", 0x23,(byte)0x23),
+    StopCorrect("停止校正", 0x24,(byte)0x24),
+    StopCorrectStatus("停止校正状态", 0x25,(byte)0x24),
     GetWeather("天气数据", 0x26,(byte)0x26);
 
     private String name;

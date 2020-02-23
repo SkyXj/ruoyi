@@ -4,7 +4,6 @@ import com.ruoyi.framework.web.domain.AjaxResult;
 import com.ruoyi.mina.config.SessionManage;
 import com.ruoyi.mina.entity.Cmd;
 import com.ruoyi.mina.entity.Msg;
-import com.sun.xml.internal.ws.resources.SenderMessages;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.mina.core.session.IoSession;
@@ -20,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "发送消息")
 public class SendMessageController {
 //    @GetMapping("/test")
-//    public void test(@RequestParam(name="msg") String msg){
+//    public AjaxResult test(@RequestParam(name="msg") String msg){
 //        SessionManage.sendMsg(msg);
 //    }
     @GetMapping("start")
@@ -44,57 +43,71 @@ public class SendMessageController {
 
     @GetMapping("/stop")
     @ApiOperation("停止6")
-    public void stop(){
+    public AjaxResult stop(){
         Msg msg=new Msg();
         msg.setBody("");
         msg.setCmd((byte)6);
         msg.setMagic("SPIMS");
         msg.setBytes(null);
         SessionManage.sendMsg(msg);
+        AjaxResult ajax = AjaxResult.success();
+        return ajax;
     }
 
     @GetMapping("/startCorrect")
     @ApiOperation("开始校正22")
-    public void startCorrect(){
+    public AjaxResult startCorrect(){
         Msg msg=new Msg();
         msg.setBody("");
         msg.setCmd((byte)22);
         msg.setMagic("SPIMS");
         msg.setBytes(null);
         SessionManage.sendMsg(msg);
+
+        AjaxResult ajax = AjaxResult.success();
+        return ajax;
     }
 
     @GetMapping("/stopCorrect")
     @ApiOperation("停止校正22")
-    public void stopCorrect(){
+    public AjaxResult stopCorrect(){
         Msg msg=new Msg();
         msg.setBody("");
         msg.setCmd((byte)24);
         msg.setMagic("SPIMS");
         msg.setBytes(null);
         SessionManage.sendMsg(msg);
+
+        AjaxResult ajax = AjaxResult.success();
+        return ajax;
     }
 
     @GetMapping("/startWeather")
     @ApiOperation("开始获取天气")
-    public void startWeather(){
+    public AjaxResult startWeather(){
         Msg msg=new Msg();
         msg.setBody("");
         msg.setCmd((byte) Cmd.StartWeather.getCmd());
         msg.setMagic("SPIMS");
         msg.setBytes(null);
         SessionManage.sendMsg(msg);
+
+        AjaxResult ajax = AjaxResult.success();
+        return ajax;
     }
 
     @GetMapping("/stopWeather")
     @ApiOperation("停止获取天气")
-    public void stopWeather(){
+    public AjaxResult stopWeather(){
         Msg msg=new Msg();
         msg.setBody("");
         msg.setCmd((byte) Cmd.StopWeather.getCmd());
         msg.setMagic("SPIMS");
         msg.setBytes(null);
         SessionManage.sendMsg(msg);
+        
+        AjaxResult ajax = AjaxResult.success();
+        return ajax;
     }
 
 
@@ -102,35 +115,58 @@ public class SendMessageController {
 
     @GetMapping("/getMethod")
     @ApiOperation("获取方法")
-    public void getMethod(){
+    public AjaxResult getMethod(){
         Msg msg=new Msg();
         msg.setBody("");
         msg.setCmd((byte) Cmd.GetMethod.getCmd());
         msg.setMagic("SPIMS");
         msg.setBytes(null);
         SessionManage.sendMsg(msg);
+
+        AjaxResult ajax = AjaxResult.success();
+        return ajax;
+    }
+
+    @GetMapping("/setMethod")
+    @ApiOperation("设置方法")
+    public AjaxResult setMethod(@RequestParam(value = "name")String name){
+        Msg msg=new Msg();
+        msg.setBody("");
+        msg.setCmd((byte) Cmd.SetMethod.getCmd());
+        msg.setMagic("SPIMS");
+        msg.setBytes(name.getBytes());
+        SessionManage.sendMsg(msg);
+
+        AjaxResult ajax = AjaxResult.success();
+        return ajax;
     }
 
     @GetMapping("/startGps")
     @ApiOperation("获取Gps")
-    public void getGps(){
+    public AjaxResult getGps(){
         Msg msg=new Msg();
         msg.setBody("");
         msg.setCmd((byte) Cmd.StartGps.getCmd());
         msg.setMagic("SPIMS");
         msg.setBytes(null);
         SessionManage.sendMsg(msg);
+
+        AjaxResult ajax = AjaxResult.success();
+        return ajax;
     }
 
     @GetMapping("/stopGps")
     @ApiOperation("停止获取Gps")
-    public void stopGps(){
+    public AjaxResult stopGps(){
         Msg msg=new Msg();
         msg.setBody("");
         msg.setCmd((byte) Cmd.StopGps.getCmd());
         msg.setMagic("SPIMS");
         msg.setBytes(null);
         SessionManage.sendMsg(msg);
+        
+        AjaxResult ajax = AjaxResult.success();
+        return ajax;
     }
 
 }

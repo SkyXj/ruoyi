@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.zh.mapper.ZhDeviceMapper">
+    
+    <resultMap type="ZhDevice" id="ZhDeviceResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="code"    column="code"    />
+        <result property="company"    column="company"    />
+        <result property="address"    column="address"    />
+        <result property="img"    column="img"    />
+        <result property="status"    column="status"    />
+        <result property="correctStatus"    column="correct_status"    />
+        <result property="weatherStatus"    column="weather_status"    />
+        <result property="gpsStatus"    column="gps_status"    />
+        <result property="createdDate"    column="created_date"    />
+        <result property="updatedDate"    column="updated_date"    />
+    </resultMap>
+
+    <sql id="selectZhDeviceVo">
+        select id, name, code, company, address, img, status, correct_status, weather_status, gps_status, created_date, updated_date from zh_device
+    </sql>
+
+    <select id="selectZhDeviceList" parameterType="ZhDevice" resultMap="ZhDeviceResult">
+        <include refid="selectZhDeviceVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="code != null  and code != ''"> and code = #{code}</if>
+            <if test="company != null  and company != ''"> and company = #{company}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="img != null  and img != ''"> and img = #{img}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="correctStatus != null "> and correct_status = #{correctStatus}</if>
+            <if test="weatherStatus != null "> and weather_status = #{weatherStatus}</if>
+            <if test="gpsStatus != null "> and gps_status = #{gpsStatus}</if>
+            <if test="createdDate != null "> and created_date = #{createdDate}</if>
+            <if test="updatedDate != null "> and updated_date = #{updatedDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectZhDeviceById" parameterType="Long" resultMap="ZhDeviceResult">
+        <include refid="selectZhDeviceVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertZhDevice" parameterType="ZhDevice">
+        insert into zh_device
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
+            <if test="name != null  and name != ''">name,</if>
+            <if test="code != null  and code != ''">code,</if>
+            <if test="company != null  and company != ''">company,</if>
+            <if test="address != null  and address != ''">address,</if>
+            <if test="img != null  and img != ''">img,</if>
+            <if test="status != null ">status,</if>
+            <if test="correctStatus != null ">correct_status,</if>
+            <if test="weatherStatus != null ">weather_status,</if>
+            <if test="gpsStatus != null ">gps_status,</if>
+            <if test="createdDate != null ">created_date,</if>
+            <if test="updatedDate != null ">updated_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="code != null  and code != ''">#{code},</if>
+            <if test="company != null  and company != ''">#{company},</if>
+            <if test="address != null  and address != ''">#{address},</if>
+            <if test="img != null  and img != ''">#{img},</if>
+            <if test="status != null ">#{status},</if>
+            <if test="correctStatus != null ">#{correctStatus},</if>
+            <if test="weatherStatus != null ">#{weatherStatus},</if>
+            <if test="gpsStatus != null ">#{gpsStatus},</if>
+            <if test="createdDate != null ">#{createdDate},</if>
+            <if test="updatedDate != null ">#{updatedDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateZhDevice" parameterType="ZhDevice">
+        update zh_device
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="code != null  and code != ''">code = #{code},</if>
+            <if test="company != null  and company != ''">company = #{company},</if>
+            <if test="address != null  and address != ''">address = #{address},</if>
+            <if test="img != null  and img != ''">img = #{img},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="correctStatus != null ">correct_status = #{correctStatus},</if>
+            <if test="weatherStatus != null ">weather_status = #{weatherStatus},</if>
+            <if test="gpsStatus != null ">gps_status = #{gpsStatus},</if>
+            <if test="createdDate != null ">created_date = #{createdDate},</if>
+            <if test="updatedDate != null ">updated_date = #{updatedDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteZhDeviceById" parameterType="Long">
+        delete from zh_device where id = #{id}
+    </delete>
+
+    <delete id="deleteZhDeviceByIds" parameterType="String">
+        delete from zh_device where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
