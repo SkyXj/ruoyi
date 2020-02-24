@@ -5,6 +5,7 @@ import com.ruoyi.common.utils.ByteUtils;
 import com.ruoyi.framework.influxdb.BatchData;
 import com.ruoyi.framework.influxdb.InfluxdbUtils;
 import com.ruoyi.mina.DensityVo;
+import com.ruoyi.mina.DensityVo.KV;
 import com.ruoyi.mina.config.SessionManage;
 import com.ruoyi.mina.entity.Cmd;
 import com.ruoyi.mina.entity.Material;
@@ -26,6 +27,10 @@ public class MsgHandler {
     public static List<DensityVo> list;
 
     public static InfluxdbUtils influxdbUtils;
+
+    //经度和纬度
+    public static double lng;
+    public static double lat;
 
     @Autowired
     public  void setList(List<DensityVo> list)
@@ -70,10 +75,25 @@ public class MsgHandler {
             int materialLength=24+128;
             int count=(datalength-16)/(materialLength);
             List<BatchData> batchDatas=new ArrayList<>();
-
+            DensityVo densityVo=new DensityVo();
+            densityVo.setLng(MsgHandler.lng+"");
+            densityVo.setLat(MsgHandler.lat+"");
+            SimpleDateFormat sim=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss");
+            Date date=new Date(datetime);
+            densityVo.setTime(sim.format(date));
+            List<DensityVo.KV> values=new ArrayList<>();
             for (int i = 0; i < count; i++) {
+                DensityVo.KV kv=densityVo.new KV();
                 byte[] meterialBytes = ByteUtils.subByte(msgbody, 16 + i * materialLength, materialLength);
                 Material meterial=new Material(meterialBytes);
+                if(meterial.getSzMatName().equals("TVOC")){
+                    densityVo.setTvoc(meterial.getdPotencyUgm3());
+                }
+                kv.setName(meterial.getSzMatName());
+                kv.setValue(meterial.getdPotencyUgm3());
+
+                values.add(kv);
+
                 System.out.println(meterial.toString());
                 BatchData batchData=new BatchData();
                 Map<String, String> tags = new HashMap<>(5);
@@ -89,11 +109,15 @@ public class MsgHandler {
                 batchData.setTable("DensityRealtime");
                 batchDatas.add(batchData);
             }
+            densityVo.setValues(values);
             influxdbUtils.batchInsertAndTime(batchDatas);
             try {
                 if(count<list.size()){
+                    //模拟
                     WebSocketServer.sendInfo(JSONObject.toJSONString(list.get(index)),"2");
                     index++;
+                    //实际
+                    //WebSocketServer.sendInfo(JSONObject.toJSONString(densityVo),"2");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -137,8 +161,11 @@ public class MsgHandler {
 //                    long time=getGpsTime(split[2]);
                     //经度
                     double lng=Double.parseDouble(lngstr);
+                    MsgHandler.lng=lng;
+
                     //纬度
                     double lat=Double.parseDouble(latstr);
+                    MsgHandler.lat=lat;
 
                     Map<String, String> tags = new HashMap<>(5);
                     tags.put("code", "spims");

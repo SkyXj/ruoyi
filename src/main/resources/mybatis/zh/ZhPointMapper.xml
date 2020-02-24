@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.zh.mapper.ZhPointMapper">
+    
+    <resultMap type="ZhPoint" id="ZhPointResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="lng"    column="lng"    />
+        <result property="lat"    column="lat"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="updatedTime"    column="updated_time"    />
+    </resultMap>
+
+    <sql id="selectZhPointVo">
+        select id, name, lng, lat, created_time, updated_time from zh_point
+    </sql>
+
+    <select id="selectZhPointList" parameterType="ZhPoint" resultMap="ZhPointResult">
+        <include refid="selectZhPointVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="lng != null  and lng != ''"> and lng = #{lng}</if>
+            <if test="lat != null  and lat != ''"> and lat = #{lat}</if>
+            <if test="createdTime != null "> and created_time = #{createdTime}</if>
+            <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectZhPointById" parameterType="Long" resultMap="ZhPointResult">
+        <include refid="selectZhPointVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertZhPoint" parameterType="ZhPoint" useGeneratedKeys="true" keyProperty="id">
+        insert into zh_point
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">name,</if>
+            <if test="lng != null  and lng != ''">lng,</if>
+            <if test="lat != null  and lat != ''">lat,</if>
+            <if test="createdTime != null ">created_time,</if>
+            <if test="updatedTime != null ">updated_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="lng != null  and lng != ''">#{lng},</if>
+            <if test="lat != null  and lat != ''">#{lat},</if>
+            <if test="createdTime != null ">#{createdTime},</if>
+            <if test="updatedTime != null ">#{updatedTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateZhPoint" parameterType="ZhPoint">
+        update zh_point
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="lng != null  and lng != ''">lng = #{lng},</if>
+            <if test="lat != null  and lat != ''">lat = #{lat},</if>
+            <if test="createdTime != null ">created_time = #{createdTime},</if>
+            <if test="updatedTime != null ">updated_time = #{updatedTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteZhPointById" parameterType="Long">
+        delete from zh_point where id = #{id}
+    </delete>
+
+    <delete id="deleteZhPointByIds" parameterType="String">
+        delete from zh_point where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
