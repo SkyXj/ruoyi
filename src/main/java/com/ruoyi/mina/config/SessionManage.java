@@ -9,7 +9,7 @@ import java.util.Map;
 public class SessionManage {
     public static IoSession session;
 
-    public static Map<String,Boolean> statusMap=new HashMap<>();
+    public static Status status=new Status();
 
     public static void sendMsg(Msg msg){
         session.write(msg.get2MsgByte());

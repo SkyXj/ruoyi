@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.UnsupportedEncodingException;
+
 @RestController
 @RequestMapping("send")
 @Api(tags = "发送消息")
@@ -110,6 +112,20 @@ public class SendMessageController {
         return ajax;
     }
 
+    @GetMapping("/getWeather")
+    @ApiOperation("获取天气")
+    public AjaxResult getWeather(){
+        Msg msg=new Msg();
+        msg.setBody("");
+        msg.setCmd(Cmd.GetWeather.getCmd());
+        msg.setMagic("SPIMS");
+        msg.setBytes(null);
+        SessionManage.sendMsg(msg);
+
+        AjaxResult ajax = AjaxResult.success();
+        return ajax;
+    }
+
 
 
 
@@ -132,9 +148,13 @@ public class SendMessageController {
     public AjaxResult setMethod(@RequestParam(value = "name")String name){
         Msg msg=new Msg();
         msg.setBody("");
-        msg.setCmd((byte) Cmd.SetMethod.getCmd());
+        msg.setCmd(Cmd.SetMethod.getCmd());
         msg.setMagic("SPIMS");
-        msg.setBytes(name.getBytes());
+        try {
+            msg.setBytes(name.getBytes("GBK"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         SessionManage.sendMsg(msg);
 
         AjaxResult ajax = AjaxResult.success();
@@ -169,4 +189,10 @@ public class SendMessageController {
         return ajax;
     }
 
+    @GetMapping("getStatus")
+    @ApiOperation("获取状态")
+    public AjaxResult getStatus(){
+        AjaxResult ajax = AjaxResult.success(SessionManage.status);
+        return ajax;
+    }
 }

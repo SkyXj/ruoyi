@@ -4,6 +4,8 @@ import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 public class ByteUtils {
     /**
@@ -121,7 +123,9 @@ public class ByteUtils {
         return c;
     }
 
-    public static String getDate(byte[] b){
+    public static long getDate(byte[] b){
+
+        SimpleDateFormat sim=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss");
         short year = byte2short(subByte(b, 0, 2));
         short month = byte2short(subByte(b, 2, 2));
         short dayOfWeek = byte2short(subByte(b, 4, 2));
@@ -130,7 +134,13 @@ public class ByteUtils {
         short nMin = byte2short(subByte(b, 10, 2));
         short nSec = byte2short(subByte(b, 12, 2));
         short nMillSec = byte2short(subByte(b, 14, 2));
-        return ""+year+"-"+month+"-"+nDay+" "+nHour+":"+nMin+":"+nSec+":"+nMillSec;
+        String time=""+year+"-"+month+"-"+nDay+" "+nHour+":"+nMin+":"+nSec+"."+nMillSec;
+        try {
+            return sim.parse(time).getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return 0L;
     }
 
 }

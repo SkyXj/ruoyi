@@ -2,7 +2,7 @@ package com.ruoyi.mina.entity;
 
 public enum Cmd {
     GetMethod("获取方法", 0x2,(byte)0x2),
-    SetMethod("设置方法", 0x4,(byte)0x4),
+    SetMethod("设置方法", 0x3,(byte)0x3),
     StartCollect("开始采集", 0x4,(byte)0x4),
     MIC_Collect("返回开始采集MIC数据", 0x5,(byte)0x5),
     StopCollect("停止采集", 0x6,(byte)0x6),

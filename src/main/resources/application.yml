@@ -125,3 +125,11 @@ mina:
   client:
     port: 8089
     host: localhost
+
+influxdb:
+  username: root
+  password: 123456
+  host: localhost
+  port: 8086
+  database: SPIMS_Meas
+#  url: http://localhost:8086

@@ -2,7 +2,8 @@ package com.ruoyi.mina.handler;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ruoyi.common.utils.ByteUtils;
-import com.ruoyi.mina.DataInit;
+import com.ruoyi.framework.influxdb.BatchData;
+import com.ruoyi.framework.influxdb.InfluxdbUtils;
 import com.ruoyi.mina.DensityVo;
 import com.ruoyi.mina.config.SessionManage;
 import com.ruoyi.mina.entity.Cmd;
@@ -14,18 +15,30 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 //消息处理
 @Component
 public class MsgHandler {
 
-    private static List<DensityVo> list;
+    public static List<DensityVo> list;
+
+    public static InfluxdbUtils influxdbUtils;
 
     @Autowired
-    public  void setOssConfMapper(List<DensityVo> list) {
+    public  void setList(List<DensityVo> list)
+    {
         MsgHandler.list = list;
     }
+
+    @Autowired
+//    @Qualifier(value = "influxdbUtils")
+    public void setInfluxdbUtils(InfluxdbUtils influxdbUtils){
+        MsgHandler.influxdbUtils=influxdbUtils;
+    }
+
     private static Integer index=0;
 
     public static void dealWith(Object message){
@@ -52,16 +65,31 @@ public class MsgHandler {
             System.out.println("接收5命令");
             //时间
             byte[] times=ByteUtils.subByte(msgbody,0,16);
-            String date = ByteUtils.getDate(times);
-            System.out.println(date);
+            long datetime = ByteUtils.getDate(times);
             //物质浓度
             int materialLength=24+128;
             int count=(datalength-16)/(materialLength);
+            List<BatchData> batchDatas=new ArrayList<>();
+
             for (int i = 0; i < count; i++) {
                 byte[] meterialBytes = ByteUtils.subByte(msgbody, 16 + i * materialLength, materialLength);
                 Material meterial=new Material(meterialBytes);
                 System.out.println(meterial.toString());
+                BatchData batchData=new BatchData();
+                Map<String, String> tags = new HashMap<>(5);
+                tags.put("code", "spims");
+                tags.put("name", meterial.getSzMatName());
+
+                Map<String, Object> fileds = new HashMap<>(4);
+                fileds.put("value",meterial.getdPotencyUgm3());
+
+                batchData.setTags(tags);
+                batchData.setFields(fileds);
+                batchData.setTime(datetime);
+                batchData.setTable("DensityRealtime");
+                batchDatas.add(batchData);
             }
+            influxdbUtils.batchInsertAndTime(batchDatas);
             try {
                 if(count<list.size()){
                     WebSocketServer.sendInfo(JSONObject.toJSONString(list.get(index)),"2");
@@ -86,10 +114,44 @@ public class MsgHandler {
             StopWeather(msg);
         }else if(cmd[0]== Cmd.GetWeather.getCmd()){
             System.out.println("天气数据xml");
+            saveWeather(msg);
         }else if(cmd[0]== Cmd.GetMethod.getCmd()){
             System.out.println("获取方法");
+        }else if(cmd[0]== Cmd.SetMethod.getCmd()){
+            System.out.println("获取方法");
         }else if(cmd[0]== Cmd.StartGps.getCmd()){
-            String gpsinfo=new String(ByteUtils.subByte(msgbody,17,datalength-17));
+            byte enable = msgbody[0];
+            byte[] times=ByteUtils.subByte(msgbody,1,16);
+            long datetime = ByteUtils.getDate(times);
+            if(enable==1){
+                System.out.println("有效gps");
+                String gpsinfo=new String(ByteUtils.subByte(msgbody,17,datalength-17));
+                if(!gpsinfo.isEmpty()){
+                    String[] split = gpsinfo.split(",");
+                    String lngdirection=split[5];
+                    String lngstr=lngdirection.equals("E")?split[4]:"-"+split[4];
+
+                    String latdirection=split[3];
+                    String latstr=latdirection.equals("N")?split[2]:"-"+split[2];
+
+//                    long time=getGpsTime(split[2]);
+                    //经度
+                    double lng=Double.parseDouble(lngstr);
+                    //纬度
+                    double lat=Double.parseDouble(latstr);
+
+                    Map<String, String> tags = new HashMap<>(5);
+                    tags.put("code", "spims");
+
+                    Map<String, Object> fileds = new HashMap<>(4);
+                    fileds.put("lng",lng);
+                    fileds.put("lat",lat);
+                    influxdbUtils.insertAndTime(tags,"DensityLog", fileds,datetime);
+                }
+
+            }else{
+                System.out.println("无效gps");
+            }
             StartGps(msg);
             System.out.println("开始获取GPS状态");
         }else if(cmd[0]== Cmd.StopGps.getCmd()){
@@ -104,8 +166,10 @@ public class MsgHandler {
         String message="";
         if(status==1){
             message="获取天气成功";
+            //发送消息获取天气数据
+//            getWeather();
         }else{
-            message="获取天气成功";
+            message="获取天气失败";
         }
         sendInfo(status==1?"1":"0",message,Cmd.StartWeather);
     }
@@ -190,13 +254,13 @@ public class MsgHandler {
         byte status=bytes[0];
         String message="";
         if(status==1){
-            SessionManage.statusMap.put(Cmd.StartCollect.getName(),true);
+            SessionManage.status.setCollectStatus(true);
             System.out.println("开始采集成功");
             message="开始采集成功";
         }else{
             System.out.println("开始采集失败");
-            SessionManage.statusMap.put(Cmd.StartCollect.getName(),true);
             message="开始采集失败";
+            SessionManage.status.setCollectStatus(false);
         }
         //发送消息
         sendInfo(status==1?"1":"0",message,Cmd.StartCollect);
@@ -211,12 +275,47 @@ public class MsgHandler {
         if(status==1){
             message="停止采集成功";
             System.out.println("停止采集成功");
+            SessionManage.status.setCollectStatus(false);
         }else{
             message="停止采集失败";
             System.out.println("停止采集失败");
+            SessionManage.status.setCollectStatus(true);
         }
         //发送消息
         sendInfo(status==1?"0":"1",message,Cmd.StopCollect);
+    }
+
+
+    private static void getWeather(){
+        Msg msg=new Msg();
+        msg.setBody("");
+        msg.setCmd(Cmd.GetWeather.getCmd());
+        msg.setMagic("SPIMS");
+        msg.setBytes(null);
+        SessionManage.sendMsg(msg);
+    }
+
+    //保存天气数据
+    private static void saveWeather(Msg msg){
+        byte enable = msg.get2MsgByte()[0];
+
+        byte[] times=ByteUtils.subByte(msg.get2MsgByte(),1,16);
+        long datetime = ByteUtils.getDate(times);
+        Map<String, String> tags = new HashMap<>(5);
+        tags.put("code", "spims");
+
+        Map<String, Object> fileds = new HashMap<>(4);
+        double temperature=ByteUtils.bytes2Double(ByteUtils.subByte(msg.get2MsgByte(),17,8));
+        double humidity=ByteUtils.bytes2Double(ByteUtils.subByte(msg.get2MsgByte(),17,8));
+        double pressure=ByteUtils.bytes2Double(ByteUtils.subByte(msg.get2MsgByte(),17,8));
+        double speed=ByteUtils.bytes2Double(ByteUtils.subByte(msg.get2MsgByte(),17,8));
+        double direction=ByteUtils.bytes2Double(ByteUtils.subByte(msg.get2MsgByte(),17,8));
+        fileds.put("temperature",temperature);
+        fileds.put("humidity",humidity);
+        fileds.put("pressure",pressure);
+        fileds.put("speed",speed);
+        fileds.put("direction",direction);
+        influxdbUtils.insertAndTime(tags,"weather", fileds,datetime);
     }
 
     private static void sendInfo(String data,String msg,Cmd cmd){
@@ -232,4 +331,38 @@ public class MsgHandler {
         }
     }
 
+    public static long getGpsTime(String str){
+        SimpleDateFormat sim1=new SimpleDateFormat("yyyyMMdd");
+        Date date=new Date();
+        String format = sim1.format(date);
+        String time = format + " " + str;
+        SimpleDateFormat sim2=new SimpleDateFormat("yyyyMMdd HHmmss.sss");
+        SimpleDateFormat sim3=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss");
+        long result=0;
+        try {
+//            result=sim3.format(sim2.parse(time));
+            result=sim2.parse(time).getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(getGpsTime("151430.154"));
+//        SimpleDateFormat sim1=new SimpleDateFormat("yyyyMMdd HHmmss.sss");
+//        SimpleDateFormat sim1=new SimpleDateFormat("yyyyMMdd");
+//
+//        SimpleDateFormat sim2=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss");
+//
+//        String timestr="2020-02-24 15:14:30.154";
+//        Date date=new Date();
+//        String format = sim1.format(date);
+//        System.out.println(format);
+//        try {
+//            Date parse = sim2.parse(timestr);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+    }
 }
