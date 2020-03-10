@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.zh.mapper.ZhCollectRecordMapper">
+<mapper namespace="com.ruoyi.zh.mapper.CollectRecordMapper">
     
-    <resultMap type="ZhCollectRecord" id="ZhCollectRecordResult">
+    <resultMap type="ZhCollectRecord" id="CollectRecordResult">
         <result property="id"    column="id"    />
         <result property="deviceCode"    column="device_code"    />
         <result property="startTime"    column="start_time"    />
@@ -12,12 +12,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="pointName"    column="point_name"    />
     </resultMap>
 
-    <sql id="selectZhCollectRecordVo">
+    <sql id="selectCollectRecordVo">
         select id, device_code, start_time, end_time, point_name from zh_collect_record
     </sql>
 
-    <select id="selectZhCollectRecordList" parameterType="ZhCollectRecord" resultMap="ZhCollectRecordResult">
-        <include refid="selectZhCollectRecordVo"/>
+    <select id="selectCollectRecordList" parameterType="ZhCollectRecord" resultMap="CollectRecordResult">
+        <include refid="selectCollectRecordVo"/>
         <where>  
             <if test="deviceCode != null  and deviceCode != ''"> and device_code = #{deviceCode}</if>
             <if test="startTime != null "> and start_time = #{startTime}</if>
@@ -26,12 +26,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
     
-    <select id="selectZhCollectRecordById" parameterType="Long" resultMap="ZhCollectRecordResult">
-        <include refid="selectZhCollectRecordVo"/>
+    <select id="selectCollectRecordById" parameterType="Long" resultMap="CollectRecordResult">
+        <include refid="selectCollectRecordVo"/>
         where id = #{id}
     </select>
         
-    <insert id="insertZhCollectRecord" parameterType="ZhCollectRecord" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertCollectRecord" parameterType="ZhCollectRecord" useGeneratedKeys="true" keyProperty="id">
         insert into zh_collect_record
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="deviceCode != null  and deviceCode != ''">device_code,</if>
@@ -47,7 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateZhCollectRecord" parameterType="ZhCollectRecord">
+    <update id="updateCollectRecord" parameterType="ZhCollectRecord">
         update zh_collect_record
         <trim prefix="SET" suffixOverrides=",">
             <if test="deviceCode != null  and deviceCode != ''">device_code = #{deviceCode},</if>
@@ -58,11 +58,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
 
-    <delete id="deleteZhCollectRecordById" parameterType="Long">
+    <delete id="deleteCollectRecordById" parameterType="Long">
         delete from zh_collect_record where id = #{id}
     </delete>
 
-    <delete id="deleteZhCollectRecordByIds" parameterType="String">
+    <delete id="deleteCollectRecordByIds" parameterType="String">
         delete from zh_collect_record where id in 
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}

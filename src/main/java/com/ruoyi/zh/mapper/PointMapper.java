@@ -9,7 +9,7 @@ import java.util.List;
  * @author ruoyi
  * @date 2020-02-24
  */
-public interface ZhPointMapper 
+public interface PointMapper 
 {
     /**
      * 查询控点
@@ -17,7 +17,7 @@ public interface ZhPointMapper
      * @param id 控点ID
      * @return 控点
      */
-    public ZhPoint selectZhPointById(Long id);
+    public ZhPoint selectPointById(Long id);
 
     /**
      * 查询控点列表
@@ -25,7 +25,7 @@ public interface ZhPointMapper
      * @param zhPoint 控点
      * @return 控点集合
      */
-    public List<ZhPoint> selectZhPointList(ZhPoint zhPoint);
+    public List<ZhPoint> selectPointList(ZhPoint zhPoint);
 
     /**
      * 新增控点
@@ -33,7 +33,7 @@ public interface ZhPointMapper
      * @param zhPoint 控点
      * @return 结果
      */
-    public int insertZhPoint(ZhPoint zhPoint);
+    public int insertPoint(ZhPoint zhPoint);
 
     /**
      * 修改控点
@@ -41,7 +41,7 @@ public interface ZhPointMapper
      * @param zhPoint 控点
      * @return 结果
      */
-    public int updateZhPoint(ZhPoint zhPoint);
+    public int updatePoint(ZhPoint zhPoint);
 
     /**
      * 删除控点
@@ -49,7 +49,7 @@ public interface ZhPointMapper
      * @param id 控点ID
      * @return 结果
      */
-    public int deleteZhPointById(Long id);
+    public int deletePointById(Long id);
 
     /**
      * 批量删除控点
@@ -57,5 +57,5 @@ public interface ZhPointMapper
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public int deleteZhPointByIds(Long[] ids);
+    public int deletePointByIds(Long[] ids);
 }

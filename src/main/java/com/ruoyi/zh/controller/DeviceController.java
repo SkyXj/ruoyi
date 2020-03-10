@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ruoyi.framework.aspectj.lang.annotation.Log;
 import com.ruoyi.framework.aspectj.lang.enums.BusinessType;
 import com.ruoyi.zh.domain.ZhDevice;
-import com.ruoyi.zh.service.IZhDeviceService;
+import com.ruoyi.zh.service.IDeviceService;
 import com.ruoyi.framework.web.controller.BaseController;
 import com.ruoyi.framework.web.domain.AjaxResult;
 import com.ruoyi.common.utils.poi.ExcelUtil;
@@ -28,10 +28,10 @@ import com.ruoyi.framework.web.page.TableDataInfo;
  */
 @RestController
 @RequestMapping("/zh/device")
-public class ZhDeviceController extends BaseController
+public class DeviceController extends BaseController
 {
     @Autowired
-    private IZhDeviceService zhDeviceService;
+    private IDeviceService zhDeviceService;
 
     /**
      * 查询走航列表
@@ -41,7 +41,7 @@ public class ZhDeviceController extends BaseController
     public TableDataInfo list(ZhDevice zhDevice)
     {
         startPage();
-        List<ZhDevice> list = zhDeviceService.selectZhDeviceList(zhDevice);
+        List<ZhDevice> list = zhDeviceService.selectDeviceList(zhDevice);
         return getDataTable(list);
     }
 
@@ -53,7 +53,7 @@ public class ZhDeviceController extends BaseController
     @GetMapping("/export")
     public AjaxResult export(ZhDevice zhDevice)
     {
-        List<ZhDevice> list = zhDeviceService.selectZhDeviceList(zhDevice);
+        List<ZhDevice> list = zhDeviceService.selectDeviceList(zhDevice);
         ExcelUtil<ZhDevice> util = new ExcelUtil<ZhDevice>(ZhDevice.class);
         return util.exportExcel(list, "device");
     }
@@ -65,7 +65,7 @@ public class ZhDeviceController extends BaseController
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
-        return AjaxResult.success(zhDeviceService.selectZhDeviceById(id));
+        return AjaxResult.success(zhDeviceService.selectDeviceById(id));
     }
 
     /**
@@ -76,7 +76,7 @@ public class ZhDeviceController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody ZhDevice zhDevice)
     {
-        return toAjax(zhDeviceService.insertZhDevice(zhDevice));
+        return toAjax(zhDeviceService.insertDevice(zhDevice));
     }
 
     /**
@@ -87,7 +87,7 @@ public class ZhDeviceController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody ZhDevice zhDevice)
     {
-        return toAjax(zhDeviceService.updateZhDevice(zhDevice));
+        return toAjax(zhDeviceService.updateDevice(zhDevice));
     }
 
     /**
@@ -98,6 +98,6 @@ public class ZhDeviceController extends BaseController
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {
-        return toAjax(zhDeviceService.deleteZhDeviceByIds(ids));
+        return toAjax(zhDeviceService.deleteDeviceByIds(ids));
     }
 }

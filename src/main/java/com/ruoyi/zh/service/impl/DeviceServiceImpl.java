@@ -3,9 +3,9 @@ package com.ruoyi.zh.service.impl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.zh.mapper.ZhDeviceMapper;
+import com.ruoyi.zh.mapper.DeviceMapper;
 import com.ruoyi.zh.domain.ZhDevice;
-import com.ruoyi.zh.service.IZhDeviceService;
+import com.ruoyi.zh.service.IDeviceService;
 
 /**
  * 走航Service业务层处理
@@ -14,10 +14,10 @@ import com.ruoyi.zh.service.IZhDeviceService;
  * @date 2020-02-23
  */
 @Service
-public class ZhDeviceServiceImpl implements IZhDeviceService 
+public class DeviceServiceImpl implements IDeviceService 
 {
     @Autowired
-    private ZhDeviceMapper zhDeviceMapper;
+    private DeviceMapper deviceMapper;
 
     /**
      * 查询走航
@@ -26,9 +26,9 @@ public class ZhDeviceServiceImpl implements IZhDeviceService
      * @return 走航
      */
     @Override
-    public ZhDevice selectZhDeviceById(Long id)
+    public ZhDevice selectDeviceById(Long id)
     {
-        return zhDeviceMapper.selectZhDeviceById(id);
+        return deviceMapper.selectDeviceById(id);
     }
 
     /**
@@ -38,9 +38,9 @@ public class ZhDeviceServiceImpl implements IZhDeviceService
      * @return 走航
      */
     @Override
-    public List<ZhDevice> selectZhDeviceList(ZhDevice zhDevice)
+    public List<ZhDevice> selectDeviceList(ZhDevice zhDevice)
     {
-        return zhDeviceMapper.selectZhDeviceList(zhDevice);
+        return deviceMapper.selectDeviceList(zhDevice);
     }
 
     /**
@@ -50,9 +50,9 @@ public class ZhDeviceServiceImpl implements IZhDeviceService
      * @return 结果
      */
     @Override
-    public int insertZhDevice(ZhDevice zhDevice)
+    public int insertDevice(ZhDevice zhDevice)
     {
-        return zhDeviceMapper.insertZhDevice(zhDevice);
+        return deviceMapper.insertDevice(zhDevice);
     }
 
     /**
@@ -62,9 +62,9 @@ public class ZhDeviceServiceImpl implements IZhDeviceService
      * @return 结果
      */
     @Override
-    public int updateZhDevice(ZhDevice zhDevice)
+    public int updateDevice(ZhDevice zhDevice)
     {
-        return zhDeviceMapper.updateZhDevice(zhDevice);
+        return deviceMapper.updateDevice(zhDevice);
     }
 
     /**
@@ -74,9 +74,9 @@ public class ZhDeviceServiceImpl implements IZhDeviceService
      * @return 结果
      */
     @Override
-    public int deleteZhDeviceByIds(Long[] ids)
+    public int deleteDeviceByIds(Long[] ids)
     {
-        return zhDeviceMapper.deleteZhDeviceByIds(ids);
+        return deviceMapper.deleteDeviceByIds(ids);
     }
 
     /**
@@ -86,8 +86,8 @@ public class ZhDeviceServiceImpl implements IZhDeviceService
      * @return 结果
      */
     @Override
-    public int deleteZhDeviceById(Long id)
+    public int deleteDeviceById(Long id)
     {
-        return zhDeviceMapper.deleteZhDeviceById(id);
+        return deviceMapper.deleteDeviceById(id);
     }
 }

@@ -1,5 +1,7 @@
 package com.ruoyi.framework.influxdb;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.BatchPoints;
@@ -12,6 +14,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class InfluxdbUtils {
+    private static final Logger logger = LogManager.getLogger(InfluxdbUtils.class);
 
 //    @Value("${influxdb.host}")
 //    private String host;
@@ -29,9 +32,15 @@ public class InfluxdbUtils {
     public InfluxdbUtils(String host,String port,String username,String password,String database){
         this.database=database;
         if (this.influxDB == null) {
-            String openurl="http://"+host+":"+port;
-            this.influxDB = InfluxDBFactory.connect(openurl, username, password);
-            this.influxDB.createDatabase(database);
+            try{
+                String openurl="http://"+host+":"+port;
+                this.influxDB = InfluxDBFactory.connect(openurl, username, password);
+                this.influxDB.createDatabase(database);
+                logger.info(">>>>>>>>>>>>>>>>>>时序数据库连接成功>>>>>>>>>>>>>>>>>>>>");
+            }catch (Exception e){
+                logger.info(">>>>>>>>>>>>>>>>>>时序数据库连接失败>>>>>>>>>>>>>>>>>>>>");
+                logger.error(e.getMessage());
+            }
         }
     }
 

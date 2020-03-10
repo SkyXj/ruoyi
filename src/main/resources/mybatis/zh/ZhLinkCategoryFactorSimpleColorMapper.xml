@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.zh.mapper.ZhLinkCategoryFactorSimpleColorMapper">
+    
+    <resultMap type="ZhLinkCategoryFactorSimpleColor" id="ZhLinkCategoryFactorSimpleColorResult">
+        <result property="id"    column="id"    />
+        <result property="categoryId"    column="category_id"    />
+        <result property="factorId"    column="factor_id"    />
+        <result property="simpleColorId"    column="simple_color_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectZhLinkCategoryFactorSimpleColorVo">
+        select id, category_id, factor_id, simple_color_id, create_by, create_time, update_by, update_time from zh_link_category_factor_simple_color
+    </sql>
+
+    <select id="selectZhLinkCategoryFactorSimpleColorList" parameterType="ZhLinkCategoryFactorSimpleColor" resultMap="ZhLinkCategoryFactorSimpleColorResult">
+        <include refid="selectZhLinkCategoryFactorSimpleColorVo"/>
+        <where>  
+            <if test="categoryId != null "> and category_id = #{categoryId}</if>
+            <if test="factorId != null "> and factor_id = #{factorId}</if>
+            <if test="simpleColorId != null "> and simple_color_id = #{simpleColorId}</if>
+        </where>
+    </select>
+    
+    <select id="selectZhLinkCategoryFactorSimpleColorById" parameterType="Long" resultMap="ZhLinkCategoryFactorSimpleColorResult">
+        <include refid="selectZhLinkCategoryFactorSimpleColorVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertZhLinkCategoryFactorSimpleColor" parameterType="ZhLinkCategoryFactorSimpleColor" useGeneratedKeys="true" keyProperty="id">
+        insert into zh_link_category_factor_simple_color
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="categoryId != null ">category_id,</if>
+            <if test="factorId != null ">factor_id,</if>
+            <if test="simpleColorId != null ">simple_color_id,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="categoryId != null ">#{categoryId},</if>
+            <if test="factorId != null ">#{factorId},</if>
+            <if test="simpleColorId != null ">#{simpleColorId},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateZhLinkCategoryFactorSimpleColor" parameterType="ZhLinkCategoryFactorSimpleColor">
+        update zh_link_category_factor_simple_color
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="categoryId != null ">category_id = #{categoryId},</if>
+            <if test="factorId != null ">factor_id = #{factorId},</if>
+            <if test="simpleColorId != null ">simple_color_id = #{simpleColorId},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteZhLinkCategoryFactorSimpleColorById" parameterType="Long">
+        delete from zh_link_category_factor_simple_color where id = #{id}
+    </delete>
+
+    <delete id="deleteZhLinkCategoryFactorSimpleColorByIds" parameterType="String">
+        delete from zh_link_category_factor_simple_color where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.zh.mapper.ZhDeviceMapper">
+<mapper namespace="com.ruoyi.zh.mapper.DeviceMapper">
     
     <resultMap type="ZhDevice" id="ZhDeviceResult">
         <result property="id"    column="id"    />
@@ -23,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select id, name, code, company, address, img, status, correct_status, weather_status, gps_status, created_date, updated_date from zh_device
     </sql>
 
-    <select id="selectZhDeviceList" parameterType="ZhDevice" resultMap="ZhDeviceResult">
+    <select id="selectDeviceList" parameterType="ZhDevice" resultMap="ZhDeviceResult">
         <include refid="selectZhDeviceVo"/>
         <where>  
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
@@ -40,12 +40,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
     
-    <select id="selectZhDeviceById" parameterType="Long" resultMap="ZhDeviceResult">
+    <select id="selectDeviceById" parameterType="Long" resultMap="ZhDeviceResult">
         <include refid="selectZhDeviceVo"/>
         where id = #{id}
     </select>
         
-    <insert id="insertZhDevice" parameterType="ZhDevice">
+    <insert id="insertDevice" parameterType="ZhDevice">
         insert into zh_device
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">id,</if>
@@ -77,7 +77,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateZhDevice" parameterType="ZhDevice">
+    <update id="updateDevice" parameterType="ZhDevice">
         update zh_device
         <trim prefix="SET" suffixOverrides=",">
             <if test="name != null  and name != ''">name = #{name},</if>
@@ -95,11 +95,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
 
-    <delete id="deleteZhDeviceById" parameterType="Long">
+    <delete id="deleteDeviceById" parameterType="Long">
         delete from zh_device where id = #{id}
     </delete>
 
-    <delete id="deleteZhDeviceByIds" parameterType="String">
+    <delete id="deleteDeviceByIds" parameterType="String">
         delete from zh_device where id in 
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}

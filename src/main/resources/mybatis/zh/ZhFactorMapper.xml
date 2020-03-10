@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.zh.mapper.ZhFactorMapper">
+    
+    <resultMap type="ZhFactor" id="ZhFactorResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="ename"    column="ename"    />
+        <result property="formula"    column="formula"    />
+        <result property="weight"    column="weight"    />
+        <result property="smell"    column="smell"    />
+        <result property="warning"    column="warning"    />
+        <result property="danger"    column="danger"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectZhFactorVo">
+        select id, name, ename, formula, weight, smell, warning, danger, create_by, create_time, update_by, update_time from zh_factor
+    </sql>
+
+    <select id="selectZhFactorList" parameterType="ZhFactor" resultMap="ZhFactorResult">
+        <include refid="selectZhFactorVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="ename != null  and ename != ''"> and ename like concat('%', #{ename}, '%')</if>
+            <if test="formula != null  and formula != ''"> and formula = #{formula}</if>
+            <if test="weight != null "> and weight = #{weight}</if>
+            <if test="smell != null  and smell != ''"> and smell = #{smell}</if>
+            <if test="warning != null "> and warning = #{warning}</if>
+            <if test="danger != null "> and danger = #{danger}</if>
+        </where>
+    </select>
+    
+    <select id="selectZhFactorById" parameterType="Long" resultMap="ZhFactorResult">
+        <include refid="selectZhFactorVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertZhFactor" parameterType="ZhFactor" useGeneratedKeys="true" keyProperty="id">
+        insert into zh_factor
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">name,</if>
+            <if test="ename != null  and ename != ''">ename,</if>
+            <if test="formula != null  and formula != ''">formula,</if>
+            <if test="weight != null ">weight,</if>
+            <if test="smell != null  and smell != ''">smell,</if>
+            <if test="warning != null ">warning,</if>
+            <if test="danger != null ">danger,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="ename != null  and ename != ''">#{ename},</if>
+            <if test="formula != null  and formula != ''">#{formula},</if>
+            <if test="weight != null ">#{weight},</if>
+            <if test="smell != null  and smell != ''">#{smell},</if>
+            <if test="warning != null ">#{warning},</if>
+            <if test="danger != null ">#{danger},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateZhFactor" parameterType="ZhFactor">
+        update zh_factor
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="ename != null  and ename != ''">ename = #{ename},</if>
+            <if test="formula != null  and formula != ''">formula = #{formula},</if>
+            <if test="weight != null ">weight = #{weight},</if>
+            <if test="smell != null  and smell != ''">smell = #{smell},</if>
+            <if test="warning != null ">warning = #{warning},</if>
+            <if test="danger != null ">danger = #{danger},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteZhFactorById" parameterType="Long">
+        delete from zh_factor where id = #{id}
+    </delete>
+
+    <delete id="deleteZhFactorByIds" parameterType="String">
+        delete from zh_factor where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

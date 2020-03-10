@@ -1,5 +1,6 @@
 package com.ruoyi.mina.handler;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ruoyi.common.utils.ByteUtils;
 import com.ruoyi.framework.influxdb.BatchData;
@@ -10,7 +11,10 @@ import com.ruoyi.mina.config.SessionManage;
 import com.ruoyi.mina.entity.Cmd;
 import com.ruoyi.mina.entity.Material;
 import com.ruoyi.mina.entity.Msg;
+import com.ruoyi.mina.entity.StatusDetail;
 import com.ruoyi.webSocket.WebSocketServer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,13 +28,16 @@ import java.util.*;
 @Component
 public class MsgHandler {
 
+
+    private static final Logger logger = LogManager.getLogger(MsgHandler.class);
+
     public static List<DensityVo> list;
 
     public static InfluxdbUtils influxdbUtils;
 
     //经度和纬度
-    public static double lng;
-    public static double lat;
+    public static double lng=0.0;
+    public static double lat=0.0;
 
     @Autowired
     public  void setList(List<DensityVo> list)
@@ -67,7 +74,8 @@ public class MsgHandler {
             index=0;
             startCollect(msg);
         }else if(cmd[0]== Cmd.MIC_Collect.getCmd()){
-            System.out.println("接收5命令");
+            //浓度数据
+
             //时间
             byte[] times=ByteUtils.subByte(msgbody,0,16);
             long datetime = ByteUtils.getDate(times);
@@ -91,13 +99,11 @@ public class MsgHandler {
                 }
                 kv.setName(meterial.getSzMatName());
                 kv.setValue(meterial.getdPotencyUgm3());
-
                 values.add(kv);
-
                 System.out.println(meterial.toString());
                 BatchData batchData=new BatchData();
                 Map<String, String> tags = new HashMap<>(5);
-                tags.put("code", "spims");
+                tags.put("code", SessionManage.status.getDevicecode());
                 tags.put("name", meterial.getSzMatName());
 
                 Map<String, Object> fileds = new HashMap<>(4);
@@ -112,17 +118,20 @@ public class MsgHandler {
             densityVo.setValues(values);
             influxdbUtils.batchInsertAndTime(batchDatas);
             try {
-                if(count<list.size()){
-                    //模拟
-                    WebSocketServer.sendInfo(JSONObject.toJSONString(list.get(index)),"2");
-                    index++;
-                    //实际
-                    //WebSocketServer.sendInfo(JSONObject.toJSONString(densityVo),"2");
+                //如果数据是有效的则使用实际数据
+                if(SessionManage.status.getGpsStatus().isAvailability()){
+                    WebSocketServer.sendInfo(JSONObject.toJSONString(densityVo),"2");
+                }else{
+                    //gps无效使用模拟数据
+                    if(index<list.size()){
+                        //模拟
+                        WebSocketServer.sendInfo(JSONObject.toJSONString(list.get(index)),"2");
+                        index++;
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }else if(cmd[0]== Cmd.StopCollect.getCmd()){
             stopCollect(msg);
         }else if(cmd[0]== Cmd.StartCorrect.getCmd()){
@@ -142,14 +151,21 @@ public class MsgHandler {
         }else if(cmd[0]== Cmd.GetMethod.getCmd()){
             System.out.println("获取方法");
         }else if(cmd[0]== Cmd.SetMethod.getCmd()){
-            System.out.println("获取方法");
+            System.out.println("设置方法");
         }else if(cmd[0]== Cmd.StartGps.getCmd()){
             byte enable = msgbody[0];
             byte[] times=ByteUtils.subByte(msgbody,1,16);
             long datetime = ByteUtils.getDate(times);
+
+            //gps 状态
+            StatusDetail statusDetail=null;
+
             if(enable==1){
                 System.out.println("有效gps");
+                statusDetail=new StatusDetail(true,true);
                 String gpsinfo=new String(ByteUtils.subByte(msgbody,17,datalength-17));
+//                String gpsinfo="$GNGGA,081649.000,2309.244790,N,11329.332827,E,1,16,0.963,22.613,M,0,M,,*52";
+                System.out.println("gps信息："+gpsinfo);
                 if(!gpsinfo.isEmpty()){
                     String[] split = gpsinfo.split(",");
                     String lngdirection=split[5];
@@ -157,32 +173,37 @@ public class MsgHandler {
 
                     String latdirection=split[3];
                     String latstr=latdirection.equals("N")?split[2]:"-"+split[2];
-
 //                    long time=getGpsTime(split[2]);
                     //经度
-                    double lng=Double.parseDouble(lngstr);
+                    double lng=Double.parseDouble(lngstr.substring(0,3))+Double.parseDouble(lngstr.substring(3,lngstr.length()))/60;
                     MsgHandler.lng=lng;
-
                     //纬度
-                    double lat=Double.parseDouble(latstr);
+                    double lat=Double.parseDouble(latstr.substring(0,2))+Double.parseDouble(latstr.substring(2,latstr.length()))/60;
+
                     MsgHandler.lat=lat;
-
                     Map<String, String> tags = new HashMap<>(5);
-                    tags.put("code", "spims");
-
+                    tags.put("code", SessionManage.status.getDevicecode());
                     Map<String, Object> fileds = new HashMap<>(4);
                     fileds.put("lng",lng);
                     fileds.put("lat",lat);
                     influxdbUtils.insertAndTime(tags,"DensityLog", fileds,datetime);
                 }
-
             }else{
-                System.out.println("无效gps");
+                if(index<list.size()){
+                    index++;
+                }
+                statusDetail=new StatusDetail(true,false);
+                //测试无效数据,暂时先用本地测试数据代替
+                Map<String, String> tags = new HashMap<>(5);
+                tags.put("code", SessionManage.status.getDevicecode());
+                Map<String, Object> fileds = new HashMap<>(4);
+                fileds.put("lng",list.get(index).getLng());
+                fileds.put("lat",list.get(index).getLat());
+                influxdbUtils.insertAndTime(tags,"DensityLog", fileds,datetime);
             }
+            SessionManage.status.setGpsStatus(statusDetail);
             StartGps(msg);
-            System.out.println("开始获取GPS状态");
         }else if(cmd[0]== Cmd.StopGps.getCmd()){
-            System.out.println("GPS停止状态");
             StopGps(msg);
         }
     }
@@ -222,19 +243,24 @@ public class MsgHandler {
         }else{
             message="获取GPS失败";
         }
-        sendInfo(status==1?"1":"0",message,Cmd.StartGps);
+
+        sendInfo(JSON.toJSONString(SessionManage.status.getGpsStatus()),message,Cmd.StartGps);
     }
 
     private static void StopGps(Msg msg) {
         byte[] bytes = msg.getBytes();
         byte status=bytes[0];
         String message="";
+        StatusDetail statusDetail=null;
         if(status==1){
             message="停止GPS成功";
+            statusDetail=new StatusDetail(false,false);
+            SessionManage.status.setGpsStatus(statusDetail);
         }else{
-            message="停止GPS成功";
+            message="停止GPS失败";
+            statusDetail=SessionManage.status.getGpsStatus();
         }
-        sendInfo(status==1?"0":"1",message,Cmd.StopGps);
+        sendInfo(JSON.toJSONString(statusDetail),message,Cmd.StopGps);
     }
 
 
@@ -280,17 +306,17 @@ public class MsgHandler {
         byte[] bytes = msg.getBytes();
         byte status=bytes[0];
         String message="";
+        StatusDetail statusDetail=null;
         if(status==1){
-            SessionManage.status.setCollectStatus(true);
-            System.out.println("开始采集成功");
+            statusDetail=new StatusDetail(true,true);
+            SessionManage.status.setCollectStatus(statusDetail);
             message="开始采集成功";
         }else{
-            System.out.println("开始采集失败");
             message="开始采集失败";
-            SessionManage.status.setCollectStatus(false);
+            statusDetail= SessionManage.status.getGpsStatus();
         }
         //发送消息
-        sendInfo(status==1?"1":"0",message,Cmd.StartCollect);
+        sendInfo(JSON.toJSONString(statusDetail),message,Cmd.StartCollect);
     }
 
     private static void stopCollect(Msg msg) {
@@ -302,11 +328,12 @@ public class MsgHandler {
         if(status==1){
             message="停止采集成功";
             System.out.println("停止采集成功");
-            SessionManage.status.setCollectStatus(false);
+            StatusDetail statusDetail=new StatusDetail(false,false);
+            SessionManage.status.setCollectStatus(statusDetail);
         }else{
             message="停止采集失败";
             System.out.println("停止采集失败");
-            SessionManage.status.setCollectStatus(true);
+//            SessionManage.status.setCollectStatus(true);
         }
         //发送消息
         sendInfo(status==1?"0":"1",message,Cmd.StopCollect);
@@ -329,7 +356,7 @@ public class MsgHandler {
         byte[] times=ByteUtils.subByte(msg.get2MsgByte(),1,16);
         long datetime = ByteUtils.getDate(times);
         Map<String, String> tags = new HashMap<>(5);
-        tags.put("code", "spims");
+        tags.put("code", SessionManage.status.getDevicecode());
 
         Map<String, Object> fileds = new HashMap<>(4);
         double temperature=ByteUtils.bytes2Double(ByteUtils.subByte(msg.get2MsgByte(),17,8));
@@ -376,7 +403,26 @@ public class MsgHandler {
     }
 
     public static void main(String[] args) {
-        System.out.println(getGpsTime("151430.154"));
+        String lngstr="11329.332827";
+        double lng=Double.parseDouble(lngstr.substring(0,3))+Double.parseDouble(lngstr.substring(3,lngstr.length()))/60;
+        System.out.println(lng);
+
+//        String gpsinfo="$GNGGA,081649.000,2309.244790,N,11329.332827,E,1,16,0.963,22.613,M,0,M,,*52";
+//        System.out.println("gps信息："+gpsinfo);
+//        if(!gpsinfo.isEmpty()){
+//            String[] split = gpsinfo.split(",");
+//            String lngdirection=split[5];
+//            String lngstr=lngdirection.equals("E")?split[4]:"-"+split[4];
+//
+//            String latdirection=split[3];
+//            String latstr=latdirection.equals("N")?split[2]:"-"+split[2];
+//            //经度
+//            double lng=Double.parseDouble(lngstr);
+//            //纬度
+//            double lat=Double.parseDouble(latstr);
+//        }
+
+
 //        SimpleDateFormat sim1=new SimpleDateFormat("yyyyMMdd HHmmss.sss");
 //        SimpleDateFormat sim1=new SimpleDateFormat("yyyyMMdd");
 //
@@ -392,4 +438,6 @@ public class MsgHandler {
 //            e.printStackTrace();
 //        }
     }
+
+
 }

@@ -3,9 +3,9 @@ package com.ruoyi.zh.service.impl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.zh.mapper.ZhPointMapper;
+import com.ruoyi.zh.mapper.PointMapper;
 import com.ruoyi.zh.domain.ZhPoint;
-import com.ruoyi.zh.service.IZhPointService;
+import com.ruoyi.zh.service.IPointService;
 
 /**
  * 控点Service业务层处理
@@ -14,10 +14,10 @@ import com.ruoyi.zh.service.IZhPointService;
  * @date 2020-02-24
  */
 @Service
-public class ZhPointServiceImpl implements IZhPointService 
+public class PointServiceImpl implements IPointService 
 {
     @Autowired
-    private ZhPointMapper zhPointMapper;
+    private PointMapper pointMapper;
 
     /**
      * 查询控点
@@ -26,9 +26,9 @@ public class ZhPointServiceImpl implements IZhPointService
      * @return 控点
      */
     @Override
-    public ZhPoint selectZhPointById(Long id)
+    public ZhPoint selectPointById(Long id)
     {
-        return zhPointMapper.selectZhPointById(id);
+        return pointMapper.selectPointById(id);
     }
 
     /**
@@ -38,9 +38,9 @@ public class ZhPointServiceImpl implements IZhPointService
      * @return 控点
      */
     @Override
-    public List<ZhPoint> selectZhPointList(ZhPoint zhPoint)
+    public List<ZhPoint> selectPointList(ZhPoint zhPoint)
     {
-        return zhPointMapper.selectZhPointList(zhPoint);
+        return pointMapper.selectPointList(zhPoint);
     }
 
     /**
@@ -50,9 +50,9 @@ public class ZhPointServiceImpl implements IZhPointService
      * @return 结果
      */
     @Override
-    public int insertZhPoint(ZhPoint zhPoint)
+    public int insertPoint(ZhPoint zhPoint)
     {
-        return zhPointMapper.insertZhPoint(zhPoint);
+        return pointMapper.insertPoint(zhPoint);
     }
 
     /**
@@ -62,9 +62,9 @@ public class ZhPointServiceImpl implements IZhPointService
      * @return 结果
      */
     @Override
-    public int updateZhPoint(ZhPoint zhPoint)
+    public int updatePoint(ZhPoint zhPoint)
     {
-        return zhPointMapper.updateZhPoint(zhPoint);
+        return pointMapper.updatePoint(zhPoint);
     }
 
     /**
@@ -74,9 +74,9 @@ public class ZhPointServiceImpl implements IZhPointService
      * @return 结果
      */
     @Override
-    public int deleteZhPointByIds(Long[] ids)
+    public int deletePointByIds(Long[] ids)
     {
-        return zhPointMapper.deleteZhPointByIds(ids);
+        return pointMapper.deletePointByIds(ids);
     }
 
     /**
@@ -86,8 +86,8 @@ public class ZhPointServiceImpl implements IZhPointService
      * @return 结果
      */
     @Override
-    public int deleteZhPointById(Long id)
+    public int deletePointById(Long id)
     {
-        return zhPointMapper.deleteZhPointById(id);
+        return pointMapper.deletePointById(id);
     }
 }

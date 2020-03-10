@@ -19,7 +19,7 @@ public class Material {
     public Material(byte[] bytes){
         this.dPotencyPpb=ByteUtils.bytes2Double(ByteUtils.subByte(bytes,0,8));
         try {
-            this.szMatName =new String(ByteUtils.subByte(bytes, 8, 128),"GBK");
+            this.szMatName =new String(ByteUtils.subByte(bytes, 8, 128),"GBK").trim();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ruoyi.framework.aspectj.lang.annotation.Log;
 import com.ruoyi.framework.aspectj.lang.enums.BusinessType;
 import com.ruoyi.zh.domain.ZhPoint;
-import com.ruoyi.zh.service.IZhPointService;
+import com.ruoyi.zh.service.IPointService;
 import com.ruoyi.framework.web.controller.BaseController;
 import com.ruoyi.framework.web.domain.AjaxResult;
 import com.ruoyi.common.utils.poi.ExcelUtil;
@@ -28,10 +28,10 @@ import com.ruoyi.framework.web.page.TableDataInfo;
  */
 @RestController
 @RequestMapping("/zh/point")
-public class ZhPointController extends BaseController
+public class PointController extends BaseController
 {
     @Autowired
-    private IZhPointService zhPointService;
+    private IPointService zhPointService;
 
     /**
      * 查询控点列表
@@ -41,7 +41,7 @@ public class ZhPointController extends BaseController
     public TableDataInfo list(ZhPoint zhPoint)
     {
         startPage();
-        List<ZhPoint> list = zhPointService.selectZhPointList(zhPoint);
+        List<ZhPoint> list = zhPointService.selectPointList(zhPoint);
         return getDataTable(list);
     }
 
@@ -53,7 +53,7 @@ public class ZhPointController extends BaseController
     @GetMapping("/export")
     public AjaxResult export(ZhPoint zhPoint)
     {
-        List<ZhPoint> list = zhPointService.selectZhPointList(zhPoint);
+        List<ZhPoint> list = zhPointService.selectPointList(zhPoint);
         ExcelUtil<ZhPoint> util = new ExcelUtil<ZhPoint>(ZhPoint.class);
         return util.exportExcel(list, "point");
     }
@@ -65,7 +65,7 @@ public class ZhPointController extends BaseController
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
-        return AjaxResult.success(zhPointService.selectZhPointById(id));
+        return AjaxResult.success(zhPointService.selectPointById(id));
     }
 
     /**
@@ -76,7 +76,7 @@ public class ZhPointController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody ZhPoint zhPoint)
     {
-        return toAjax(zhPointService.insertZhPoint(zhPoint));
+        return toAjax(zhPointService.insertPoint(zhPoint));
     }
 
     /**
@@ -87,7 +87,7 @@ public class ZhPointController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody ZhPoint zhPoint)
     {
-        return toAjax(zhPointService.updateZhPoint(zhPoint));
+        return toAjax(zhPointService.updatePoint(zhPoint));
     }
 
     /**
@@ -98,6 +98,6 @@ public class ZhPointController extends BaseController
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {
-        return toAjax(zhPointService.deleteZhPointByIds(ids));
+        return toAjax(zhPointService.deletePointByIds(ids));
     }
 }

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.zh.mapper.ZhPointMapper">
+<mapper namespace="com.ruoyi.zh.mapper.PointMapper">
     
     <resultMap type="ZhPoint" id="ZhPointResult">
         <result property="id"    column="id"    />
@@ -17,7 +17,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select id, name, lng, lat, created_time, updated_time from zh_point
     </sql>
 
-    <select id="selectZhPointList" parameterType="ZhPoint" resultMap="ZhPointResult">
+    <select id="selectPointList" parameterType="ZhPoint" resultMap="ZhPointResult">
         <include refid="selectZhPointVo"/>
         <where>  
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
@@ -28,12 +28,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
     
-    <select id="selectZhPointById" parameterType="Long" resultMap="ZhPointResult">
+    <select id="selectPointById" parameterType="Long" resultMap="ZhPointResult">
         <include refid="selectZhPointVo"/>
         where id = #{id}
     </select>
         
-    <insert id="insertZhPoint" parameterType="ZhPoint" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertPoint" parameterType="ZhPoint" useGeneratedKeys="true" keyProperty="id">
         insert into zh_point
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="name != null  and name != ''">name,</if>
@@ -51,7 +51,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateZhPoint" parameterType="ZhPoint">
+    <update id="updatePoint" parameterType="ZhPoint">
         update zh_point
         <trim prefix="SET" suffixOverrides=",">
             <if test="name != null  and name != ''">name = #{name},</if>
@@ -63,11 +63,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
 
-    <delete id="deleteZhPointById" parameterType="Long">
+    <delete id="deletePointById" parameterType="Long">
         delete from zh_point where id = #{id}
     </delete>
 
-    <delete id="deleteZhPointByIds" parameterType="String">
+    <delete id="deletePointByIds" parameterType="String">
         delete from zh_point where id in 
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}

@@ -125,7 +125,7 @@ public class ByteUtils {
 
     public static long getDate(byte[] b){
 
-        SimpleDateFormat sim=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss");
+        SimpleDateFormat sim=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         short year = byte2short(subByte(b, 0, 2));
         short month = byte2short(subByte(b, 2, 2));
         short dayOfWeek = byte2short(subByte(b, 4, 2));
@@ -134,7 +134,8 @@ public class ByteUtils {
         short nMin = byte2short(subByte(b, 10, 2));
         short nSec = byte2short(subByte(b, 12, 2));
         short nMillSec = byte2short(subByte(b, 14, 2));
-        String time=""+year+"-"+month+"-"+nDay+" "+nHour+":"+nMin+":"+nSec+"."+nMillSec;
+//        String time=""+year+"-"+month+"-"+nDay+" "+nHour+":"+nMin+":"+nSec+"."+nMillSec;
+        String time=""+year+"-"+month+"-"+nDay+" "+nHour+":"+nMin+":"+nSec;
         try {
             return sim.parse(time).getTime();
         } catch (ParseException e) {

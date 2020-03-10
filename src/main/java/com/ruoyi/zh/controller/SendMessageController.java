@@ -4,8 +4,9 @@ import com.ruoyi.framework.web.domain.AjaxResult;
 import com.ruoyi.mina.config.SessionManage;
 import com.ruoyi.mina.entity.Cmd;
 import com.ruoyi.mina.entity.Msg;
+import com.ruoyi.mina.entity.StatusDetail;
 import com.ruoyi.zh.domain.ZhCollectRecord;
-import com.ruoyi.zh.service.IZhCollectRecordService;
+import com.ruoyi.zh.service.ICollectRecordService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.LogManager;
@@ -42,12 +43,15 @@ public class SendMessageController {
     }
 
     @Autowired
-    IZhCollectRecordService zhCollectRecordService;
+    ICollectRecordService zhCollectRecordService;
 
     @GetMapping("start")
     @ApiOperation("开始 4")
     public AjaxResult start(
-            @RequestParam(value = "pointname") String pointname) {
+            @RequestParam(value = "pointname") String pointname,
+            @RequestParam(value = "code") String code) {
+        SessionManage.status.setDevicecode(code);
+
         Msg msg = new Msg();
         //经纬度
         msg.setBody("");
@@ -60,12 +64,15 @@ public class SendMessageController {
         msg.setBytes(ByteUtils.concat(lng_bytes, lat_bytes));
         SessionManage.sendMsg(msg);
 
+        //开启gps
+        this.getGps();
+
 
         ZhCollectRecord zhCollectRecord = new ZhCollectRecord();
-        zhCollectRecord.setDeviceCode("SPIMS001");
+        zhCollectRecord.setDeviceCode(code);
         zhCollectRecord.setPointName(pointname);
         zhCollectRecord.setStartTime(new Date());
-        zhCollectRecordService.insertZhCollectRecord(zhCollectRecord);
+        zhCollectRecordService.insertCollectRecord(zhCollectRecord);
 
 
         AjaxResult ajax = AjaxResult.success();
@@ -85,9 +92,14 @@ public class SendMessageController {
         ZhCollectRecord zhCollectRecord = new ZhCollectRecord();
         zhCollectRecord.setEndTime(new Date());
         zhCollectRecord.setId(zhCollectRecordService.getMaxId());
-        zhCollectRecordService.updateZhCollectRecord(zhCollectRecord);
+        zhCollectRecordService.updateCollectRecord(zhCollectRecord);
+        //采集状态未false
+        StatusDetail statusDetail=new StatusDetail(false,false);
+        SessionManage.status.setCollectStatus(statusDetail);
 
-        AjaxResult ajax = AjaxResult.success();
+        this.stopGps();
+
+        AjaxResult ajax = AjaxResult.success(SessionManage.status);
         return ajax;
     }
 

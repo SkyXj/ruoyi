@@ -180,14 +180,14 @@ public class TestExcel {
     @Excel(name = "苯")
     private String field53;
 
-    @Excel(name = "苯乙烯")
-    private String field54;
+//    @Excel(name = "苯乙烯")
+//    private String field54;
 
-    @Excel(name = "苯甲酸甲酯")
-    private String field55;
-
-    @Excel(name = "苯胺")
-    private String field56;
+//    @Excel(name = "苯甲酸甲酯")
+//    private String field55;
+//
+//    @Excel(name = "苯胺")
+//    private String field56;
 
     public TestExcel(DensityVo densityVo){
         this.time=densityVo.getTime();
@@ -247,9 +247,9 @@ public class TestExcel {
         this.field51=densityVo.getValues().get(51).getValue().toString();
         this.field52=densityVo.getValues().get(52).getValue().toString();
         this.field53=densityVo.getValues().get(53).getValue().toString();
-        this.field54=densityVo.getValues().get(54).getValue().toString();
-        this.field55=densityVo.getValues().get(55).getValue().toString();
-        this.field56=densityVo.getValues().get(56).getValue().toString();
+//        this.field54=densityVo.getValues().get(54).getValue().toString();
+//        this.field55=densityVo.getValues().get(55).getValue().toString();
+//        this.field56=densityVo.getValues().get(56).getValue().toString();
     }
 
     public static List<TestExcel> getList(List<DensityVo> densityVos){

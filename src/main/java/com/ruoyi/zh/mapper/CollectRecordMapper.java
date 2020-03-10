@@ -1,6 +1,7 @@
 package com.ruoyi.zh.mapper;
 
 import com.ruoyi.zh.domain.ZhCollectRecord;
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -9,7 +10,7 @@ import java.util.List;
  * @author ruoyi
  * @date 2020-02-24
  */
-public interface ZhCollectRecordMapper 
+public interface CollectRecordMapper
 {
     /**
      * 查询走航记录
@@ -17,7 +18,7 @@ public interface ZhCollectRecordMapper
      * @param id 走航记录ID
      * @return 走航记录
      */
-    public ZhCollectRecord selectZhCollectRecordById(Long id);
+    public ZhCollectRecord selectCollectRecordById(Long id);
 
     /**
      * 查询走航记录列表
@@ -25,7 +26,7 @@ public interface ZhCollectRecordMapper
      * @param zhCollectRecord 走航记录
      * @return 走航记录集合
      */
-    public List<ZhCollectRecord> selectZhCollectRecordList(ZhCollectRecord zhCollectRecord);
+    public List<ZhCollectRecord> selectCollectRecordList(ZhCollectRecord zhCollectRecord);
 
     /**
      * 新增走航记录
@@ -33,15 +34,15 @@ public interface ZhCollectRecordMapper
      * @param zhCollectRecord 走航记录
      * @return 结果
      */
-    public int insertZhCollectRecord(ZhCollectRecord zhCollectRecord);
+    public int insertCollectRecord(ZhCollectRecord zhCollectRecord);
 
     /**
      * 修改走航记录
      * 
-     * @param zhCollectRecord 走航记录
+     * @param collectRecord 走航记录
      * @return 结果
      */
-    public int updateZhCollectRecord(ZhCollectRecord zhCollectRecord);
+    public int updateCollectRecord(ZhCollectRecord collectRecord);
 
     /**
      * 删除走航记录
@@ -49,7 +50,7 @@ public interface ZhCollectRecordMapper
      * @param id 走航记录ID
      * @return 结果
      */
-    public int deleteZhCollectRecordById(Long id);
+    public int deleteCollectRecordById(Long id);
 
     /**
      * 批量删除走航记录
@@ -57,7 +58,7 @@ public interface ZhCollectRecordMapper
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public int deleteZhCollectRecordByIds(Long[] ids);
+    public int deleteCollectRecordByIds(Long[] ids);
 
     public Long getMaxId();
 }
