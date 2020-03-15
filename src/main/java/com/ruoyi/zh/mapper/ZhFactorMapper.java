@@ -58,4 +58,5 @@ public interface ZhFactorMapper
      * @return 结果
      */
     public int deleteZhFactorByIds(Long[] ids);
+
 }

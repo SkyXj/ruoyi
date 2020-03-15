@@ -1,6 +1,8 @@
 package com.ruoyi.zh.mapper;
 
 import com.ruoyi.zh.domain.ZhCollectRecord;
+import com.ruoyi.zh.dto.ZhCollectRecordDto;
+
 import javax.annotation.Resource;
 import java.util.List;
 
@@ -61,4 +63,6 @@ public interface CollectRecordMapper
     public int deleteCollectRecordByIds(Long[] ids);
 
     public Long getMaxId();
+
+    public ZhCollectRecord getRecently();
 }

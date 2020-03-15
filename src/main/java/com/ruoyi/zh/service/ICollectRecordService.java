@@ -3,6 +3,8 @@ package com.ruoyi.zh.service;
 import com.ruoyi.mina.DensityVo;
 import com.ruoyi.zh.domain.ZhCollectRecord;
 import com.ruoyi.zh.dto.DensityDto;
+import com.ruoyi.zh.dto.ZhCollectRecordDto;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -65,4 +67,12 @@ public interface ICollectRecordService
     public Long getMaxId();
 
     public List<DensityVo> searchMic(DensityDto densityDto);
+
+    public ZhCollectRecordDto getRecently();
+
+    public Long importData(String deviceCode, /*String recordName,*/ MultipartFile file);
+
+    public ZhCollectRecordDto getPointsById(Long id);
+
+    public String exportData(Long id);
 }

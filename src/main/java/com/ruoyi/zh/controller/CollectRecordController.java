@@ -1,5 +1,7 @@
 package com.ruoyi.zh.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
@@ -7,7 +9,9 @@ import com.ruoyi.mina.DensityVo;
 import com.ruoyi.mina.handler.MsgHandler;
 import com.ruoyi.zh.domain.TestExcel;
 import com.ruoyi.zh.dto.DensityDto;
+import com.ruoyi.zh.dto.ZhCollectRecordDto;
 import io.swagger.annotations.ApiOperation;
+import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +23,7 @@ import com.ruoyi.framework.web.controller.BaseController;
 import com.ruoyi.framework.web.domain.AjaxResult;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.web.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 走航记录Controller
@@ -36,7 +41,7 @@ public class CollectRecordController extends BaseController
     /**
      * 查询走航记录列表
      */
-    @PreAuthorize("@ss.hasPermi('zh:collectRecord:list')")
+//    @PreAuthorize("@ss.hasPermi('zh:collectRecord:list')")
     @GetMapping("/list")
     public TableDataInfo list(ZhCollectRecord zhCollectRecord)
     {
@@ -48,7 +53,7 @@ public class CollectRecordController extends BaseController
     /**
      * 导出走航记录列表
      */
-    @PreAuthorize("@ss.hasPermi('zh:collectRecord:export')")
+//    @PreAuthorize("@ss.hasPermi('zh:collectRecord:export')")
     @Log(title = "走航记录", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
     public AjaxResult export(ZhCollectRecord zhCollectRecord)
@@ -61,7 +66,7 @@ public class CollectRecordController extends BaseController
     /**
      * 获取走航记录详细信息
      */
-    @PreAuthorize("@ss.hasPermi('zh:collectRecord:query')")
+//    @PreAuthorize("@ss.hasPermi('zh:collectRecord:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
@@ -71,7 +76,7 @@ public class CollectRecordController extends BaseController
     /**
      * 新增走航记录
      */
-    @PreAuthorize("@ss.hasPermi('zh:collectRecord:add')")
+//    @PreAuthorize("@ss.hasPermi('zh:collectRecord:add')")
     @Log(title = "走航记录", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody ZhCollectRecord zhCollectRecord)
@@ -82,7 +87,7 @@ public class CollectRecordController extends BaseController
     /**
      * 修改走航记录
      */
-    @PreAuthorize("@ss.hasPermi('zh:collectRecord:edit')")
+//    @PreAuthorize("@ss.hasPermi('zh:collectRecord:edit')")
     @Log(title = "走航记录", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody ZhCollectRecord zhCollectRecord)
@@ -93,7 +98,7 @@ public class CollectRecordController extends BaseController
     /**
      * 删除走航记录
      */
-    @PreAuthorize("@ss.hasPermi('zh:collectRecord:remove')")
+//    @PreAuthorize("@ss.hasPermi('zh:collectRecord:remove')")
     @Log(title = "走航记录", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
@@ -110,5 +115,41 @@ public class CollectRecordController extends BaseController
         List<TestExcel> list = TestExcel.getList(search);
         AjaxResult ajaxResult=excelExcelUtil.exportExcel(list,"走航");
         return ajaxResult;
+    }
+
+    @GetMapping("/getRecently")
+    @ApiOperation("查询最后一次走航")
+    public AjaxResult getRecently() {
+        ZhCollectRecordDto zhCollectRecordDto = zhCollectRecordService.getRecently();
+//        if(zhCollectRecordDto==null){
+//            return AjaxResult.success(new ArrayList<DensityVo>());
+//        }
+//        DensityDto densityDto=new DensityDto();
+//        SimpleDateFormat sim=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        densityDto.setStartDate(sim.format(zhCollectRecordDto.getStartTime()));
+//        List<DensityVo> search = zhCollectRecordService.searchMic(densityDto);
+        return AjaxResult.success(zhCollectRecordDto);
+    }
+
+    @PostMapping("/importData")
+    @ApiOperation("导入历史走航数据")
+    public AjaxResult importData(@RequestParam(value="file") MultipartFile file,
+                                 @RequestParam(value="deviceCode") String deviceCode){
+        AjaxResult ajaxResult=AjaxResult.success(zhCollectRecordService.importData(deviceCode,file));
+        return  ajaxResult;
+    }
+
+    @GetMapping("/getPointsById")
+    @ApiOperation("查询最后一次走航")
+    public AjaxResult getPointsById(@RequestParam(value="id") Long id) {
+        AjaxResult ajaxResult=AjaxResult.success(zhCollectRecordService.getPointsById(id));
+        return  ajaxResult;
+    }
+
+    @GetMapping("/exportData")
+    @ApiOperation("导出历史走航数据")
+    public AjaxResult exportData(@RequestParam(value="id") Long id){
+        AjaxResult ajaxResult=AjaxResult.success(zhCollectRecordService.exportData(id));
+        return  ajaxResult;
     }
 }

@@ -93,4 +93,12 @@ public class ZhFactorServiceImpl implements IZhFactorService
     {
         return zhFactorMapper.deleteZhFactorById(id);
     }
+
+    @Override
+    public List<ZhFactor> search(String name) {
+        ZhFactor zhFactor=new ZhFactor();
+        zhFactor.setName(name);
+        List<ZhFactor> zhFactors = zhFactorMapper.selectZhFactorList(zhFactor);
+        return zhFactors;
+    }
 }

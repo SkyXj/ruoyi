@@ -73,4 +73,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select max(id) id from zh_collect_record;
     </select>
 
+    <select id="getRecently" resultMap="CollectRecordResult">
+        select * from zh_collect_record where id=(select max(id) from zh_collect_record where end_time is null)
+    </select>
+
 </mapper>

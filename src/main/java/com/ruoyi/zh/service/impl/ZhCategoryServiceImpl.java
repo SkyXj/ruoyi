@@ -1,7 +1,16 @@
 package com.ruoyi.zh.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.zh.domain.ZhColor;
+import com.ruoyi.zh.domain.ZhFactor;
+import com.ruoyi.zh.domain.ZhLinkCategoryFactorColor;
+import com.ruoyi.zh.dto.ZhCategoryDto;
+import com.ruoyi.zh.dto.ZhFactorDto;
+import com.ruoyi.zh.mapper.ZhColorMapper;
+import com.ruoyi.zh.mapper.ZhFactorMapper;
+import com.ruoyi.zh.mapper.ZhLinkCategoryFactorColorMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.zh.mapper.ZhCategoryMapper;
@@ -19,6 +28,15 @@ public class ZhCategoryServiceImpl implements IZhCategoryService
 {
     @Autowired
     private ZhCategoryMapper zhCategoryMapper;
+
+    @Autowired
+    private ZhFactorMapper zhFactorMapper;
+
+    @Autowired
+    private ZhLinkCategoryFactorColorMapper zhLinkCategoryFactorColorMapper;
+
+    @Autowired
+    private ZhColorMapper zhColorMapper;
 
     /**
      * 查询颜色标准
@@ -92,5 +110,29 @@ public class ZhCategoryServiceImpl implements IZhCategoryService
     public int deleteZhCategoryById(Long id)
     {
         return zhCategoryMapper.deleteZhCategoryById(id);
+    }
+
+    @Override
+    public ZhCategoryDto getCategoryFactors(Long id) {
+        ZhCategory zhCategory = zhCategoryMapper.selectZhCategoryById(id);
+        //返回结果
+        ZhCategoryDto zhCategoryDto=new ZhCategoryDto(zhCategory);
+        List<ZhFactorDto> zhFactorDtos=new ArrayList<>();
+        //关联表
+        ZhLinkCategoryFactorColor zhLinkCategoryFactorColor=new ZhLinkCategoryFactorColor();
+        zhLinkCategoryFactorColor.setCategoryId(id);
+        //关联表
+        List<ZhLinkCategoryFactorColor> zhLinkCategoryFactorColors = zhLinkCategoryFactorColorMapper.selectZhLinkCategoryFactorColorList(zhLinkCategoryFactorColor);
+        if(zhLinkCategoryFactorColors==null||zhLinkCategoryFactorColors.size()<=0){
+            return  zhCategoryDto;
+        }
+        for (ZhLinkCategoryFactorColor linkCategoryFactorColor: zhLinkCategoryFactorColors) {
+            ZhFactor zhFactor = zhFactorMapper.selectZhFactorById(linkCategoryFactorColor.getFactorId());
+            ZhColor zhColor = zhColorMapper.selectZhColorById(linkCategoryFactorColor.getColorId());
+            ZhFactorDto zhFactorDto=new ZhFactorDto(zhFactor,zhColor);
+            zhFactorDtos.add(zhFactorDto);
+        }
+        zhCategoryDto.setFactors(zhFactorDtos);
+        return zhCategoryDto;
     }
 }

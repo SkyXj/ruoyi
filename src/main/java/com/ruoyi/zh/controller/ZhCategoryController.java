@@ -1,6 +1,9 @@
 package com.ruoyi.zh.controller;
 
 import java.util.List;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +31,7 @@ import com.ruoyi.framework.web.page.TableDataInfo;
  */
 @RestController
 @RequestMapping("/zh/category")
+@Api(tags = "颜色标准")
 public class ZhCategoryController extends BaseController
 {
     @Autowired
@@ -36,8 +40,9 @@ public class ZhCategoryController extends BaseController
     /**
      * 查询颜色标准列表
      */
-    @PreAuthorize("@ss.hasPermi('zh:category:list')")
+//    @PreAuthorize("@ss.hasPermi('zh:category:list')")
     @GetMapping("/list")
+    @ApiOperation("色标准列表(分页)")
     public TableDataInfo list(ZhCategory zhCategory)
     {
         startPage();
@@ -82,9 +87,10 @@ public class ZhCategoryController extends BaseController
     /**
      * 修改颜色标准
      */
-    @PreAuthorize("@ss.hasPermi('zh:category:edit')")
+//    @PreAuthorize("@ss.hasPermi('zh:category:edit')")
     @Log(title = "颜色标准", businessType = BusinessType.UPDATE)
     @PutMapping
+    @ApiOperation("修改标准名称")
     public AjaxResult edit(@RequestBody ZhCategory zhCategory)
     {
         return toAjax(zhCategoryService.updateZhCategory(zhCategory));
@@ -99,5 +105,16 @@ public class ZhCategoryController extends BaseController
     public AjaxResult remove(@PathVariable Long[] ids)
     {
         return toAjax(zhCategoryService.deleteZhCategoryByIds(ids));
+    }
+
+    /**
+     * 当前标准每个物质的颜色
+     */
+//    @PreAuthorize("@ss.hasPermi('zh:category:remove')")
+    @GetMapping(value = "/factorColor/{id}")
+    @ApiOperation("根据标准id列出所有物质颜色")
+    public AjaxResult getCategoryFactors(@PathVariable("id") Long id){
+        AjaxResult ajaxResult=AjaxResult.success(zhCategoryService.getCategoryFactors(id));
+        return ajaxResult;
     }
 }

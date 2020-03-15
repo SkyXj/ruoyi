@@ -14,8 +14,6 @@ import java.util.Date;
  */
 public class ZhCollectRecord
 {
-    private static final long serialVersionUID = 1L;
-
     /** id */
     private Long id;
 

@@ -1,16 +1,12 @@
 package com.ruoyi.zh.controller;
 
 import java.util.List;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.ruoyi.framework.aspectj.lang.annotation.Log;
 import com.ruoyi.framework.aspectj.lang.enums.BusinessType;
 import com.ruoyi.zh.domain.ZhLinkCategoryFactorColor;
@@ -28,6 +24,7 @@ import com.ruoyi.framework.web.page.TableDataInfo;
  */
 @RestController
 @RequestMapping("/zh/categoryFactorColor")
+@Api(tags = "颜色关联")
 public class ZhLinkCategoryFactorColorController extends BaseController
 {
     @Autowired
@@ -99,5 +96,18 @@ public class ZhLinkCategoryFactorColorController extends BaseController
     public AjaxResult remove(@PathVariable Long[] ids)
     {
         return toAjax(zhLinkCategoryFactorColorService.deleteZhLinkCategoryFactorColorByIds(ids));
+    }
+
+
+    @PostMapping("/insertOrUpdate")
+    @ApiOperation("插入或修改标准因子颜色")
+    public AjaxResult insertOrUpdate(@RequestParam(value="categoryId") Long categoryId,@RequestParam(value="factorId") Long factorId,@RequestParam(value="colortStr") String colortStr){
+        return toAjax(zhLinkCategoryFactorColorService.insertOrUpdate(categoryId,factorId,colortStr));
+    }
+
+    @DeleteMapping("/delete")
+    @ApiOperation("删除当前标准某一列因子颜色")
+    public AjaxResult delete(@RequestParam(value="categoryId") Long categoryId,@RequestParam(value="factorId") Long factorId){
+        return toAjax(zhLinkCategoryFactorColorService.delete(categoryId,factorId));
     }
 }

@@ -75,7 +75,6 @@ public class MsgHandler {
             startCollect(msg);
         }else if(cmd[0]== Cmd.MIC_Collect.getCmd()){
             //浓度数据
-
             //时间
             byte[] times=ByteUtils.subByte(msgbody,0,16);
             long datetime = ByteUtils.getDate(times);
@@ -84,6 +83,7 @@ public class MsgHandler {
             int count=(datalength-16)/(materialLength);
             List<BatchData> batchDatas=new ArrayList<>();
             DensityVo densityVo=new DensityVo();
+            densityVo.setCollectId(SessionManage.status.getCollectId());
             densityVo.setLng(MsgHandler.lng+"");
             densityVo.setLat(MsgHandler.lat+"");
             SimpleDateFormat sim=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss");
@@ -123,7 +123,12 @@ public class MsgHandler {
                     WebSocketServer.sendInfo(JSONObject.toJSONString(densityVo),"2");
                 }else{
                     //gps无效使用模拟数据
-                    if(index<list.size()){
+                    if(index<list.size()-1){
+                        //模拟
+                        WebSocketServer.sendInfo(JSONObject.toJSONString(list.get(index)),"2");
+                        index++;
+                    }else{
+                        index=0;
                         //模拟
                         WebSocketServer.sendInfo(JSONObject.toJSONString(list.get(index)),"2");
                         index++;
@@ -189,7 +194,7 @@ public class MsgHandler {
                     influxdbUtils.insertAndTime(tags,"DensityLog", fileds,datetime);
                 }
             }else{
-                if(index<list.size()){
+                if(index<list.size()-1){
                     index++;
                 }
                 statusDetail=new StatusDetail(true,false);

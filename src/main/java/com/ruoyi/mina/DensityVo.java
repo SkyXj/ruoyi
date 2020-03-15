@@ -23,6 +23,7 @@ public class DensityVo implements Comparable<DensityVo>{
     private boolean isException;
     private Long exceptionid;
     private String name;
+    private Long collectId;
 
     @Override
     public int compareTo(DensityVo o) {

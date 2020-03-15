@@ -17,6 +17,8 @@ public class Status {
     //后台与溯源之间的连接状态
     private boolean collectConnectStatus;
 
+    private Long collectId;
+
     //敏感点名称
     private boolean pointname;
     //设备名称

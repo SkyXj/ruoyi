@@ -35,7 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="danger != null "> and danger = #{danger}</if>
         </where>
     </select>
-    
+
     <select id="selectZhFactorById" parameterType="Long" resultMap="ZhFactorResult">
         <include refid="selectZhFactorVo"/>
         where id = #{id}

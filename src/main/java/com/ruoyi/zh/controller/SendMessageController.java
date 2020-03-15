@@ -73,8 +73,7 @@ public class SendMessageController {
         zhCollectRecord.setPointName(pointname);
         zhCollectRecord.setStartTime(new Date());
         zhCollectRecordService.insertCollectRecord(zhCollectRecord);
-
-
+        SessionManage.status.setCollectId(zhCollectRecord.getId());
         AjaxResult ajax = AjaxResult.success();
         return ajax;
     }

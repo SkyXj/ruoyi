@@ -36,7 +36,7 @@ public class PointController extends BaseController
     /**
      * 查询控点列表
      */
-    @PreAuthorize("@ss.hasPermi('zh:point:list')")
+//    @PreAuthorize("@ss.hasPermi('zh:point:list')")
     @GetMapping("/list")
     public TableDataInfo list(ZhPoint zhPoint)
     {
@@ -48,7 +48,7 @@ public class PointController extends BaseController
     /**
      * 导出控点列表
      */
-    @PreAuthorize("@ss.hasPermi('zh:point:export')")
+//    @PreAuthorize("@ss.hasPermi('zh:point:export')")
     @Log(title = "控点", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
     public AjaxResult export(ZhPoint zhPoint)
@@ -61,7 +61,7 @@ public class PointController extends BaseController
     /**
      * 获取控点详细信息
      */
-    @PreAuthorize("@ss.hasPermi('zh:point:query')")
+//    @PreAuthorize("@ss.hasPermi('zh:point:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
@@ -71,7 +71,7 @@ public class PointController extends BaseController
     /**
      * 新增控点
      */
-    @PreAuthorize("@ss.hasPermi('zh:point:add')")
+//    @PreAuthorize("@ss.hasPermi('zh:point:add')")
     @Log(title = "控点", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody ZhPoint zhPoint)
@@ -82,7 +82,7 @@ public class PointController extends BaseController
     /**
      * 修改控点
      */
-    @PreAuthorize("@ss.hasPermi('zh:point:edit')")
+//    @PreAuthorize("@ss.hasPermi('zh:point:edit')")
     @Log(title = "控点", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody ZhPoint zhPoint)
@@ -93,7 +93,7 @@ public class PointController extends BaseController
     /**
      * 删除控点
      */
-    @PreAuthorize("@ss.hasPermi('zh:point:remove')")
+//    @PreAuthorize("@ss.hasPermi('zh:point:remove')")
     @Log(title = "控点", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)

@@ -36,7 +36,7 @@ public class DeviceController extends BaseController
     /**
      * 查询走航列表
      */
-    @PreAuthorize("@ss.hasPermi('zh:device:list')")
+//    @PreAuthorize("@ss.hasPermi('zh:device:list')")
     @GetMapping("/list")
     public TableDataInfo list(ZhDevice zhDevice)
     {
@@ -48,7 +48,7 @@ public class DeviceController extends BaseController
     /**
      * 导出走航列表
      */
-    @PreAuthorize("@ss.hasPermi('zh:device:export')")
+//    @PreAuthorize("@ss.hasPermi('zh:device:export')")
     @Log(title = "走航", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
     public AjaxResult export(ZhDevice zhDevice)
@@ -61,7 +61,7 @@ public class DeviceController extends BaseController
     /**
      * 获取走航详细信息
      */
-    @PreAuthorize("@ss.hasPermi('zh:device:query')")
+//    @PreAuthorize("@ss.hasPermi('zh:device:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
@@ -71,7 +71,7 @@ public class DeviceController extends BaseController
     /**
      * 新增走航
      */
-    @PreAuthorize("@ss.hasPermi('zh:device:add')")
+//    @PreAuthorize("@ss.hasPermi('zh:device:add')")
     @Log(title = "走航", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody ZhDevice zhDevice)
@@ -82,7 +82,7 @@ public class DeviceController extends BaseController
     /**
      * 修改走航
      */
-    @PreAuthorize("@ss.hasPermi('zh:device:edit')")
+//    @PreAuthorize("@ss.hasPermi('zh:device:edit')")
     @Log(title = "走航", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody ZhDevice zhDevice)
@@ -93,7 +93,7 @@ public class DeviceController extends BaseController
     /**
      * 删除走航
      */
-    @PreAuthorize("@ss.hasPermi('zh:device:remove')")
+//    @PreAuthorize("@ss.hasPermi('zh:device:remove')")
     @Log(title = "走航", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)

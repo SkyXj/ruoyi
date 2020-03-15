@@ -58,4 +58,11 @@ public interface IZhFactorService
      * @return 结果
      */
     public int deleteZhFactorById(Long id);
+
+    /**
+     * 根据名称模糊查找因子
+     * @param name
+     * @return
+     */
+    public List<ZhFactor> search(String name);
 }

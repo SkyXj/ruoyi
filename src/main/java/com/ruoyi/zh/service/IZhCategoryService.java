@@ -1,6 +1,8 @@
 package com.ruoyi.zh.service;
 
 import com.ruoyi.zh.domain.ZhCategory;
+import com.ruoyi.zh.dto.ZhCategoryDto;
+
 import java.util.List;
 
 /**
@@ -58,4 +60,6 @@ public interface IZhCategoryService
      * @return 结果
      */
     public int deleteZhCategoryById(Long id);
+
+    public ZhCategoryDto getCategoryFactors(Long id);
 }

@@ -58,4 +58,21 @@ public interface IZhLinkCategoryFactorColorService
      * @return 结果
      */
     public int deleteZhLinkCategoryFactorColorById(Long id);
+
+    /**
+     * 新增物质因子颜色关联()
+     * @param categoryId 标准id
+     * @param factorId 因子id
+     * @param colortStr 颜色字符串
+     * @return
+     */
+    public int insertOrUpdate(Long categoryId,Long factorId,String colortStr);
+
+    /**
+     * 删除
+     * @param categoryId 标准id
+     * @param factorId 因子id
+     * @return
+     */
+    public int delete(Long categoryId,Long factorId);
 }
