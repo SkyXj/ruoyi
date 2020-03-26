@@ -70,7 +70,7 @@ public interface ICollectRecordService
 
     public ZhCollectRecordDto getRecently();
 
-    public Long importData(String deviceCode, /*String recordName,*/ MultipartFile file);
+    public Long importData(String deviceCode, /*String recordName,*/ MultipartFile file,String pointname);
 
     public ZhCollectRecordDto getPointsById(Long id);
 

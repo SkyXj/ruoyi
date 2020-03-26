@@ -199,7 +199,7 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
     }
 
     @Override
-    public Long importData(String deviceCode, /*String recordName,*/ MultipartFile file) {
+    public Long importData(String deviceCode, /*String recordName,*/ MultipartFile file,String pointname) {
         Date startTime = null;
         Date endTime = null;
         ZhCollectRecord collectionRecord=null;
@@ -270,6 +270,7 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
             collectionRecord.setDeviceCode(deviceCode);
             collectionRecord.setStartTime(startTime);
             collectionRecord.setEndTime(endTime);
+            collectionRecord.setPointName(pointname);
             collectRecordMapper.insertCollectRecord(collectionRecord);
         } catch (IOException e) {
             e.printStackTrace();
@@ -306,15 +307,14 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
             return null;
         }
         List<DensityVo> points = pointsById.getPoints();
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
         String fileName="走航"+System.currentTimeMillis()+".txt";
         BufferedWriter fileWriter = null;
         try {
             fileWriter=new BufferedWriter (new OutputStreamWriter (new FileOutputStream (profile+""+fileName,true),"GBK"));
 //            fileWriter = new FileWriter(profile+"/"+fileName);//创建文本文件
             for (int i = 0; i <points.size(); i++) {
-                if(i==0){
-
-                }
                 StringBuffer sb1=new StringBuffer();
 
                 StringBuffer sb=new StringBuffer();
