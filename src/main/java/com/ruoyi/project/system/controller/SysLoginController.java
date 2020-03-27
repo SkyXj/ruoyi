@@ -48,11 +48,11 @@ public class SysLoginController
      * @return 结果
      */
     @PostMapping("/login")
-    public AjaxResult login(String username, String password, String code, String uuid)
+    public AjaxResult login(String username, String password/*, String code, String uuid*/)
     {
         AjaxResult ajax = AjaxResult.success();
         // 生成令牌
-        String token = loginService.login(username, password, code, uuid);
+        String token = loginService.login(username, password);
         ajax.put(Constants.TOKEN, token);
         return ajax;
     }
@@ -62,7 +62,7 @@ public class SysLoginController
      * 
      * @return 用户信息
      */
-    @GetMapping("getInfo")
+    @GetMapping("/getInfo")
     public AjaxResult getInfo()
     {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());

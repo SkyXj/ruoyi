@@ -19,9 +19,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectCollectRecordList" parameterType="ZhCollectRecord" resultMap="CollectRecordResult">
         <include refid="selectCollectRecordVo"/>
         <where>  
-            <if test="deviceCode != null  and deviceCode != ''"> and device_code = #{deviceCode}</if>
-            <if test="startTime != null "> and start_time = #{startTime}</if>
-            <if test="endTime != null "> and end_time = #{endTime}</if>
+            <if test="deviceCode != null  and deviceCode != ''"> and device_code like concat('%', #{deviceCode}, '%')</if>
+            <if test="startTime != null "> and start_time &gt;= #{startTime}</if>
+            <if test="endTime != null "> and end_time &lt;= #{endTime}</if>
             <if test="pointName != null  and pointName != ''"> and point_name like concat('%', #{pointName}, '%')</if>
         </where>
     </select>
