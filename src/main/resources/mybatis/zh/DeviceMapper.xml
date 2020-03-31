@@ -27,16 +27,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectZhDeviceVo"/>
         <where>  
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
-            <if test="code != null  and code != ''"> and code = #{code}</if>
-            <if test="company != null  and company != ''"> and company = #{company}</if>
-            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="code != null  and code != ''"> and code like concat('%',  #{code}, '%')</if>
+            <if test="company != null  and company != ''"> and company like concat('%',  #{company}, '%')</if>
+            <if test="address != null  and address != ''"> and address like concat('%',  #{address}, '%')</if>
             <if test="img != null  and img != ''"> and img = #{img}</if>
             <if test="status != null "> and status = #{status}</if>
             <if test="correctStatus != null "> and correct_status = #{correctStatus}</if>
             <if test="weatherStatus != null "> and weather_status = #{weatherStatus}</if>
             <if test="gpsStatus != null "> and gps_status = #{gpsStatus}</if>
-            <if test="createdDate != null "> and created_date = #{createdDate}</if>
-            <if test="updatedDate != null "> and updated_date = #{updatedDate}</if>
         </where>
     </select>
     

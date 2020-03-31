@@ -86,6 +86,7 @@ public class MsgHandler {
             densityVo.setCollectId(SessionManage.status.getCollectId());
             densityVo.setLng(MsgHandler.lng+"");
             densityVo.setLat(MsgHandler.lat+"");
+            densityVo.setCollectId(SessionManage.status.getCollectId());
             SimpleDateFormat sim=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss");
             Date date=new Date(datetime);
             densityVo.setTime(sim.format(date));
@@ -124,13 +125,19 @@ public class MsgHandler {
                 }else{
                     //gps无效使用模拟数据
                     if(index<list.size()-1){
+                        DensityVo dv= list.get(index);
+                        densityVo.setLng(dv.getLng());
+                        densityVo.setLat(dv.getLat());
                         //模拟
-                        WebSocketServer.sendInfo(JSONObject.toJSONString(list.get(index)),"2");
+                        WebSocketServer.sendInfo(JSONObject.toJSONString(densityVo),"2");
                         index++;
                     }else{
                         index=0;
+                        DensityVo dv= list.get(index);
+                        densityVo.setLng(dv.getLng());
+                        densityVo.setLat(dv.getLat());
                         //模拟
-                        WebSocketServer.sendInfo(JSONObject.toJSONString(list.get(index)),"2");
+                        WebSocketServer.sendInfo(JSONObject.toJSONString(densityVo),"2");
                         index++;
                     }
                 }
