@@ -74,5 +74,9 @@ public interface ICollectRecordService
 
     public ZhCollectRecordDto getPointsById(Long id);
 
+    public List<ZhCollectRecordDto> getPointsByIds(Long[] ids);
+
     public String exportData(Long id);
+
+    public List<ZhCollectRecord> selectCollectRecordByIds(Long[] ids);
 }

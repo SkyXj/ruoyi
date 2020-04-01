@@ -22,6 +22,8 @@ public interface CollectRecordMapper
      */
     public ZhCollectRecord selectCollectRecordById(Long id);
 
+    public List<ZhCollectRecord> selectCollectRecordByIds(Long[] ids);
+
     /**
      * 查询走航记录列表
      * 

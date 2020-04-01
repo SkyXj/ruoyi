@@ -50,6 +50,14 @@ public class CollectRecordController extends BaseController
         return getDataTable(list);
     }
 
+    @GetMapping("/selectByIds")
+    public TableDataInfo selectByIds(Long[] ids)
+    {
+        startPage();
+        List<ZhCollectRecord> list = zhCollectRecordService.selectCollectRecordByIds(ids);
+        return getDataTable(list);
+    }
+
     /**
      * 导出走航记录列表
      */
@@ -144,6 +152,13 @@ public class CollectRecordController extends BaseController
     @ApiOperation("查询最后一次走航")
     public AjaxResult getPointsById(@RequestParam(value="id") Long id) {
         AjaxResult ajaxResult=AjaxResult.success(zhCollectRecordService.getPointsById(id));
+        return  ajaxResult;
+    }
+
+    @GetMapping("/getPointsByIds/{ids}")
+    @ApiOperation("查询最后一次走航")
+    public AjaxResult getPointsByIds(@PathVariable(value="ids") Long[] ids) {
+        AjaxResult ajaxResult=AjaxResult.success(zhCollectRecordService.getPointsByIds(ids));
         return  ajaxResult;
     }
 

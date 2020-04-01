@@ -30,6 +30,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectCollectRecordVo"/>
         where id = #{id}
     </select>
+
+    <select id="selectCollectRecordByIds" parameterType="String" resultMap="CollectRecordResult">
+        <include refid="selectCollectRecordVo"/>
+        where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
         
     <insert id="insertCollectRecord" parameterType="ZhCollectRecord" useGeneratedKeys="true" keyProperty="id">
         insert into zh_collect_record

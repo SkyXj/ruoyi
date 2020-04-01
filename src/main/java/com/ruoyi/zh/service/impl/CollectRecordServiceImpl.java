@@ -131,8 +131,31 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
             return result;
         }
 
-        Map<String, List<DensityRealTime>> map = list.stream()
-                .collect(Collectors.groupingBy(s -> s.getTime() + "_" + s.getCode()));
+        Map<String, List<DensityRealTime>> map=new HashMap<>();
+        for (DensityRealTime s: list) {
+             if(map.containsKey(s.getTime() + "_" + s.getCode())){
+                 map.get(s.getTime() + "_" + s.getCode()).add(s);
+             }else{
+                 List<DensityRealTime> listtemp=new ArrayList<DensityRealTime>();
+                 listtemp.add(s);
+                 map.put(s.getTime() + "_" + s.getCode(),listtemp);
+             }
+        }
+
+        Map<String, DensityLog> mapLogs=new HashMap<>();
+        for (DensityLog s: densityLogs) {
+//            if(mapLogs.containsKey(s.getTime() + "_" + s.getCode())){
+//                mapLogs.put(s.getTime() + "_" + s.getCode());
+//            }else{
+//                mapLogs.put(s.getTime() + "_" + s.getCode(),new ArrayList<DensityRealTime>());
+//            }
+            mapLogs.put(s.getTime() + "_" + s.getCode(),s);
+        }
+
+
+
+//        Map<String, List<DensityRealTime>> map = list.stream()
+//                .collect(Collectors.groupingBy(s -> s.getTime() + "_" + s.getCode()));
         for (String key : map.keySet()) {
             String[] strs = key.split("_");
             DensityVo vo = new DensityVo();
@@ -144,12 +167,17 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
             DensityRealTime dr = new DensityRealTime();
             dr.setTime(strs[0]);
             dr.setCode(strs[1]);
-            List<DensityLog> collect = densityLogs.stream().filter(t -> t.getTime().equals(strs[0]) && t.getCode().equals(strs[1])).collect(Collectors.toList());
-            if (collect == null || collect.size() <= 0) {
-                continue;
-            }
+//            List<DensityLog> collect = densityLogs.stream().filter(t -> t.getTime().equals(strs[0]) && t.getCode().equals(strs[1])).collect(Collectors.toList());
+//            List<DensityLog> collect = null;
+//
+//            if (collect == null || collect.size() <= 0) {
+//                continue;
+//            }
 //            DensityLog densityLog = densityLogService.getOne(dr,deviceModel,serverIp);
-            DensityLog densityLog = collect.get(0);
+            DensityLog densityLog = null;
+            if(mapLogs.containsKey(key)){
+                densityLog = mapLogs.get(key);
+            }
             if (densityLog == null) {
                 continue;
             }
@@ -294,9 +322,31 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
         DensityDto densityDto=new DensityDto();
         densityDto.setCode(zhCollectRecord.getDeviceCode());
         densityDto.setStartDate(sim.format(zhCollectRecord.getStartTime()));
+        densityDto.setEndDate(sim.format(zhCollectRecord.getEndTime()));
         List<DensityVo> densityVos = searchMic(densityDto);
         zhCollectRecordDto.setPoints(densityVos);
         return zhCollectRecordDto;
+    }
+
+    @Override
+    public List<ZhCollectRecordDto> getPointsByIds(Long[] ids) {
+        SimpleDateFormat sim=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        List<ZhCollectRecordDto> zhCollectRecordDtos=new ArrayList<>();
+        List<ZhCollectRecord> zhCollectRecords = collectRecordMapper.selectCollectRecordByIds(ids);
+        if(zhCollectRecords==null||zhCollectRecords.size()<=0){
+            return zhCollectRecordDtos;
+        }
+        for (ZhCollectRecord zhCollectRecord: zhCollectRecords) {
+            ZhCollectRecordDto zhCollectRecordDto=new ZhCollectRecordDto(zhCollectRecord);
+            DensityDto densityDto=new DensityDto();
+            densityDto.setCode(zhCollectRecord.getDeviceCode());
+            densityDto.setStartDate(sim.format(zhCollectRecord.getStartTime()));
+            densityDto.setEndDate(sim.format(zhCollectRecord.getEndTime()));
+            List<DensityVo> densityVos = searchMic(densityDto);
+            zhCollectRecordDto.setPoints(densityVos);
+            zhCollectRecordDtos.add(zhCollectRecordDto);
+        }
+        return zhCollectRecordDtos;
     }
 
     @Override
@@ -344,6 +394,14 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
             e.printStackTrace();
         }
         return fileName;
+    }
+
+    @Override
+    public List<ZhCollectRecord> selectCollectRecordByIds(Long[] ids) {
+        if(ids==null){
+            return new ArrayList<ZhCollectRecord>();
+        }
+        return collectRecordMapper.selectCollectRecordByIds(ids);
     }
 
 
