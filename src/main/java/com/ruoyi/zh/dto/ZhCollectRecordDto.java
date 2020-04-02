@@ -29,6 +29,10 @@ public class ZhCollectRecordDto {
     @Excel(name = "敏感点名称")
     private String pointName;
 
+    /** 物质总数 */
+    @Excel(name = "物质总数")
+    private Integer factorCount;
+
     private List<DensityVo> points;
 
     public ZhCollectRecordDto(ZhCollectRecord zhCollectRecord){
@@ -37,6 +41,7 @@ public class ZhCollectRecordDto {
         this.startTime=zhCollectRecord.getStartTime();
         this.endTime=zhCollectRecord.getEndTime();
         this.pointName=zhCollectRecord.getPointName();
+        this.factorCount=zhCollectRecord.getFactorCount();
     }
 
     public ZhCollectRecordDto(){

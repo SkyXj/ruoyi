@@ -298,6 +298,7 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
             collectionRecord.setDeviceCode(deviceCode);
             collectionRecord.setStartTime(startTime);
             collectionRecord.setEndTime(endTime);
+            collectionRecord.setFactorCount(names.length-3);
             collectionRecord.setPointName(pointname);
             collectRecordMapper.insertCollectRecord(collectionRecord);
         } catch (IOException e) {
@@ -322,7 +323,9 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
         DensityDto densityDto=new DensityDto();
         densityDto.setCode(zhCollectRecord.getDeviceCode());
         densityDto.setStartDate(sim.format(zhCollectRecord.getStartTime()));
-        densityDto.setEndDate(sim.format(zhCollectRecord.getEndTime()));
+        if(zhCollectRecord.getEndTime()!=null){
+            densityDto.setEndDate(sim.format(zhCollectRecord.getEndTime()));
+        }
         List<DensityVo> densityVos = searchMic(densityDto);
         zhCollectRecordDto.setPoints(densityVos);
         return zhCollectRecordDto;
@@ -341,7 +344,9 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
             DensityDto densityDto=new DensityDto();
             densityDto.setCode(zhCollectRecord.getDeviceCode());
             densityDto.setStartDate(sim.format(zhCollectRecord.getStartTime()));
-            densityDto.setEndDate(sim.format(zhCollectRecord.getEndTime()));
+            if(zhCollectRecord.getEndTime()!=null){
+                densityDto.setEndDate(sim.format(zhCollectRecord.getEndTime()));
+            }
             List<DensityVo> densityVos = searchMic(densityDto);
             zhCollectRecordDto.setPoints(densityVos);
             zhCollectRecordDtos.add(zhCollectRecordDto);
@@ -357,9 +362,60 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
             return null;
         }
         List<DensityVo> points = pointsById.getPoints();
+        SimpleDateFormat sdfday=new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdfhour=new SimpleDateFormat("HH：mm：ss");
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String timestr="-"+pointsById.getPointName()+sdfday.format(pointsById.getStartTime())+"("+sdfhour.format(pointsById.getStartTime())+"-";
+        if(pointsById.getEndTime()==null){
+            timestr+=sdfhour.format(new Date());
+        }else{
+            timestr+=sdfhour.format(pointsById.getEndTime());
+        }
+        timestr+=")"+".txt";
+//        String fileName=pointsById.getPointName()+"走航"+sdf.format(pointsById.getStartTime())+".txt";
+        String fileName=timestr;
+        createFileName(points,fileName);
+//        BufferedWriter fileWriter = null;
+//        try {
+//            fileWriter=new BufferedWriter (new OutputStreamWriter (new FileOutputStream (profile+""+fileName,true),"GBK"));
+////            fileWriter = new FileWriter(profile+"/"+fileName);//创建文本文件
+//            for (int i = 0; i <points.size(); i++) {
+//                StringBuffer sb1=new StringBuffer();
+//
+//                StringBuffer sb=new StringBuffer();
+//                sb1.append("时间;经度;纬度;");
+//                sb.append(points.get(i).getTime()+";"+points.get(i).getLng()+";"+points.get(i).getLat()+";");
+//                int tempindex=0;
+//                for (DensityVo.KV value : points.get(i).getValues()) {
+//                    sb1.append(value.getName());
+//                    sb.append(value.getValue());
+//                    if(tempindex<points.get(i).getValues().size()-1){
+//                        if(i==0){
+//                            sb1.append(";");
+//                        }
+//                        sb.append(";");
+//                    }
+//                    tempindex++;
+//                }
+//                if(i==0){
+//                    fileWriter.write(sb1.toString()+"\r\n");//写入 \r\n换行
+//                }
+//                fileWriter.write(sb.toString()+"\r\n");//写入 \r\n换行
+//            }
+//            fileWriter.flush();
+//            fileWriter.close();
+//        } catch (IOException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+        return fileName;
+    }
 
-        String fileName="走航"+System.currentTimeMillis()+".txt";
+    public void createFileName(List<DensityVo> points,String fileName){
+        String profile = RuoYiConfig.getDownloadPath();
+        SimpleDateFormat sdfday=new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdfhour=new SimpleDateFormat("HH：mm：ss");
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         BufferedWriter fileWriter = null;
         try {
             fileWriter=new BufferedWriter (new OutputStreamWriter (new FileOutputStream (profile+""+fileName,true),"GBK"));
@@ -393,6 +449,22 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public String exportDataByIds(Long[] ids) {
+        List<ZhCollectRecordDto> zhCollectRecordDtos = getPointsByIds(ids);
+        List<DensityVo> points = new ArrayList<>();
+        if(zhCollectRecordDtos==null||zhCollectRecordDtos.size()<=0){
+            return "";
+        }
+//        Set<Integer> sets=new HashSet<>();
+        for (int i = 0; i < zhCollectRecordDtos.size(); i++) {
+            points.addAll(zhCollectRecordDtos.get(i).getPoints());
+        }
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH：mm：ss");
+        String fileName="合并文件"+sdf.format(new Date())+".txt";
+        createFileName(points,fileName);
         return fileName;
     }
 

@@ -33,6 +33,10 @@ public class ZhCollectRecord
     @Excel(name = "敏感点名称")
     private String pointName;
 
+    /** 物质总数 */
+    @Excel(name = "物质总数")
+    private Integer factorCount;
+
     public void setId(Long id) 
     {
         this.id = id;
@@ -78,6 +82,14 @@ public class ZhCollectRecord
     public String getPointName() 
     {
         return pointName;
+    }
+
+    public Integer getFactorCount() {
+        return factorCount;
+    }
+
+    public void setFactorCount(Integer factorCount) {
+        this.factorCount = factorCount;
     }
 
     @Override

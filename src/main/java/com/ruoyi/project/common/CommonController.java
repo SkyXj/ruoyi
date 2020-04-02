@@ -40,10 +40,10 @@ public class CommonController
     {
         try
         {
-            if (!FileUtils.isValidFilename(fileName))
-            {
-                throw new Exception(StringUtils.format("文件名称({})非法，不允许下载。 ", fileName));
-            }
+//            if (!FileUtils.isValidFilename(fileName))
+//            {
+//                throw new Exception(StringUtils.format("文件名称({})非法，不允许下载。 ", fileName));
+//            }
             String realFileName = System.currentTimeMillis() + fileName.substring(fileName.indexOf("_") + 1);
             String filePath = RuoYiConfig.getDownloadPath() + fileName;
 

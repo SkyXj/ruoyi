@@ -10,10 +10,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="startTime"    column="start_time"    />
         <result property="endTime"    column="end_time"    />
         <result property="pointName"    column="point_name"    />
+        <result property="factorCount"    column="factor_count"    />
     </resultMap>
 
     <sql id="selectCollectRecordVo">
-        select id, device_code, start_time, end_time, point_name from zh_collect_record
+        select id, device_code, start_time, end_time, point_name,factor_count from zh_collect_record
     </sql>
 
     <select id="selectCollectRecordList" parameterType="ZhCollectRecord" resultMap="CollectRecordResult">
@@ -22,6 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="deviceCode != null  and deviceCode != ''"> and device_code like concat('%', #{deviceCode}, '%')</if>
             <if test="startTime != null "> and start_time &gt;= #{startTime}</if>
             <if test="endTime != null "> and end_time &lt;= #{endTime}</if>
+            <if test="factorCount != null "> and factor_count = #{factorCount}</if>
             <if test="pointName != null  and pointName != ''"> and point_name like concat('%', #{pointName}, '%')</if>
         </where>
     </select>
@@ -45,12 +47,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="deviceCode != null  and deviceCode != ''">device_code,</if>
             <if test="startTime != null ">start_time,</if>
             <if test="endTime != null ">end_time,</if>
+            <if test="factorCount != null ">factor_count,</if>
             <if test="pointName != null  and pointName != ''">point_name,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="deviceCode != null  and deviceCode != ''">#{deviceCode},</if>
             <if test="startTime != null ">#{startTime},</if>
             <if test="endTime != null ">#{endTime},</if>
+            <if test="factorCount != null ">#{factorCount},</if>
             <if test="pointName != null  and pointName != ''">#{pointName},</if>
          </trim>
     </insert>
@@ -61,6 +65,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="deviceCode != null  and deviceCode != ''">device_code = #{deviceCode},</if>
             <if test="startTime != null ">start_time = #{startTime},</if>
             <if test="endTime != null ">end_time = #{endTime},</if>
+            <if test="factorCount != null ">factor_count=#{factorCount},</if>
             <if test="pointName != null  and pointName != ''">point_name = #{pointName},</if>
         </trim>
         where id = #{id}

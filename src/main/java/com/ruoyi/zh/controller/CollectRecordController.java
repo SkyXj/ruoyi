@@ -71,6 +71,14 @@ public class CollectRecordController extends BaseController
         return util.exportExcel(list, "collectRecord");
     }
 
+    @Log(title = "根据id导出走航记录", businessType = BusinessType.EXPORT)
+    @GetMapping("/exportByIds/{ids}")
+    public AjaxResult exportByIds(@PathVariable(value = "ids")Long[] ids)
+    {
+        AjaxResult ajaxResult=AjaxResult.success(zhCollectRecordService.exportDataByIds(ids));
+        return  ajaxResult;
+    }
+
     /**
      * 获取走航记录详细信息
      */
