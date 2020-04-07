@@ -42,6 +42,24 @@ public class DataInit {
         }
         return null;
     }
+
+    private String strpath="data/test.txt";
+
+    @Bean(name = "testtext")
+    public String getTxt(){
+        try {
+            // 根据resource文件路径，生成文件
+            File jsonFile=new File(strpath);
+            if(!jsonFile.exists()){
+                jsonFile=new File("../"+strpath);
+            }
+            String json = FileUtils.readFileToString(jsonFile,"UTF-8");
+            return json;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
     private static final String  BEGIN_HEX="3C626567696E3E";
     private static final String  END_HEX="3C656E643E";
 

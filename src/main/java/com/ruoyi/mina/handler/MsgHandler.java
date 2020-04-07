@@ -16,6 +16,7 @@ import com.ruoyi.webSocket.WebSocketServer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -33,6 +34,8 @@ public class MsgHandler {
 
     public static List<DensityVo> list;
 
+    public static String testTxt;
+
     public static InfluxdbUtils influxdbUtils;
 
     //经度和纬度
@@ -45,6 +48,12 @@ public class MsgHandler {
         MsgHandler.list = list;
     }
 
+    @Autowired
+    @Qualifier(value = "testtext")
+    public  void setTestTxt(String txt)
+    {
+        MsgHandler.testTxt = txt;
+    }
     @Autowired
 //    @Qualifier(value = "influxdbUtils")
     public void setInfluxdbUtils(InfluxdbUtils influxdbUtils){
@@ -117,6 +126,7 @@ public class MsgHandler {
                 batchDatas.add(batchData);
             }
             densityVo.setValues(values);
+            densityVo.setThisDatas();
             influxdbUtils.batchInsertAndTime(batchDatas);
             try {
                 //如果数据是有效的则使用实际数据
@@ -128,6 +138,7 @@ public class MsgHandler {
                         DensityVo dv= list.get(index);
                         densityVo.setLng(dv.getLng());
                         densityVo.setLat(dv.getLat());
+                        densityVo.setThisDatas();
                         //模拟
                         WebSocketServer.sendInfo(JSONObject.toJSONString(densityVo),"2");
                         index++;
@@ -136,6 +147,7 @@ public class MsgHandler {
                         DensityVo dv= list.get(index);
                         densityVo.setLng(dv.getLng());
                         densityVo.setLat(dv.getLat());
+                        densityVo.setThisDatas();
                         //模拟
                         WebSocketServer.sendInfo(JSONObject.toJSONString(densityVo),"2");
                         index++;

@@ -32,5 +32,12 @@ public class CesiumController {
         return ajaxResult;
     }
 
+    @GetMapping("testTxt")
+    @ApiOperation("测试数据文本")
+    public AjaxResult testTxt(){
+        AjaxResult ajaxResult=AjaxResult.success(MsgHandler.testTxt);
+        return ajaxResult;
+    }
+
 
 }

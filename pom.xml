@@ -263,6 +263,18 @@
 			<version>2.15</version>
 		</dependency>
 
+		<!--<dependency>-->
+			<!--<groupId>com.browser</groupId>-->
+			<!--<artifactId>jxbrowser</artifactId>-->
+			<!--<version>6.21</version>-->
+		<!--</dependency>-->
+
+		<!--<dependency>-->
+			<!--<groupId>com.browser</groupId>-->
+			<!--<artifactId>jxbrowser-win64</artifactId>-->
+			<!--<version>6.21</version>-->
+		<!--</dependency>-->
+
 	</dependencies>
 
 	<build>

@@ -166,7 +166,7 @@ public class CollectRecordController extends BaseController
     @GetMapping("/getPointsByIds/{ids}")
     @ApiOperation("查询最后一次走航")
     public AjaxResult getPointsByIds(@PathVariable(value="ids") Long[] ids) {
-        AjaxResult ajaxResult=AjaxResult.success(zhCollectRecordService.getPointsByIds(ids));
+        AjaxResult ajaxResult=AjaxResult.success(zhCollectRecordService.getPointsStrByIds(ids));
         return  ajaxResult;
     }
 

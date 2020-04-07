@@ -35,6 +35,8 @@ public class ZhCollectRecordDto {
 
     private List<DensityVo> points;
 
+    private List<String> datas;
+
     public ZhCollectRecordDto(ZhCollectRecord zhCollectRecord){
         this.id=zhCollectRecord.getId();
         this.deviceCode=zhCollectRecord.getDeviceCode();

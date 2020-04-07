@@ -68,6 +68,8 @@ public interface ICollectRecordService
 
     public List<DensityVo> searchMic(DensityDto densityDto);
 
+    public List<String> searchStrMic(DensityDto densityDto);
+
     public ZhCollectRecordDto getRecently();
 
     public Long importData(String deviceCode, /*String recordName,*/ MultipartFile file,String pointname);
@@ -75,6 +77,8 @@ public interface ICollectRecordService
     public ZhCollectRecordDto getPointsById(Long id);
 
     public List<ZhCollectRecordDto> getPointsByIds(Long[] ids);
+
+    public List<ZhCollectRecordDto> getPointsStrByIds(Long[] ids);
 
     public String exportData(Long id);
 
