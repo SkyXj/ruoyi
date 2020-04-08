@@ -20,7 +20,7 @@ public class ZhConfig extends BaseEntity
 
     /** 走航放大倍数 */
     @Excel(name = "走航放大倍数")
-    private Long zoom;
+    private Double zoom;
 
     /** 方向 */
     @Excel(name = "方向")
@@ -44,11 +44,11 @@ public class ZhConfig extends BaseEntity
 
     /** 经度 */
     @Excel(name = "经度")
-    private Long lng;
+    private Double lng;
 
     /** 纬度 */
     @Excel(name = "纬度")
-    private Long lat;
+    private Double lat;
 
     public void setId(Long id) 
     {
@@ -59,12 +59,12 @@ public class ZhConfig extends BaseEntity
     {
         return id;
     }
-    public void setZoom(Long zoom) 
+    public void setZoom(Double zoom)
     {
         this.zoom = zoom;
     }
 
-    public Long getZoom() 
+    public Double getZoom()
     {
         return zoom;
     }
@@ -113,21 +113,21 @@ public class ZhConfig extends BaseEntity
     {
         return shapetype;
     }
-    public void setLng(Long lng) 
+    public void setLng(Double lng)
     {
         this.lng = lng;
     }
 
-    public Long getLng() 
+    public Double getLng()
     {
         return lng;
     }
-    public void setLat(Long lat) 
+    public void setLat(Double lat)
     {
         this.lat = lat;
     }
 
-    public Long getLat() 
+    public Double getLat()
     {
         return lat;
     }
