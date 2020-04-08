@@ -604,5 +604,10 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
         return collectRecordMapper.selectCollectRecordByIds(ids);
     }
 
+    @Override
+    public void closeRecord() {
+        collectRecordMapper.closeRecord();
+    }
+
 
 }

@@ -85,4 +85,6 @@ public interface ICollectRecordService
     public String exportDataByIds(Long[] ids);
 
     public List<ZhCollectRecord> selectCollectRecordByIds(Long[] ids);
+
+    public void closeRecord();
 }

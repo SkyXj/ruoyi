@@ -176,4 +176,12 @@ public class CollectRecordController extends BaseController
         AjaxResult ajaxResult=AjaxResult.success(zhCollectRecordService.exportData(id));
         return  ajaxResult;
     }
+
+    @GetMapping("/closeRecord")
+    @ApiOperation("关闭走航记录")
+    public AjaxResult closeRecord(){
+        zhCollectRecordService.closeRecord();
+        AjaxResult ajaxResult=AjaxResult.success();
+        return  ajaxResult;
+    }
 }

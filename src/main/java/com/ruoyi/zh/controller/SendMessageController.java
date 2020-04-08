@@ -67,6 +67,8 @@ public class SendMessageController {
         //开启gps
         this.getGps();
 
+        zhCollectRecordService.closeRecord();
+
 
         ZhCollectRecord zhCollectRecord = new ZhCollectRecord();
         zhCollectRecord.setDeviceCode(code);

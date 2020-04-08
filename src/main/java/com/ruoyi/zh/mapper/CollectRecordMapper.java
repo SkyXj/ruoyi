@@ -67,4 +67,6 @@ public interface CollectRecordMapper
     public Long getMaxId();
 
     public ZhCollectRecord getRecently();
+
+    public void closeRecord();
 }
