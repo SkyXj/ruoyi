@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.zh.mapper.ZhConfigMapper">
+    
+    <resultMap type="ZhConfig" id="ZhConfigResult">
+        <result property="id"    column="id"    />
+        <result property="zoom"    column="zoom"    />
+        <result property="direction"    column="direction"    />
+        <result property="angle"    column="angle"    />
+        <result property="distance"    column="distance"    />
+        <result property="flashtime"    column="flashtime"    />
+        <result property="shapetype"    column="shapetype"    />
+        <result property="lng"    column="lng"    />
+        <result property="lat"    column="lat"    />
+    </resultMap>
+
+    <sql id="selectZhConfigVo">
+        select id, zoom, direction, angle, distance, flashtime, shapetype, lng, lat from zh_config
+    </sql>
+
+    <select id="selectZhConfigList" parameterType="ZhConfig" resultMap="ZhConfigResult">
+        <include refid="selectZhConfigVo"/>
+        <where>  
+            <if test="zoom != null "> and zoom = #{zoom}</if>
+            <if test="direction != null "> and direction = #{direction}</if>
+            <if test="angle != null "> and angle = #{angle}</if>
+            <if test="distance != null "> and distance = #{distance}</if>
+            <if test="flashtime != null "> and flashtime = #{flashtime}</if>
+            <if test="shapetype != null "> and shapetype = #{shapetype}</if>
+            <if test="lng != null "> and lng = #{lng}</if>
+            <if test="lat != null "> and lat = #{lat}</if>
+        </where>
+    </select>
+    
+    <select id="selectZhConfigById" parameterType="Long" resultMap="ZhConfigResult">
+        <include refid="selectZhConfigVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertZhConfig" parameterType="ZhConfig" useGeneratedKeys="true" keyProperty="id">
+        insert into zh_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="zoom != null ">zoom,</if>
+            <if test="direction != null ">direction,</if>
+            <if test="angle != null ">angle,</if>
+            <if test="distance != null ">distance,</if>
+            <if test="flashtime != null ">flashtime,</if>
+            <if test="shapetype != null ">shapetype,</if>
+            <if test="lng != null ">lng,</if>
+            <if test="lat != null ">lat,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="zoom != null ">#{zoom},</if>
+            <if test="direction != null ">#{direction},</if>
+            <if test="angle != null ">#{angle},</if>
+            <if test="distance != null ">#{distance},</if>
+            <if test="flashtime != null ">#{flashtime},</if>
+            <if test="shapetype != null ">#{shapetype},</if>
+            <if test="lng != null ">#{lng},</if>
+            <if test="lat != null ">#{lat},</if>
+         </trim>
+    </insert>
+
+    <update id="updateZhConfig" parameterType="ZhConfig">
+        update zh_config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="zoom != null ">zoom = #{zoom},</if>
+            <if test="direction != null ">direction = #{direction},</if>
+            <if test="angle != null ">angle = #{angle},</if>
+            <if test="distance != null ">distance = #{distance},</if>
+            <if test="flashtime != null ">flashtime = #{flashtime},</if>
+            <if test="shapetype != null ">shapetype = #{shapetype},</if>
+            <if test="lng != null ">lng = #{lng},</if>
+            <if test="lat != null ">lat = #{lat},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteZhConfigById" parameterType="Long">
+        delete from zh_config where id = #{id}
+    </delete>
+
+    <delete id="deleteZhConfigByIds" parameterType="String">
+        delete from zh_config where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
