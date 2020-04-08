@@ -42,18 +42,18 @@ public class MsgHandler {
     public static double lng=0.0;
     public static double lat=0.0;
 
-//    @Autowired
-//    public  void setList(List<DensityVo> list)
-//    {
-//        MsgHandler.list = list;
-//    }
+    @Autowired
+    public  void setList(List<DensityVo> list)
+    {
+        MsgHandler.list = list;
+    }
 
-//    @Autowired
-//    @Qualifier(value = "testtext")
-//    public  void setTestTxt(String txt)
-//    {
-//        MsgHandler.testTxt = txt;
-//    }
+    @Autowired
+    @Qualifier(value = "testtext")
+    public  void setTestTxt(String txt)
+    {
+        MsgHandler.testTxt = txt;
+    }
     @Autowired
 //    @Qualifier(value = "influxdbUtils")
     public void setInfluxdbUtils(InfluxdbUtils influxdbUtils){
