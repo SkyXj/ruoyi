@@ -331,12 +331,17 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
             List<BatchData> batchDatas = new ArrayList<>();
             List<BatchData> logBatchDatas = new ArrayList<>();
             while ((temp = bf.readLine()) != null) {
+                if(temp.isEmpty()){
+                    continue;
+                }
                 //标题
                 if (index == 1) {
                     names = temp.split(";");
                 } else {
                     //浓度值
                     String[] values = temp.split(";");
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    Date time = sdf.parse(values[0]);
 //                    List<BatchData> batchDatas = new ArrayList<>();
 //
 //                    List<BatchData> logBatchDatas = new ArrayList<>();
@@ -347,8 +352,8 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
                         tags.put("name", names[i]);
                         Map<String, Object> fileds = new HashMap<>(4);
                         fileds.put("value", Double.parseDouble(values[i]));
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                        Date time = sdf.parse(values[0]);
+
+
                         startTime = startTime == null ? time : startTime;
                         endTime = endTime == null ? time : endTime;
                         if (startTime.getTime() > time.getTime()) {
@@ -362,21 +367,23 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
                         batchData.setTime(time.getTime());
                         batchData.setTable("DensityRealtime");
                         batchDatas.add(batchData);
-                        BatchData logBatchData = new BatchData();
-                        Map<String, String> logTags = new HashMap<>();
-                        logTags.put("code", deviceCode);
-
-                        Map<String, Object> logFileds = new HashMap<>();
-                        logFileds.put("lat", Double.parseDouble(values[2]));
-                        logFileds.put("lng", Double.parseDouble(values[1]));
-                        logBatchData.setTags(logTags);
-                        logBatchData.setFields(logFileds);
-                        logBatchData.setTable("DensityLog");
-                        logBatchData.setTime(time.getTime());
-                        logBatchDatas.add(logBatchData);
                     }
 //                    influxdbUtils.batchInsertAndTime(batchDatas);
 //                    influxdbUtils.batchInsertAndTime(logBatchDatas);
+                    BatchData logBatchData = new BatchData();
+                    Map<String, String> logTags = new HashMap<>();
+                    logTags.put("code", deviceCode);
+                    Map<String, Object> logFileds = new HashMap<>();
+                    logFileds.put("lat", Double.parseDouble(values[2]));
+                    logFileds.put("lng", Double.parseDouble(values[1]));
+//                    logFileds.put("lat", (double) Math.round(Double.parseDouble(values[2]) * 1000000) / 1000000);
+//                    logFileds.put("lng", (double) Math.round(Double.parseDouble(values[1]) * 1000000) / 1000000);
+                    logBatchData.setTags(logTags);
+                    logBatchData.setFields(logFileds);
+                    logBatchData.setTable("DensityLog");
+                    logBatchData.setTime(time.getTime());
+                    logBatchDatas.add(logBatchData);
+//                    influxdbUtils.insertAndTime(logTags,"DensityLog",logFileds,time.getTime());
                 }
                 index++;
             }
@@ -392,13 +399,17 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
             collectionRecord.setFactorCount(names.length-3);
             collectionRecord.setPointName(pointname);
             collectRecordMapper.insertCollectRecord(collectionRecord);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        } catch (ParseException e) {
+        }catch (Exception e) {
             e.printStackTrace();
             return null;
         }
+//        catch (IOException e) {
+//            e.printStackTrace();
+//            return null;
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//            return null;
+//        }
         return collectionRecord.getId();
     }
 
@@ -532,8 +543,8 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         BufferedWriter fileWriter = null;
         try {
-//            fileWriter=new BufferedWriter (new OutputStreamWriter (new FileOutputStream (profile+""+fileName,true),"GBK"));
-            fileWriter=new BufferedWriter (new OutputStreamWriter (new FileOutputStream (profile+""+fileName,true),"UTF-8"));
+            fileWriter=new BufferedWriter (new OutputStreamWriter (new FileOutputStream (profile+""+fileName,true),"GBK"));
+//            fileWriter=new BufferedWriter (new OutputStreamWriter (new FileOutputStream (profile+""+fileName,true),"UTF-8"));
 //            fileWriter = new FileWriter(profile+"/"+fileName);//创建文本文件
             for (int i = 0; i <points.size(); i++) {
                 StringBuffer sb1=new StringBuffer();
@@ -556,7 +567,9 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
                 if(i==0){
                     fileWriter.write(sb1.toString()+"\r\n");//写入 \r\n换行
                 }
-                fileWriter.write(sb.toString()+"\r\n");//写入 \r\n换行
+                if(i<=points.size()-2){
+                    fileWriter.write(sb.toString()+"\r\n");//写入 \r\n换行
+                }
             }
             fileWriter.flush();
             fileWriter.close();

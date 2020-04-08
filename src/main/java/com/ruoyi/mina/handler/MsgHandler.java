@@ -210,6 +210,8 @@ public class MsgHandler {
                     Map<String, Object> fileds = new HashMap<>(4);
                     fileds.put("lng",lng);
                     fileds.put("lat",lat);
+//                    fileds.put("lng",(double) Math.round(lng * 1000000) / 1000000);
+//                    fileds.put("lat",(double) Math.round(lat * 1000000) / 1000000);
                     influxdbUtils.insertAndTime(tags,"DensityLog", fileds,datetime);
                 }
             }else{
@@ -221,8 +223,8 @@ public class MsgHandler {
                 Map<String, String> tags = new HashMap<>(5);
                 tags.put("code", SessionManage.status.getDevicecode());
                 Map<String, Object> fileds = new HashMap<>(4);
-                fileds.put("lng",list.get(index).getLng());
-                fileds.put("lat",list.get(index).getLat());
+                fileds.put("lng",Double.parseDouble(list.get(index).getLng()));
+                fileds.put("lat",Double.parseDouble(list.get(index).getLng()));
                 influxdbUtils.insertAndTime(tags,"DensityLog", fileds,datetime);
             }
             SessionManage.status.setGpsStatus(statusDetail);

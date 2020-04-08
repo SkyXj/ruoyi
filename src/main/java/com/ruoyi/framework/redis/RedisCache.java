@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * spring redis 工具类
- * 
+ *
  * @author ruoyi
  **/
 @SuppressWarnings(value = { "unchecked", "rawtypes" })
@@ -196,7 +196,7 @@ public class RedisCache
 
     /**
      * 获得缓存的基本对象列表
-     * 
+     *
      * @param pattern 字符串前缀
      * @return 对象列表
      */
