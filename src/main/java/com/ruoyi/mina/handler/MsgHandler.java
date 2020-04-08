@@ -224,7 +224,7 @@ public class MsgHandler {
                 tags.put("code", SessionManage.status.getDevicecode());
                 Map<String, Object> fileds = new HashMap<>(4);
                 fileds.put("lng",Double.parseDouble(list.get(index).getLng()));
-                fileds.put("lat",Double.parseDouble(list.get(index).getLng()));
+                fileds.put("lat",Double.parseDouble(list.get(index).getLat()));
                 influxdbUtils.insertAndTime(tags,"DensityLog", fileds,datetime);
             }
             SessionManage.status.setGpsStatus(statusDetail);
