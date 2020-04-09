@@ -128,31 +128,39 @@ public class MsgHandler {
             densityVo.setValues(values);
             densityVo.setThisDatas();
             influxdbUtils.batchInsertAndTime(batchDatas);
+            //插入定位点
+            Map<String, String> logTags = new HashMap<>(5);
+            logTags.put("code", SessionManage.status.getDevicecode());
+            Map<String, Object> logFileds = new HashMap<>(4);
+            logFileds.put("lng", MsgHandler.lng);
+            logFileds.put("lat", MsgHandler.lat);
+            influxdbUtils.insertAndTime(logTags, "DensityLog", logFileds, datetime);
             try {
+                WebSocketServer.sendInfo(JSONObject.toJSONString(densityVo),"2");
                 //如果数据是有效的则使用实际数据
-                if(SessionManage.status.getGpsStatus().isAvailability()){
-                    WebSocketServer.sendInfo(JSONObject.toJSONString(densityVo),"2");
-                }else{
-                    //gps无效使用模拟数据
-                    if(index<list.size()-1){
-                        DensityVo dv= list.get(index);
-                        densityVo.setLng(dv.getLng());
-                        densityVo.setLat(dv.getLat());
-                        densityVo.setThisDatas();
-                        //模拟
-                        WebSocketServer.sendInfo(JSONObject.toJSONString(densityVo),"2");
-                        index++;
-                    }else{
-                        index=0;
-                        DensityVo dv= list.get(index);
-                        densityVo.setLng(dv.getLng());
-                        densityVo.setLat(dv.getLat());
-                        densityVo.setThisDatas();
-                        //模拟
-                        WebSocketServer.sendInfo(JSONObject.toJSONString(densityVo),"2");
-                        index++;
-                    }
-                }
+//                if(SessionManage.status.getGpsStatus().isAvailability()){
+//                    WebSocketServer.sendInfo(JSONObject.toJSONString(densityVo),"2");
+//                }else{
+//                    //gps无效使用模拟数据
+//                    if(index<list.size()-1){
+//                        DensityVo dv= list.get(index);
+//                        densityVo.setLng(dv.getLng());
+//                        densityVo.setLat(dv.getLat());
+//                        densityVo.setThisDatas();
+//                        //模拟
+//                        WebSocketServer.sendInfo(JSONObject.toJSONString(densityVo),"2");
+//                        index++;
+//                    }else{
+//                        index=0;
+//                        DensityVo dv= list.get(index);
+//                        densityVo.setLng(dv.getLng());
+//                        densityVo.setLat(dv.getLat());
+//                        densityVo.setThisDatas();
+//                        //模拟
+//                        WebSocketServer.sendInfo(JSONObject.toJSONString(densityVo),"2");
+//                        index++;
+//                    }
+//                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -180,16 +188,14 @@ public class MsgHandler {
             byte enable = msgbody[0];
             byte[] times=ByteUtils.subByte(msgbody,1,16);
             long datetime = ByteUtils.getDate(times);
-
             //gps 状态
             StatusDetail statusDetail=null;
-
             if(enable==1){
                 System.out.println("有效gps");
                 statusDetail=new StatusDetail(true,true);
                 String gpsinfo=new String(ByteUtils.subByte(msgbody,17,datalength-17));
 //                String gpsinfo="$GNGGA,081649.000,2309.244790,N,11329.332827,E,1,16,0.963,22.613,M,0,M,,*52";
-                System.out.println("gps信息："+gpsinfo);
+//                System.out.println("gps信息："+gpsinfo);
                 if(!gpsinfo.isEmpty()){
                     String[] split = gpsinfo.split(",");
                     String lngdirection=split[5];
@@ -205,27 +211,31 @@ public class MsgHandler {
                     double lat=Double.parseDouble(latstr.substring(0,2))+Double.parseDouble(latstr.substring(2,latstr.length()))/60;
 
                     MsgHandler.lat=lat;
-                    Map<String, String> tags = new HashMap<>(5);
-                    tags.put("code", SessionManage.status.getDevicecode());
-                    Map<String, Object> fileds = new HashMap<>(4);
-                    fileds.put("lng",lng);
-                    fileds.put("lat",lat);
-//                    fileds.put("lng",(double) Math.round(lng * 1000000) / 1000000);
-//                    fileds.put("lat",(double) Math.round(lat * 1000000) / 1000000);
-                    influxdbUtils.insertAndTime(tags,"DensityLog", fileds,datetime);
+//                    Map<String, String> tags = new HashMap<>(5);
+//                    tags.put("code", SessionManage.status.getDevicecode());
+//                    Map<String, Object> fileds = new HashMap<>(4);
+//                    fileds.put("lng",lng);
+//                    fileds.put("lat",lat);
+//
+//                    influxdbUtils.insertAndTime(tags,"DensityLog", fileds,datetime);
                 }
             }else{
                 if(index<list.size()-1){
                     index++;
+                }else{
+                    index=0;
                 }
                 statusDetail=new StatusDetail(true,false);
+
+                MsgHandler.lng=Double.parseDouble(list.get(index).getLng());
+                MsgHandler.lat=Double.parseDouble(list.get(index).getLat());
                 //测试无效数据,暂时先用本地测试数据代替
-                Map<String, String> tags = new HashMap<>(5);
-                tags.put("code", SessionManage.status.getDevicecode());
-                Map<String, Object> fileds = new HashMap<>(4);
-                fileds.put("lng",Double.parseDouble(list.get(index).getLng()));
-                fileds.put("lat",Double.parseDouble(list.get(index).getLat()));
-                influxdbUtils.insertAndTime(tags,"DensityLog", fileds,datetime);
+//                Map<String, String> tags = new HashMap<>(5);
+//                tags.put("code", SessionManage.status.getDevicecode());
+//                Map<String, Object> fileds = new HashMap<>(4);
+//                fileds.put("lng",Double.parseDouble(list.get(index).getLng()));
+//                fileds.put("lat",Double.parseDouble(list.get(index).getLat()));
+//                influxdbUtils.insertAndTime(tags,"DensityLog", fileds,datetime);
             }
             SessionManage.status.setGpsStatus(statusDetail);
             StartGps(msg);
