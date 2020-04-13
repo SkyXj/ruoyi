@@ -66,9 +66,8 @@ public class SendMessageController {
 
         //开启gps
         this.getGps();
-
+        //关闭最近的走航记录
         zhCollectRecordService.closeRecord();
-
 
         ZhCollectRecord zhCollectRecord = new ZhCollectRecord();
         zhCollectRecord.setDeviceCode(code);
