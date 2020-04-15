@@ -238,6 +238,7 @@ public class MsgHandler {
 //                influxdbUtils.insertAndTime(tags,"DensityLog", fileds,datetime);
             }
             SessionManage.status.setGpsStatus(statusDetail);
+            //通知前端
             StartGps(msg);
         }else if(cmd[0]== Cmd.StopGps.getCmd()){
             StopGps(msg);
