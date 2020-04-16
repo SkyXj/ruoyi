@@ -17,6 +17,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -48,6 +49,14 @@ public class MsgHandler {
     public  void setList(List<DensityVo> list)
     {
         MsgHandler.list = list;
+    }
+
+
+    public static String env;
+
+    @Value("${voyage.env}")
+    public void setEnv(String env){
+        MsgHandler.env = env;
     }
 
     @Autowired
@@ -129,7 +138,7 @@ public class MsgHandler {
             }
             densityVo.setValues(values);
             densityVo.setThisDatas();
-            if(MsgHandler.gpsAvailability==true){
+            if(MsgHandler.gpsAvailability==true||env.equals("localtest")){
                 influxdbUtils.batchInsertAndTime(batchDatas);
             }
             //插入定位点
@@ -138,11 +147,11 @@ public class MsgHandler {
             Map<String, Object> logFileds = new HashMap<>(4);
             logFileds.put("lng", MsgHandler.lng);
             logFileds.put("lat", MsgHandler.lat);
-            if(MsgHandler.gpsAvailability==true){
+            if(MsgHandler.gpsAvailability==true||env.equals("localtest")){
                 influxdbUtils.insertAndTime(logTags, "DensityLog", logFileds, datetime);
             }
             try {
-                if(MsgHandler.gpsAvailability==true){
+                if(MsgHandler.gpsAvailability==true||env.equals("localtest")){
                     WebSocketServer.sendInfo(JSONObject.toJSONString(densityVo),"2");
                 }
                 //如果数据是有效的则使用实际数据
@@ -232,15 +241,17 @@ public class MsgHandler {
             }else{
                 MsgHandler.gpsAvailability=false;
                 //本地测试用
-//                if(index<list.size()-1){
-//                    index++;
-//                }else{
-//                    index=0;
-//                }
-//                statusDetail=new StatusDetail(true,false);
-//
-//                MsgHandler.lng=Double.parseDouble(list.get(index).getLng());
-//                MsgHandler.lat=Double.parseDouble(list.get(index).getLat());
+                if(MsgHandler.env.equals("localtest")){
+                    if(index<list.size()-1){
+                        index++;
+                    }else{
+                        index=0;
+                    }
+                    statusDetail=new StatusDetail(true,false);
+
+                    MsgHandler.lng=Double.parseDouble(list.get(index).getLng());
+                    MsgHandler.lat=Double.parseDouble(list.get(index).getLat());
+                }
                 //本地测试用
 
                 //测试无效数据,暂时先用本地测试数据代替

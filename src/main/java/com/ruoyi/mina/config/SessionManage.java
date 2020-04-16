@@ -11,6 +11,10 @@ public class SessionManage {
 
     public static Status status=new Status();
 
+    public static String host;
+
+    public static int port;
+
     public static void sendMsg(Msg msg){
         session.write(msg.get2MsgByte());
     }

@@ -104,6 +104,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .antMatchers("/webjars/**").anonymous()
                 .antMatchers("/*/api-docs").anonymous()
                 .antMatchers("/druid/**").anonymous()
+                .antMatchers("/testxj/**").anonymous()
 //                .antMatchers("/zh/category/**").anonymous()
 //                .antMatchers("/zh/color/**").anonymous()
 //                .antMatchers("/zh/factor/**").anonymous()

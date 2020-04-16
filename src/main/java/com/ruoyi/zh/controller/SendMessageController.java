@@ -1,14 +1,17 @@
 package com.ruoyi.zh.controller;
 
 import com.ruoyi.framework.web.domain.AjaxResult;
+import com.ruoyi.mina.config.MinaClientConfig;
 import com.ruoyi.mina.config.SessionManage;
 import com.ruoyi.mina.entity.Cmd;
 import com.ruoyi.mina.entity.Msg;
 import com.ruoyi.mina.entity.StatusDetail;
+import com.ruoyi.mina.socket.IoListener;
 import com.ruoyi.zh.domain.ZhCollectRecord;
 import com.ruoyi.zh.service.ICollectRecordService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.mina.core.future.ConnectFuture;
@@ -28,6 +31,7 @@ import java.util.Date;
 @RestController
 @RequestMapping("send")
 @Api(tags = "发送消息")
+@Slf4j
 public class SendMessageController {
     //    @GetMapping("/test")
 //    public AjaxResult test(@RequestParam(name="msg") String msg){
@@ -35,12 +39,12 @@ public class SendMessageController {
 //    }
     private static final Logger logger = LogManager.getLogger(SendMessageController.class);
 
-    private NioSocketConnector connector;
-
-    @Autowired
-    public void setConnector(NioSocketConnector connector) {
-        this.connector = connector;
-    }
+//    private NioSocketConnector connector;
+//
+//    @Autowired
+//    public void setConnector(NioSocketConnector connector) {
+//        this.connector = connector;
+//    }
 
     @Autowired
     ICollectRecordService zhCollectRecordService;
@@ -252,11 +256,35 @@ public class SendMessageController {
         try {
             // 设置服务器地址，端口号
             InetSocketAddress address = new InetSocketAddress(host, port);
-            ConnectFuture future = connector.connect(address);
+
+            // 添加重连监听
+//            connector.addListener(new IoListener() {
+//                @Override
+//                public void sessionDestroyed(IoSession arg0) throws Exception {
+//                    for (; ; ) {
+//                        try {
+//                            Thread.sleep(3000);
+//                            ConnectFuture future = connector.connect();
+//                            future.awaitUninterruptibly();// 等待连接创建成功
+//                            SessionManage.session = future.getSession();// 获取会话
+//                            if (SessionManage.session.isConnected()) {
+//                                log.info("断线重连[" + connector.getDefaultRemoteAddress().getHostName() + ":" + connector.getDefaultRemoteAddress().getPort() + "]成功");
+//                                break;
+//                            }
+//                        } catch (Exception ex) {
+//                            log.info("重连服务器登录失败,3秒再连接一次:" + ex.getMessage());
+//                        }
+//                    }
+//                }
+//            });
+
+            ConnectFuture future = MinaClientConfig.connectorall.connect(address);
             // 获取session执行绑定方法
             future.awaitUninterruptibly();
             IoSession session = future.getSession();
             SessionManage.status.setCollectConnectStatus(true);
+            SessionManage.host=host;
+            SessionManage.port=port;
             ajax = AjaxResult.success(SessionManage.status);
             SessionManage.session=session;
 //            bind(session, account, msg);

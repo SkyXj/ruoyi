@@ -42,7 +42,7 @@ spring:
     # 国际化资源文件路径
     basename: i18n/messages
   profiles: 
-    active: dev
+    active: test
   # 文件上传
   servlet:
      multipart:
@@ -106,5 +106,7 @@ mina:
     port: 8089
     host: localhost
 
+voyage:
+  env: localtest
 
 #  url: http://localhost:8086

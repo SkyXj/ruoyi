@@ -3,9 +3,14 @@ package com.ruoyi.mina.config;
 
 
 import com.ruoyi.mina.handler.ClientHandler;
+import com.ruoyi.mina.socket.IoListener;
 import com.ruoyi.mina.socket.SocketFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.mina.core.filterchain.DefaultIoFilterChainBuilder;
 import org.apache.mina.core.filterchain.IoFilter;
+import org.apache.mina.core.filterchain.IoFilterAdapter;
+import org.apache.mina.core.future.ConnectFuture;
+import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.executor.ExecutorFilter;
 import org.apache.mina.filter.keepalive.KeepAliveFilter;
@@ -16,6 +21,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.beans.PropertyEditor;
+import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -29,7 +35,10 @@ import java.util.Map;
  * @return
  */
 @Configuration
+@Slf4j
 public class MinaClientConfig {
+
+    public static NioSocketConnector connectorall;
 
     /**
      * 设置I/O接收器
@@ -126,6 +135,49 @@ public class MinaClientConfig {
         connector.setHandler(clientHandler);
         // 绑定过滤器链
         connector.setFilterChainBuilder(defaultIoFilterChainBuilder);
+
+//        connector.getFilterChain().addFirst("reconnection", new IoFilterAdapter() {
+//            @Override
+//            public void sessionClosed(NextFilter nextFilter, IoSession ioSession) throws Exception {
+//                for(;;){
+//                    try{
+//                        Thread.sleep(3000);
+//                        ConnectFuture future = connector.connect();
+//                        future.awaitUninterruptibly();// 等待连接创建成功
+//                        SessionManage.session = future.getSession();// 获取会话
+//                        if(SessionManage.session.isConnected()){
+//                            log.info("断线重连["+ connector.getDefaultRemoteAddress().getHostName() +":"+ connector.getDefaultRemoteAddress().getPort()+"]成功");
+//                            break;
+//                        }
+//                    }catch(Exception ex){
+//                        log.info("重连服务器登录失败,3秒再连接一次:" + ex.getMessage());
+//                    }
+//                }
+//            }
+//        });
+
+        // 添加重连监听
+//        connector.addListener(new IoListener() {
+//            @Override
+//            public void sessionDestroyed(IoSession arg0) throws Exception {
+//                for (;;) {
+//                    try {
+//                        Thread.sleep(2000);
+//                        connector.setDefaultRemoteAddress(new InetSocketAddress(SessionManage.host,SessionManage.port));
+//                        ConnectFuture future = connector.connect();
+//                        future.awaitUninterruptibly();// 等待连接创建成功
+//                        SessionManage.session = future.getSession();// 获取会话
+//                        if (SessionManage.session.isConnected()) {
+//                            log.info("断线重连[" + connector.getDefaultRemoteAddress().getHostName() + ":" + connector.getDefaultRemoteAddress().getPort() + "]成功");
+//                            break;
+//                        }
+//                    } catch (Exception ex) {
+//                        log.info("重连服务器登录失败,2秒再连接一次:" + ex.getMessage());
+//                    }
+//                }
+//            }
+//        });
+        MinaClientConfig.connectorall=connector;
         return connector;
     }
 
