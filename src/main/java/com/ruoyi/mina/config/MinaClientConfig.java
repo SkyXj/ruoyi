@@ -162,7 +162,7 @@ public class MinaClientConfig {
 //            public void sessionDestroyed(IoSession arg0) throws Exception {
 //                for (;;) {
 //                    try {
-//                        Thread.sleep(2000);
+//                        Thread.sleep(3000);
 //                        connector.setDefaultRemoteAddress(new InetSocketAddress(SessionManage.host,SessionManage.port));
 //                        ConnectFuture future = connector.connect();
 //                        future.awaitUninterruptibly();// 等待连接创建成功
@@ -172,7 +172,7 @@ public class MinaClientConfig {
 //                            break;
 //                        }
 //                    } catch (Exception ex) {
-//                        log.info("重连服务器登录失败,2秒再连接一次:" + ex.getMessage());
+//                        log.info("重连服务器登录失败,3秒再连接一次:" + ex.getMessage());
 //                    }
 //                }
 //            }

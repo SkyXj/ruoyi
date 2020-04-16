@@ -121,7 +121,7 @@ public class MsgHandler {
                 kv.setName(meterial.getSzMatName());
                 kv.setValue(meterial.getdPotencyUgm3());
                 values.add(kv);
-                System.out.println(meterial.toString());
+//                System.out.println(meterial.toString());
                 BatchData batchData=new BatchData();
                 Map<String, String> tags = new HashMap<>(5);
                 tags.put("code", SessionManage.status.getDevicecode());
