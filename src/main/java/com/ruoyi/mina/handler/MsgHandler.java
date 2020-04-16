@@ -42,6 +42,8 @@ public class MsgHandler {
     public static double lng=0.0;
     public static double lat=0.0;
 
+    public static boolean gpsAvailability=false;
+
     @Autowired
     public  void setList(List<DensityVo> list)
     {
@@ -127,16 +129,22 @@ public class MsgHandler {
             }
             densityVo.setValues(values);
             densityVo.setThisDatas();
-            influxdbUtils.batchInsertAndTime(batchDatas);
+            if(MsgHandler.gpsAvailability==true){
+                influxdbUtils.batchInsertAndTime(batchDatas);
+            }
             //插入定位点
             Map<String, String> logTags = new HashMap<>(5);
             logTags.put("code", SessionManage.status.getDevicecode());
             Map<String, Object> logFileds = new HashMap<>(4);
             logFileds.put("lng", MsgHandler.lng);
             logFileds.put("lat", MsgHandler.lat);
-            influxdbUtils.insertAndTime(logTags, "DensityLog", logFileds, datetime);
+            if(MsgHandler.gpsAvailability==true){
+                influxdbUtils.insertAndTime(logTags, "DensityLog", logFileds, datetime);
+            }
             try {
-                WebSocketServer.sendInfo(JSONObject.toJSONString(densityVo),"2");
+                if(MsgHandler.gpsAvailability==true){
+                    WebSocketServer.sendInfo(JSONObject.toJSONString(densityVo),"2");
+                }
                 //如果数据是有效的则使用实际数据
 //                if(SessionManage.status.getGpsStatus().isAvailability()){
 //                    WebSocketServer.sendInfo(JSONObject.toJSONString(densityVo),"2");
@@ -211,6 +219,8 @@ public class MsgHandler {
                     double lat=Double.parseDouble(latstr.substring(0,2))+Double.parseDouble(latstr.substring(2,latstr.length()))/60;
 
                     MsgHandler.lat=lat;
+
+                    MsgHandler.gpsAvailability=true;
 //                    Map<String, String> tags = new HashMap<>(5);
 //                    tags.put("code", SessionManage.status.getDevicecode());
 //                    Map<String, Object> fileds = new HashMap<>(4);
@@ -220,15 +230,19 @@ public class MsgHandler {
 //                    influxdbUtils.insertAndTime(tags,"DensityLog", fileds,datetime);
                 }
             }else{
-                if(index<list.size()-1){
-                    index++;
-                }else{
-                    index=0;
-                }
-                statusDetail=new StatusDetail(true,false);
+                MsgHandler.gpsAvailability=false;
+                //本地测试用
+//                if(index<list.size()-1){
+//                    index++;
+//                }else{
+//                    index=0;
+//                }
+//                statusDetail=new StatusDetail(true,false);
+//
+//                MsgHandler.lng=Double.parseDouble(list.get(index).getLng());
+//                MsgHandler.lat=Double.parseDouble(list.get(index).getLat());
+                //本地测试用
 
-                MsgHandler.lng=Double.parseDouble(list.get(index).getLng());
-                MsgHandler.lat=Double.parseDouble(list.get(index).getLat());
                 //测试无效数据,暂时先用本地测试数据代替
 //                Map<String, String> tags = new HashMap<>(5);
 //                tags.put("code", SessionManage.status.getDevicecode());
