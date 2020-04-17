@@ -157,26 +157,29 @@ public class MinaClientConfig {
 //        });
 
         // 添加重连监听
-//        connector.addListener(new IoListener() {
-//            @Override
-//            public void sessionDestroyed(IoSession arg0) throws Exception {
-//                for (;;) {
-//                    try {
-//                        Thread.sleep(3000);
-//                        connector.setDefaultRemoteAddress(new InetSocketAddress(SessionManage.host,SessionManage.port));
-//                        ConnectFuture future = connector.connect();
-//                        future.awaitUninterruptibly();// 等待连接创建成功
-//                        SessionManage.session = future.getSession();// 获取会话
-//                        if (SessionManage.session.isConnected()) {
-//                            log.info("断线重连[" + connector.getDefaultRemoteAddress().getHostName() + ":" + connector.getDefaultRemoteAddress().getPort() + "]成功");
-//                            break;
-//                        }
-//                    } catch (Exception ex) {
-//                        log.info("重连服务器登录失败,3秒再连接一次:" + ex.getMessage());
-//                    }
-//                }
-//            }
-//        });
+        connector.addListener(new IoListener() {
+            @Override
+            public void sessionDestroyed(IoSession arg0) throws Exception {
+                for (;;) {
+                    try {
+                        Thread.sleep(3000);
+                        connector.setDefaultRemoteAddress(new InetSocketAddress(SessionManage.host,SessionManage.port));
+                        ConnectFuture future = connector.connect();
+                        future.awaitUninterruptibly();// 等待连接创建成功
+                        SessionManage.session = future.getSession();// 获取会话
+                        if (SessionManage.session.isConnected()) {
+                            log.info("断线重连[" + connector.getDefaultRemoteAddress().getHostName() + ":" + connector.getDefaultRemoteAddress().getPort() + "]成功");
+                            //重新发送开始采集和gps
+                            SessionManage.startMic();
+                            SessionManage.startGps();
+                            break;
+                        }
+                    } catch (Exception ex) {
+                        log.info("重连服务器登录失败,3秒再连接一次:" + ex.getMessage());
+                    }
+                }
+            }
+        });
         MinaClientConfig.connectorall=connector;
         return connector;
     }

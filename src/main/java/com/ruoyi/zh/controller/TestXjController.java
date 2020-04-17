@@ -101,6 +101,10 @@ public class TestXjController {
         }
     }
 
+    @GetMapping("/test")
+    public String test(){
+        return "test";
+    }
     public static void main(String[] args) {
         System.out.println(System.currentTimeMillis());
     }
