@@ -33,6 +33,8 @@ public class ZhCollectRecordDto {
     @Excel(name = "物质总数")
     private Integer factorCount;
 
+    private Boolean show;
+
     private List<DensityVo> points;
 
     private List<String> datas;
@@ -44,6 +46,7 @@ public class ZhCollectRecordDto {
         this.endTime=zhCollectRecord.getEndTime();
         this.pointName=zhCollectRecord.getPointName();
         this.factorCount=zhCollectRecord.getFactorCount();
+        this.show=zhCollectRecord.getShow();
     }
 
     public ZhCollectRecordDto(){

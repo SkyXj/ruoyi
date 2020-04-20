@@ -74,6 +74,8 @@ public interface ICollectRecordService
 
     public Long importData(String deviceCode, /*String recordName,*/ MultipartFile file,String pointname);
 
+    public List<Long> importListData(String deviceCode,List<MultipartFile> files,String pointname);
+
     public ZhCollectRecordDto getPointsById(Long id);
 
     public List<ZhCollectRecordDto> getPointsByIds(Long[] ids);

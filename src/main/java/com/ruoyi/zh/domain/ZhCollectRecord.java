@@ -37,6 +37,8 @@ public class ZhCollectRecord
     @Excel(name = "物质总数")
     private Integer factorCount;
 
+    private Boolean show;
+
     public void setId(Long id) 
     {
         this.id = id;
@@ -90,6 +92,14 @@ public class ZhCollectRecord
 
     public void setFactorCount(Integer factorCount) {
         this.factorCount = factorCount;
+    }
+
+    public Boolean getShow() {
+        return true;
+    }
+
+    public void setShow(Boolean show) {
+        this.show = show;
     }
 
     @Override

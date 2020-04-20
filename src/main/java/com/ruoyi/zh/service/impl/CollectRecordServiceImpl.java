@@ -14,8 +14,11 @@ import com.ruoyi.zh.mapper.CollectRecordMapper;
 import com.ruoyi.zh.service.IDensityLogService;
 import com.ruoyi.zh.service.IDensityRealTimeService;
 import com.ruoyi.zh.service.ICollectRecordService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -32,6 +35,7 @@ import java.util.stream.Collectors;
  * @date 2020-02-24
  */
 @Service
+@Slf4j
 public class CollectRecordServiceImpl implements ICollectRecordService {
     @Autowired
     private CollectRecordMapper collectRecordMapper;
@@ -411,6 +415,94 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
 //            return null;
 //        }
         return collectionRecord.getId();
+    }
+
+    @Override
+    @Transactional
+    public List<Long> importListData(String deviceCode, List<MultipartFile> files, String pointname) {
+        List<Long> ids=new ArrayList<>();
+        List<ZhCollectRecord> collectRecords=new ArrayList<>();
+
+        for (MultipartFile file: files) {
+            Date startTime = null;
+            Date endTime = null;
+            List<BatchData> batchDatas = new ArrayList<>();
+            List<BatchData> logBatchDatas = new ArrayList<>();
+            ZhCollectRecord collectionRecord=null;
+            try {
+                BufferedReader bf = new BufferedReader(new InputStreamReader(file.getInputStream(), "GBK"));
+                String temp = null;
+                int index = 1;
+                // 按行读取字符串
+                String[] names = null;
+                while ((temp = bf.readLine()) != null) {
+                    if(temp.isEmpty()){
+                        continue;
+                    }
+                    //标题
+                    if (index == 1) {
+                        names = temp.split(";");
+                    } else {
+                        //浓度值
+                        String[] values = temp.split(";");
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        Date time = sdf.parse(values[0]);
+                        for (int i = 3; i < values.length; i++) {
+                            BatchData batchData = new BatchData();
+                            Map<String, String> tags = new HashMap<>(5);
+                            tags.put("code", deviceCode);
+                            tags.put("name", names[i]);
+                            Map<String, Object> fileds = new HashMap<>(4);
+                            fileds.put("value", Double.parseDouble(values[i]));
+                            startTime = startTime == null ? time : startTime;
+                            endTime = endTime == null ? time : endTime;
+                            if (startTime.getTime() > time.getTime()) {
+                                startTime = time;
+                            }
+                            if (endTime.getTime() < time.getTime()) {
+                                endTime = time;
+                            }
+                            batchData.setTags(tags);
+                            batchData.setFields(fileds);
+                            batchData.setTime(time.getTime());
+                            batchData.setTable("DensityRealtime");
+                            batchDatas.add(batchData);
+                        }
+                        BatchData logBatchData = new BatchData();
+                        Map<String, String> logTags = new HashMap<>();
+                        logTags.put("code", deviceCode);
+                        Map<String, Object> logFileds = new HashMap<>();
+                        logFileds.put("lat", Double.parseDouble(values[2]));
+                        logFileds.put("lng", Double.parseDouble(values[1]));
+                        logBatchData.setTags(logTags);
+                        logBatchData.setFields(logFileds);
+                        logBatchData.setTable("DensityLog");
+                        logBatchData.setTime(time.getTime());
+                        logBatchDatas.add(logBatchData);
+                    }
+                    index++;
+                }
+                bf.close();
+
+                influxdbUtils.batchInsertAndTime(batchDatas);
+                influxdbUtils.batchInsertAndTime(logBatchDatas);
+
+                //插入走航记录
+                collectionRecord = new ZhCollectRecord();
+                collectionRecord.setDeviceCode(deviceCode);
+                collectionRecord.setStartTime(startTime);
+                collectionRecord.setEndTime(endTime);
+                collectionRecord.setFactorCount(names.length-3);
+                collectionRecord.setPointName(pointname);
+                collectRecordMapper.insertCollectRecord(collectionRecord);
+                ids.add(collectionRecord.getId());
+            }catch (Exception e) {
+                log.error(e.getMessage());
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                return null;
+            }
+        }
+        return ids;
     }
 
     @Override

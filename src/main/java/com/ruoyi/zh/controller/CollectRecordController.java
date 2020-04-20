@@ -149,10 +149,10 @@ public class CollectRecordController extends BaseController
 
     @PostMapping("/importData")
     @ApiOperation("导入历史走航数据")
-    public AjaxResult importData(@RequestParam(value="file") MultipartFile file,
+    public AjaxResult importData(@RequestParam(value="file") List<MultipartFile> files,
                                  @RequestParam(value="deviceCode") String deviceCode,
                                  @RequestParam(value="pointname") String pointname){
-        AjaxResult ajaxResult=AjaxResult.success(zhCollectRecordService.importData(deviceCode,file,pointname));
+        AjaxResult ajaxResult=AjaxResult.success(zhCollectRecordService.importListData(deviceCode,files,pointname));
         return  ajaxResult;
     }
 
