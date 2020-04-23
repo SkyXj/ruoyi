@@ -630,6 +630,10 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
 
     public void createFileName(List<DensityVo> points,String fileName){
         String profile = RuoYiConfig.getDownloadPath();
+        File downloaPath=new File(profile);
+        if (!downloaPath.exists()) {
+            downloaPath.mkdirs();
+        }
         SimpleDateFormat sdfday=new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat sdfhour=new SimpleDateFormat("HH：mm：ss");
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
