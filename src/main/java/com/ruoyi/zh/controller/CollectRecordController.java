@@ -156,6 +156,15 @@ public class CollectRecordController extends BaseController
         return  ajaxResult;
     }
 
+    @PostMapping("/readData")
+    @ApiOperation("读取文本走航数据")
+    public AjaxResult readData(@RequestParam(value="file") List<MultipartFile> files,
+                                 @RequestParam(value="deviceCode") String deviceCode,
+                                 @RequestParam(value="pointname") String pointname){
+        AjaxResult ajaxResult=AjaxResult.success(zhCollectRecordService.readListData(deviceCode,files,pointname));
+        return  ajaxResult;
+    }
+
     @GetMapping("/getPointsById")
     @ApiOperation("查询最后一次走航")
     public AjaxResult getPointsById(@RequestParam(value="id") Long id) {

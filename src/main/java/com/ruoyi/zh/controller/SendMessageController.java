@@ -3,6 +3,7 @@ package com.ruoyi.zh.controller;
 import com.ruoyi.framework.web.domain.AjaxResult;
 import com.ruoyi.mina.config.MinaClientConfig;
 import com.ruoyi.mina.config.SessionManage;
+import com.ruoyi.mina.config.Status;
 import com.ruoyi.mina.entity.Cmd;
 import com.ruoyi.mina.entity.Msg;
 import com.ruoyi.mina.entity.StatusDetail;
@@ -257,30 +258,12 @@ public class SendMessageController {
             // 设置服务器地址，端口号
             InetSocketAddress address = new InetSocketAddress(host, port);
 
-            // 添加重连监听
-//            connector.addListener(new IoListener() {
-//                @Override
-//                public void sessionDestroyed(IoSession arg0) throws Exception {
-//                    for (; ; ) {
-//                        try {
-//                            Thread.sleep(3000);
-//                            ConnectFuture future = connector.connect();
-//                            future.awaitUninterruptibly();// 等待连接创建成功
-//                            SessionManage.session = future.getSession();// 获取会话
-//                            if (SessionManage.session.isConnected()) {
-//                                log.info("断线重连[" + connector.getDefaultRemoteAddress().getHostName() + ":" + connector.getDefaultRemoteAddress().getPort() + "]成功");
-//                                break;
-//                            }
-//                        } catch (Exception ex) {
-//                            log.info("重连服务器登录失败,3秒再连接一次:" + ex.getMessage());
-//                        }
-//                    }
-//                }
-//            });
-
             ConnectFuture future = MinaClientConfig.connectorall.connect(address);
             // 获取session执行绑定方法
             future.awaitUninterruptibly();
+
+            MinaClientConfig.isBreakNormal=false;
+
             IoSession session = future.getSession();
             SessionManage.status.setCollectConnectStatus(true);
             SessionManage.host=host;
@@ -291,7 +274,6 @@ public class SendMessageController {
             logger.info("<<<<<<<<<<<<<<<<<<与远程服务器连接成功<<<<<<<<<<<<<<<<<<");
         } catch (Exception e) {
             logger.error("<<<<<<<<<<<<<<<<<<与远程服务器连接失败<<<<<<<<<<<<<<<<<<" + e.getMessage());
-            e.printStackTrace();
             SessionManage.status.setCollectConnectStatus(false);
             ajax = AjaxResult.success(SessionManage.status);
             return ajax;
@@ -306,8 +288,10 @@ public class SendMessageController {
         logger.info(">>>>>>>>>>>>>>>>>>正在断开远程服务器>>>>>>>>>>>>>>>>>>>>");
         try{
             if (SessionManage.session != null && SessionManage.session.isConnected()) {
+                MinaClientConfig.isBreakNormal=true;
                 SessionManage.session.closeNow();
-                SessionManage.status.setCollectConnectStatus(false);
+                SessionManage.status=new Status();
+                //SessionManage.status.setCollectConnectStatus(false);
                 ajax=AjaxResult.success(SessionManage.status);
 //                SessionManage.session.getCloseFuture().awaitUninterruptibly();// 等待连接断开
                 logger.info(">>>>>>>>>>>>>>>>>>与远程服务器断开成功>>>>>>>>>>>>>>>>>>>>");

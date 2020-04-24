@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.zh.mapper.ZhFileMapper">
+    
+    <resultMap type="ZhFile" id="ZhFileResult">
+        <result property="id"    column="id"    />
+        <result property="fileName"    column="file_name"    />
+        <result property="size"    column="size"    />
+        <result property="path"    column="path"    />
+        <result property="collectRecordId"    column="collect_record_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectZhFileVo">
+        select id, file_name, size, path, collect_record_id, create_by, create_time, update_by, update_time, remark from zh_file
+    </sql>
+
+    <select id="selectZhFileList" parameterType="ZhFile" resultMap="ZhFileResult">
+        <include refid="selectZhFileVo"/>
+        <where>  
+            <if test="fileName != null  and fileName != ''"> and file_name like concat('%', #{fileName}, '%')</if>
+            <if test="size != null "> and size = #{size}</if>
+            <if test="path != null  and path != ''"> and path = #{path}</if>
+            <if test="collectRecordId != null "> and collect_record_id = #{collectRecordId}</if>
+        </where>
+    </select>
+    
+    <select id="selectZhFileById" parameterType="Long" resultMap="ZhFileResult">
+        <include refid="selectZhFileVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertZhFile" parameterType="ZhFile" useGeneratedKeys="true" keyProperty="id">
+        insert into zh_file
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fileName != null  and fileName != ''">file_name,</if>
+            <if test="size != null ">size,</if>
+            <if test="path != null  and path != ''">path,</if>
+            <if test="collectRecordId != null ">collect_record_id,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="fileName != null  and fileName != ''">#{fileName},</if>
+            <if test="size != null ">#{size},</if>
+            <if test="path != null  and path != ''">#{path},</if>
+            <if test="collectRecordId != null ">#{collectRecordId},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateZhFile" parameterType="ZhFile">
+        update zh_file
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="fileName != null  and fileName != ''">file_name = #{fileName},</if>
+            <if test="size != null ">size = #{size},</if>
+            <if test="path != null  and path != ''">path = #{path},</if>
+            <if test="collectRecordId != null ">collect_record_id = #{collectRecordId},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteZhFileById" parameterType="Long">
+        delete from zh_file where id = #{id}
+    </delete>
+
+    <delete id="deleteZhFileByIds" parameterType="String">
+        delete from zh_file where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

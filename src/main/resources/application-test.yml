@@ -6,11 +6,9 @@ spring:
         druid:
             # 主库数据源
             master:
-                url: jdbc:mysql://localhost:3306/voyage?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+                url: jdbc:mysql://192.168.1.246:3306/voyage?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
                 username: root
 #                password: root123..————————————————
-                #        版权声明：本文为CSDN博主「周杰伦jay」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。
-                #        原文链接：https://blog.csdn.net/qq_22708467/article/details/83615851
                 password: 123456
             # 从库数据源
             slave:
@@ -60,7 +58,7 @@ spring:
                         multi-statement-allow: true
     redis:
         # 地址
-        host: localhost
+        host: 192.168.1.246
         # 端口，默认为6379
         port: 6379
         # 密码
@@ -83,4 +81,8 @@ influxdb:
     password: 123456
     host: 192.168.1.246
     port: 8086
-    database: SPIMS_Meas_Test
+    database: SPIMS_Meas
+
+voyage:
+    env: localtest
+#    database: DT_Meas

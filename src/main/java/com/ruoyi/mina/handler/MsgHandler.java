@@ -434,7 +434,7 @@ public class MsgHandler {
         influxdbUtils.insertAndTime(tags,"weather", fileds,datetime);
     }
 
-    private static void sendInfo(String data,String msg,Cmd cmd){
+    public static void sendInfo(String data,String msg,Cmd cmd){
         try {
             JSONObject msgJson=new JSONObject();
             //返回前端代表开关状态

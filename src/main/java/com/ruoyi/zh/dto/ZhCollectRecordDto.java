@@ -3,7 +3,9 @@ package com.ruoyi.zh.dto;
 import com.ruoyi.framework.aspectj.lang.annotation.Excel;
 import com.ruoyi.mina.DensityVo;
 import com.ruoyi.zh.domain.ZhCollectRecord;
+import com.ruoyi.zh.domain.ZhFile;
 import lombok.Data;
+import org.apache.poi.openxml4j.opc.internal.ZipHelper;
 
 import java.util.Date;
 import java.util.List;
@@ -38,6 +40,8 @@ public class ZhCollectRecordDto {
     private List<DensityVo> points;
 
     private List<String> datas;
+
+    private ZhFile zhFile;
 
     public ZhCollectRecordDto(ZhCollectRecord zhCollectRecord){
         this.id=zhCollectRecord.getId();

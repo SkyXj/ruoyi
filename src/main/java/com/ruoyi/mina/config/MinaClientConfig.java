@@ -2,7 +2,10 @@ package com.ruoyi.mina.config;
 
 
 
+import com.alibaba.fastjson.JSON;
+import com.ruoyi.mina.entity.Cmd;
 import com.ruoyi.mina.handler.ClientHandler;
+import com.ruoyi.mina.handler.MsgHandler;
 import com.ruoyi.mina.socket.IoListener;
 import com.ruoyi.mina.socket.SocketFactory;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +42,11 @@ import java.util.Map;
 public class MinaClientConfig {
 
     public static NioSocketConnector connectorall;
+
+    public static int reConnectTimes=0;
+
+    //是否正常手动断开
+    public static boolean isBreakNormal=false;
 
     /**
      * 设置I/O接收器
@@ -160,22 +168,33 @@ public class MinaClientConfig {
         connector.addListener(new IoListener() {
             @Override
             public void sessionDestroyed(IoSession arg0) throws Exception {
-                for (;;) {
-                    try {
-                        Thread.sleep(3000);
-                        connector.setDefaultRemoteAddress(new InetSocketAddress(SessionManage.host,SessionManage.port));
-                        ConnectFuture future = connector.connect();
-                        future.awaitUninterruptibly();// 等待连接创建成功
-                        SessionManage.session = future.getSession();// 获取会话
-                        if (SessionManage.session.isConnected()) {
-                            log.info("断线重连[" + connector.getDefaultRemoteAddress().getHostName() + ":" + connector.getDefaultRemoteAddress().getPort() + "]成功");
-                            //重新发送开始采集和gps
-                            SessionManage.startMic();
-                            SessionManage.startGps();
-                            break;
+                //如果不是手动断开则重连
+                if(!MinaClientConfig.isBreakNormal){
+                    for (;;) {
+                        try {
+                            Thread.sleep(3000);
+                            connector.setDefaultRemoteAddress(new InetSocketAddress(SessionManage.host,SessionManage.port));
+                            ConnectFuture future = connector.connect();
+                            future.awaitUninterruptibly();// 等待连接创建成功
+                            SessionManage.session = future.getSession();// 获取会话
+                            if (SessionManage.session.isConnected()) {
+                                log.info("断线重连[" + connector.getDefaultRemoteAddress().getHostName() + ":" + connector.getDefaultRemoteAddress().getPort() + "]成功");
+                                //重新发送开始采集和gps
+                                SessionManage.startMic();
+                                SessionManage.startGps();
+                                break;
+                            }
+                        } catch (Exception ex) {
+                            log.info("重连服务器登录失败,3秒再连接一次:" + ex.getMessage());
+                            MinaClientConfig.reConnectTimes++;
+                            if(MinaClientConfig.reConnectTimes>3){
+                                log.info("重连服务器已超过次数限制,不在重连");
+                                MinaClientConfig.reConnectTimes=0;
+                                SessionManage.status=new Status();
+                                MsgHandler.sendInfo(JSON.toJSONString(SessionManage.status),"获取所有状态", Cmd.GetAllstatus);
+                                break;
+                            }
                         }
-                    } catch (Exception ex) {
-                        log.info("重连服务器登录失败,3秒再连接一次:" + ex.getMessage());
                     }
                 }
             }

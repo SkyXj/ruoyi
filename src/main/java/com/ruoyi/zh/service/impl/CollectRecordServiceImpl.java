@@ -1,24 +1,33 @@
 package com.ruoyi.zh.service.impl;
 
+import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.IdUtils;
 import com.ruoyi.common.utils.TimeTool;
 import com.ruoyi.framework.config.RuoYiConfig;
 import com.ruoyi.framework.influxdb.BatchData;
 import com.ruoyi.framework.influxdb.InfluxdbUtils;
+import com.ruoyi.framework.security.LoginUser;
 import com.ruoyi.mina.DensityVo;
+import com.ruoyi.project.system.domain.SysUser;
 import com.ruoyi.zh.domain.DensityLog;
 import com.ruoyi.zh.domain.DensityRealTime;
 import com.ruoyi.zh.domain.ZhCollectRecord;
+import com.ruoyi.zh.domain.ZhFile;
 import com.ruoyi.zh.dto.DensityDto;
 import com.ruoyi.zh.dto.ZhCollectRecordDto;
 import com.ruoyi.zh.mapper.CollectRecordMapper;
 import com.ruoyi.zh.service.IDensityLogService;
 import com.ruoyi.zh.service.IDensityRealTimeService;
 import com.ruoyi.zh.service.ICollectRecordService;
+import com.ruoyi.zh.service.IZhFileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -47,6 +56,9 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
 
     @Autowired
     public InfluxdbUtils influxdbUtils;
+
+    @Autowired
+    public IZhFileService zhFileService;
 
     /**
      * 查询走航记录
@@ -421,8 +433,6 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
     @Transactional
     public List<Long> importListData(String deviceCode, List<MultipartFile> files, String pointname) {
         List<Long> ids=new ArrayList<>();
-        List<ZhCollectRecord> collectRecords=new ArrayList<>();
-
         for (MultipartFile file: files) {
             Date startTime = null;
             Date endTime = null;
@@ -503,6 +513,103 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
             }
         }
         return ids;
+    }
+
+    @Override
+    public List<ZhCollectRecordDto> readListData(String deviceCode, List<MultipartFile> files, String pointname) {
+        List<ZhCollectRecordDto> collectRecordDtos=new ArrayList<>();
+        String jar_parent_path="";
+        try {
+            jar_parent_path = new File(ResourceUtils.getURL("classpath:").getPath()).getParentFile().getParentFile().getParent();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        String rootPath=jar_parent_path+File.separator+"importData"+File.separator+DateUtils.getDate();
+        File fileRoot=new File(rootPath);
+        if(!fileRoot.exists()){
+            fileRoot.mkdirs();
+        }
+        for (MultipartFile file: files) {
+            ZhFile zhFile=new ZhFile();
+            List<String> datas=new ArrayList<>();
+            //文件名
+            String fileOldName=file.getOriginalFilename();
+            //文件后缀名
+            String suffix = fileOldName.substring(fileOldName.lastIndexOf(".") + 1);
+            String fileNewName=IdUtils.fastSimpleUUID()+ "." +suffix;
+            String filePath=rootPath+File.separator+fileNewName;
+            zhFile.setFileName(fileOldName);
+            zhFile.setPath(filePath);
+            zhFile.setSize(file.getSize());
+//            zhFile.setCreateBy(DateUtils.getTime());
+//            zhFile.setCreateBy(sysUser.getCreateBy());
+            //保存本地文件
+            File fileLocal=new File(filePath);
+
+            try {
+                file.transferTo(fileLocal);
+            } catch (IOException e) {
+                log.error(e.getMessage());
+            }
+            Date startTime = null;
+            Date endTime = null;
+            ZhCollectRecord collectionRecord=null;
+
+            try {
+//                BufferedReader bf = new BufferedReader(new InputStreamReader(file.getInputStream(), "GBK"));
+                BufferedReader bf = new BufferedReader(new InputStreamReader(new FileInputStream(fileLocal), "GBK"));
+                String temp = null;
+                int index = 1;
+                // 按行读取字符串
+                String[] names = null;
+                while ((temp = bf.readLine()) != null) {
+                    if(temp.isEmpty()){
+                        continue;
+                    }
+                    datas.add(temp);
+                    //标题
+                    if (index == 1) {
+                        names = temp.split(";");
+                    } else {
+                        //浓度值
+                        String[] values = temp.split(";");
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        Date time = sdf.parse(values[0]);
+                        //判断起始时间
+                        startTime = startTime == null ? time : startTime;
+                        endTime = endTime == null ? time : endTime;
+                        if (startTime.getTime() > time.getTime()) {
+                            startTime = time;
+                        }
+                        if (endTime.getTime() < time.getTime()) {
+                            endTime = time;
+                        }
+                    }
+                    index++;
+                }
+                bf.close();
+                //插入走航记录
+                collectionRecord = new ZhCollectRecord();
+                collectionRecord.setDeviceCode(deviceCode);
+                collectionRecord.setStartTime(startTime);
+                collectionRecord.setEndTime(endTime);
+                collectionRecord.setFactorCount(names.length-3);
+                collectionRecord.setPointName(pointname);
+                collectRecordMapper.insertCollectRecord(collectionRecord);
+                zhFile.setCollectRecordId(collectionRecord.getId());
+                ZhCollectRecordDto zhCollectRecordDto=new ZhCollectRecordDto(collectionRecord);
+                zhCollectRecordDto.setDatas(datas);
+                zhCollectRecordDto.setZhFile(zhFile);
+                collectRecordDtos.add(zhCollectRecordDto);
+                //走航文件
+                int i = zhFileService.insertZhFile(zhFile);
+            }catch (Exception e) {
+                log.error(e.getMessage());
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                return null;
+            }
+        }
+        return collectRecordDtos;
     }
 
     @Override

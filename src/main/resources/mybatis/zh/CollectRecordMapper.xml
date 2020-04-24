@@ -87,7 +87,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <select id="getMaxId" resultType="java.lang.Long">
-        select max(id) id from zh_collect_record limit 1
+        select max(id) id from zh_collect_record
     </select>
 
     <select id="getRecently" resultMap="CollectRecordResult">
