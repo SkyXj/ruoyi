@@ -1,7 +1,7 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : localhost
+ Source Server         : localhost_3306
  Source Server Type    : MySQL
  Source Server Version : 50623
  Source Host           : localhost:3306
@@ -11,7 +11,7 @@
  Target Server Version : 50623
  File Encoding         : 65001
 
- Date: 10/03/2020 16:17:29
+ Date: 24/04/2020 20:57:05
 */
 
 SET NAMES utf8mb4;
@@ -39,7 +39,7 @@ CREATE TABLE `gen_table`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`table_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '代码生成业务表' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '代码生成业务表' ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of gen_table
@@ -53,6 +53,7 @@ INSERT INTO `gen_table` VALUES (8, 'zh_category', '颜色标准', 'ZhCategory', 
 INSERT INTO `gen_table` VALUES (11, 'zh_factor', '因子表', 'ZhFactor', 'crud', 'com.ruoyi.zh', 'zh', 'factor', '因子', 'ruoyi', '{}', 'admin', '2020-03-04 16:03:49', '', '2020-03-04 16:04:04', NULL);
 INSERT INTO `gen_table` VALUES (12, 'zh_link_category_factor_color', '物质因子颜色关联', 'ZhLinkCategoryFactorColor', 'crud', 'com.ruoyi.zh', 'zh', 'categoryFactorColor', '物质因子颜色关联', 'ruoyi', '{}', 'admin', '2020-03-04 17:23:56', '', '2020-03-04 17:24:56', NULL);
 INSERT INTO `gen_table` VALUES (13, 'zh_link_category_factor_simple_color', '物质因子颜色关联', 'ZhLinkCategoryFactorSimpleColor', 'crud', 'com.ruoyi.zh', 'zh', 'categoryFactorSimpleColor', '物质因子颜色关联', 'ruoyi', '{}', 'admin', '2020-03-04 17:23:56', '', '2020-03-04 17:25:14', NULL);
+INSERT INTO `gen_table` VALUES (14, 'zh_file', '文件表', 'ZhFile', 'crud', 'com.ruoyi.zh', 'zh', 'file', '文件', 'hxsdd', '{}', 'admin', '2020-04-24 19:50:09', '', '2020-04-24 19:50:43', NULL);
 
 -- ----------------------------
 -- Table structure for gen_table_column
@@ -82,7 +83,7 @@ CREATE TABLE `gen_table_column`  (
   `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '更新者',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`column_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 103 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '代码生成业务表字段' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 113 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '代码生成业务表字段' ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of gen_table_column
@@ -157,6 +158,16 @@ INSERT INTO `gen_table_column` VALUES (99, '13', 'create_by', '创建人', 'varc
 INSERT INTO `gen_table_column` VALUES (100, '13', 'create_time', '创建时间', 'datetime', 'Date', 'createTime', '0', '0', NULL, '1', NULL, NULL, NULL, 'EQ', 'datetime', '', 6, 'admin', '2020-03-04 17:23:56', '', '2020-03-04 17:25:14');
 INSERT INTO `gen_table_column` VALUES (101, '13', 'update_by', '修改人', 'varchar(20)', 'String', 'updateBy', '0', '0', NULL, '1', '1', NULL, NULL, 'EQ', 'input', '', 7, 'admin', '2020-03-04 17:23:56', '', '2020-03-04 17:25:14');
 INSERT INTO `gen_table_column` VALUES (102, '13', 'update_time', '修改时间', 'datetime', 'Date', 'updateTime', '0', '0', NULL, '1', '1', NULL, NULL, 'EQ', 'datetime', '', 8, 'admin', '2020-03-04 17:23:56', '', '2020-03-04 17:25:14');
+INSERT INTO `gen_table_column` VALUES (103, '14', 'id', '主键', 'int(11) unsigned', 'Long', 'id', '1', '1', NULL, '1', NULL, NULL, NULL, 'EQ', 'input', '', 1, 'admin', '2020-04-24 19:50:09', '', '2020-04-24 19:50:43');
+INSERT INTO `gen_table_column` VALUES (104, '14', 'file_name', '文件名', 'varchar(255)', 'String', 'fileName', '0', '0', NULL, '1', '1', '1', '1', 'LIKE', 'input', '', 2, 'admin', '2020-04-24 19:50:09', '', '2020-04-24 19:50:43');
+INSERT INTO `gen_table_column` VALUES (105, '14', 'size', '文件大小kb', 'int(11)', 'Long', 'size', '0', '0', NULL, '1', '1', '1', '1', 'EQ', 'input', '', 3, 'admin', '2020-04-24 19:50:09', '', '2020-04-24 19:50:43');
+INSERT INTO `gen_table_column` VALUES (106, '14', 'path', '文件路径', 'varchar(1000)', 'String', 'path', '0', '0', NULL, '1', '1', '1', '1', 'EQ', 'textarea', '', 4, 'admin', '2020-04-24 19:50:09', '', '2020-04-24 19:50:43');
+INSERT INTO `gen_table_column` VALUES (107, '14', 'collect_record_id', '走航id', 'int(11)', 'Long', 'collectRecordId', '0', '0', '1', '1', '1', '1', '1', 'EQ', 'input', '', 5, 'admin', '2020-04-24 19:50:09', '', '2020-04-24 19:50:43');
+INSERT INTO `gen_table_column` VALUES (108, '14', 'create_by', '创建者', 'varchar(64)', 'String', 'createBy', '0', '0', NULL, '1', NULL, NULL, NULL, 'EQ', 'input', '', 6, 'admin', '2020-04-24 19:50:09', '', '2020-04-24 19:50:43');
+INSERT INTO `gen_table_column` VALUES (109, '14', 'create_time', '创建时间', 'datetime', 'Date', 'createTime', '0', '0', NULL, '1', NULL, NULL, NULL, 'EQ', 'datetime', '', 7, 'admin', '2020-04-24 19:50:09', '', '2020-04-24 19:50:43');
+INSERT INTO `gen_table_column` VALUES (110, '14', 'update_by', '更新者', 'varchar(64)', 'String', 'updateBy', '0', '0', NULL, '1', '1', NULL, NULL, 'EQ', 'input', '', 8, 'admin', '2020-04-24 19:50:09', '', '2020-04-24 19:50:43');
+INSERT INTO `gen_table_column` VALUES (111, '14', 'update_time', '更新时间', 'datetime', 'Date', 'updateTime', '0', '0', NULL, '1', '1', NULL, NULL, 'EQ', 'datetime', '', 9, 'admin', '2020-04-24 19:50:09', '', '2020-04-24 19:50:43');
+INSERT INTO `gen_table_column` VALUES (112, '14', 'remark', '备注', 'varchar(500)', 'String', 'remark', '0', '0', NULL, '1', '1', '1', NULL, 'EQ', 'textarea', '', 10, 'admin', '2020-04-24 19:50:09', '', '2020-04-24 19:50:43');
 
 -- ----------------------------
 -- Table structure for sys_config
@@ -367,7 +378,7 @@ CREATE TABLE `sys_logininfor`  (
   `msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '提示消息',
   `login_time` datetime(0) NULL DEFAULT NULL COMMENT '访问时间',
   PRIMARY KEY (`info_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 192 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统访问记录' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 513 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统访问记录' ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of sys_logininfor
@@ -464,6 +475,327 @@ INSERT INTO `sys_logininfor` VALUES (188, 'admin', '127.0.0.1', '内网IP', 'Chr
 INSERT INTO `sys_logininfor` VALUES (189, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-08 14:54:09');
 INSERT INTO `sys_logininfor` VALUES (190, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-09 20:24:14');
 INSERT INTO `sys_logininfor` VALUES (191, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-10 13:39:56');
+INSERT INTO `sys_logininfor` VALUES (192, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-11 14:09:06');
+INSERT INTO `sys_logininfor` VALUES (193, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-11 14:10:39');
+INSERT INTO `sys_logininfor` VALUES (194, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-11 14:11:39');
+INSERT INTO `sys_logininfor` VALUES (195, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-11 14:14:54');
+INSERT INTO `sys_logininfor` VALUES (196, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-11 14:21:01');
+INSERT INTO `sys_logininfor` VALUES (197, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-11 14:32:14');
+INSERT INTO `sys_logininfor` VALUES (198, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-11 14:32:21');
+INSERT INTO `sys_logininfor` VALUES (199, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-11 14:33:57');
+INSERT INTO `sys_logininfor` VALUES (200, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-11 14:34:06');
+INSERT INTO `sys_logininfor` VALUES (201, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-11 14:35:31');
+INSERT INTO `sys_logininfor` VALUES (202, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-11 14:41:14');
+INSERT INTO `sys_logininfor` VALUES (203, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-11 14:52:37');
+INSERT INTO `sys_logininfor` VALUES (204, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-11 14:52:56');
+INSERT INTO `sys_logininfor` VALUES (205, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-11 14:53:20');
+INSERT INTO `sys_logininfor` VALUES (206, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-11 14:54:00');
+INSERT INTO `sys_logininfor` VALUES (207, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '1', '验证码错误', '2020-03-11 14:54:32');
+INSERT INTO `sys_logininfor` VALUES (208, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-11 14:54:43');
+INSERT INTO `sys_logininfor` VALUES (209, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-11 14:55:54');
+INSERT INTO `sys_logininfor` VALUES (210, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-11 19:57:57');
+INSERT INTO `sys_logininfor` VALUES (211, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-11 19:58:13');
+INSERT INTO `sys_logininfor` VALUES (212, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-11 19:59:48');
+INSERT INTO `sys_logininfor` VALUES (213, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '1', '验证码错误', '2020-03-11 21:46:20');
+INSERT INTO `sys_logininfor` VALUES (214, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-11 21:46:34');
+INSERT INTO `sys_logininfor` VALUES (215, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-11 22:01:35');
+INSERT INTO `sys_logininfor` VALUES (216, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-11 22:16:25');
+INSERT INTO `sys_logininfor` VALUES (217, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-12 09:51:44');
+INSERT INTO `sys_logininfor` VALUES (218, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '1', '验证码错误', '2020-03-12 10:10:43');
+INSERT INTO `sys_logininfor` VALUES (219, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-12 10:10:51');
+INSERT INTO `sys_logininfor` VALUES (220, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-12 10:37:18');
+INSERT INTO `sys_logininfor` VALUES (221, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-12 10:38:43');
+INSERT INTO `sys_logininfor` VALUES (222, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-12 10:39:31');
+INSERT INTO `sys_logininfor` VALUES (223, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-12 10:40:23');
+INSERT INTO `sys_logininfor` VALUES (224, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-12 10:44:41');
+INSERT INTO `sys_logininfor` VALUES (225, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-12 10:50:50');
+INSERT INTO `sys_logininfor` VALUES (226, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-12 11:03:51');
+INSERT INTO `sys_logininfor` VALUES (227, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-12 11:07:41');
+INSERT INTO `sys_logininfor` VALUES (228, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-12 11:15:50');
+INSERT INTO `sys_logininfor` VALUES (229, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '1', '验证码错误', '2020-03-12 11:19:54');
+INSERT INTO `sys_logininfor` VALUES (230, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-12 11:19:59');
+INSERT INTO `sys_logininfor` VALUES (231, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-12 11:31:56');
+INSERT INTO `sys_logininfor` VALUES (232, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '1', '验证码错误', '2020-03-12 12:25:16');
+INSERT INTO `sys_logininfor` VALUES (233, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-12 12:25:23');
+INSERT INTO `sys_logininfor` VALUES (234, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-13 10:49:58');
+INSERT INTO `sys_logininfor` VALUES (235, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-14 16:20:55');
+INSERT INTO `sys_logininfor` VALUES (236, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-14 18:33:18');
+INSERT INTO `sys_logininfor` VALUES (237, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-14 19:54:10');
+INSERT INTO `sys_logininfor` VALUES (238, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-14 20:12:52');
+INSERT INTO `sys_logininfor` VALUES (239, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-14 22:27:59');
+INSERT INTO `sys_logininfor` VALUES (240, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-15 17:01:21');
+INSERT INTO `sys_logininfor` VALUES (241, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-15 19:28:01');
+INSERT INTO `sys_logininfor` VALUES (242, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-15 22:16:46');
+INSERT INTO `sys_logininfor` VALUES (243, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-15 22:20:23');
+INSERT INTO `sys_logininfor` VALUES (244, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-15 22:21:28');
+INSERT INTO `sys_logininfor` VALUES (245, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-16 01:12:57');
+INSERT INTO `sys_logininfor` VALUES (246, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '1', '验证码错误', '2020-03-16 01:21:06');
+INSERT INTO `sys_logininfor` VALUES (247, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-16 01:21:26');
+INSERT INTO `sys_logininfor` VALUES (248, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-16 03:25:54');
+INSERT INTO `sys_logininfor` VALUES (249, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-16 04:27:13');
+INSERT INTO `sys_logininfor` VALUES (250, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-16 10:37:20');
+INSERT INTO `sys_logininfor` VALUES (251, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-16 11:10:01');
+INSERT INTO `sys_logininfor` VALUES (252, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-16 12:28:09');
+INSERT INTO `sys_logininfor` VALUES (253, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-16 12:33:21');
+INSERT INTO `sys_logininfor` VALUES (254, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-16 16:37:50');
+INSERT INTO `sys_logininfor` VALUES (255, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-16 17:08:03');
+INSERT INTO `sys_logininfor` VALUES (256, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-16 17:37:19');
+INSERT INTO `sys_logininfor` VALUES (257, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-16 17:42:12');
+INSERT INTO `sys_logininfor` VALUES (258, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-16 19:43:56');
+INSERT INTO `sys_logininfor` VALUES (259, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-16 20:17:14');
+INSERT INTO `sys_logininfor` VALUES (260, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-16 20:17:19');
+INSERT INTO `sys_logininfor` VALUES (261, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-16 22:28:05');
+INSERT INTO `sys_logininfor` VALUES (262, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '1', '验证码错误', '2020-03-18 16:35:46');
+INSERT INTO `sys_logininfor` VALUES (263, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-18 16:35:50');
+INSERT INTO `sys_logininfor` VALUES (264, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-18 20:04:12');
+INSERT INTO `sys_logininfor` VALUES (265, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-19 21:45:02');
+INSERT INTO `sys_logininfor` VALUES (266, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-23 15:47:27');
+INSERT INTO `sys_logininfor` VALUES (267, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-26 22:21:52');
+INSERT INTO `sys_logininfor` VALUES (268, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-27 18:21:07');
+INSERT INTO `sys_logininfor` VALUES (269, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '1', '验证码已失效', '2020-03-27 20:26:58');
+INSERT INTO `sys_logininfor` VALUES (270, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-27 20:35:12');
+INSERT INTO `sys_logininfor` VALUES (271, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-27 20:35:46');
+INSERT INTO `sys_logininfor` VALUES (272, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-27 20:36:40');
+INSERT INTO `sys_logininfor` VALUES (273, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-27 20:37:41');
+INSERT INTO `sys_logininfor` VALUES (274, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-27 21:35:08');
+INSERT INTO `sys_logininfor` VALUES (275, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-27 21:41:48');
+INSERT INTO `sys_logininfor` VALUES (276, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-27 22:47:17');
+INSERT INTO `sys_logininfor` VALUES (277, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-29 21:12:09');
+INSERT INTO `sys_logininfor` VALUES (278, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-29 22:10:50');
+INSERT INTO `sys_logininfor` VALUES (279, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-29 22:12:18');
+INSERT INTO `sys_logininfor` VALUES (280, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-29 22:55:02');
+INSERT INTO `sys_logininfor` VALUES (281, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '退出成功', '2020-03-29 23:01:56');
+INSERT INTO `sys_logininfor` VALUES (282, 'ry', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-29 23:02:56');
+INSERT INTO `sys_logininfor` VALUES (283, 'ry', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '退出成功', '2020-03-29 23:03:11');
+INSERT INTO `sys_logininfor` VALUES (284, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-29 23:03:15');
+INSERT INTO `sys_logininfor` VALUES (285, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '退出成功', '2020-03-29 23:04:42');
+INSERT INTO `sys_logininfor` VALUES (286, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '1', '用户不存在/密码错误', '2020-03-29 23:04:52');
+INSERT INTO `sys_logininfor` VALUES (287, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-29 23:05:12');
+INSERT INTO `sys_logininfor` VALUES (288, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '退出成功', '2020-03-29 23:05:30');
+INSERT INTO `sys_logininfor` VALUES (289, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '1', '用户不存在/密码错误', '2020-03-29 23:05:38');
+INSERT INTO `sys_logininfor` VALUES (290, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '1', '用户不存在/密码错误', '2020-03-29 23:05:49');
+INSERT INTO `sys_logininfor` VALUES (291, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-29 23:06:04');
+INSERT INTO `sys_logininfor` VALUES (292, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '退出成功', '2020-03-29 23:06:43');
+INSERT INTO `sys_logininfor` VALUES (293, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-29 23:07:05');
+INSERT INTO `sys_logininfor` VALUES (294, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '退出成功', '2020-03-29 23:07:19');
+INSERT INTO `sys_logininfor` VALUES (295, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-29 23:07:25');
+INSERT INTO `sys_logininfor` VALUES (296, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '退出成功', '2020-03-29 23:08:11');
+INSERT INTO `sys_logininfor` VALUES (297, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-29 23:08:17');
+INSERT INTO `sys_logininfor` VALUES (298, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-29 23:08:32');
+INSERT INTO `sys_logininfor` VALUES (299, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-30 09:30:05');
+INSERT INTO `sys_logininfor` VALUES (300, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '退出成功', '2020-03-30 09:31:56');
+INSERT INTO `sys_logininfor` VALUES (301, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-30 09:31:59');
+INSERT INTO `sys_logininfor` VALUES (302, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-30 09:32:27');
+INSERT INTO `sys_logininfor` VALUES (303, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-30 09:52:35');
+INSERT INTO `sys_logininfor` VALUES (304, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-30 10:37:03');
+INSERT INTO `sys_logininfor` VALUES (305, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-30 10:54:33');
+INSERT INTO `sys_logininfor` VALUES (306, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-30 12:21:14');
+INSERT INTO `sys_logininfor` VALUES (307, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-30 20:26:21');
+INSERT INTO `sys_logininfor` VALUES (308, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-30 20:34:28');
+INSERT INTO `sys_logininfor` VALUES (309, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-30 20:35:23');
+INSERT INTO `sys_logininfor` VALUES (310, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-30 20:38:13');
+INSERT INTO `sys_logininfor` VALUES (311, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-30 20:41:09');
+INSERT INTO `sys_logininfor` VALUES (312, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-30 20:57:50');
+INSERT INTO `sys_logininfor` VALUES (313, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-30 21:05:42');
+INSERT INTO `sys_logininfor` VALUES (314, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-30 21:22:28');
+INSERT INTO `sys_logininfor` VALUES (315, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-30 22:35:27');
+INSERT INTO `sys_logininfor` VALUES (316, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-30 23:20:40');
+INSERT INTO `sys_logininfor` VALUES (317, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-30 23:56:49');
+INSERT INTO `sys_logininfor` VALUES (318, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-31 00:21:38');
+INSERT INTO `sys_logininfor` VALUES (319, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-31 11:16:16');
+INSERT INTO `sys_logininfor` VALUES (320, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-31 14:13:39');
+INSERT INTO `sys_logininfor` VALUES (321, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '退出成功', '2020-03-31 14:39:48');
+INSERT INTO `sys_logininfor` VALUES (322, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-31 14:40:00');
+INSERT INTO `sys_logininfor` VALUES (323, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-31 15:02:47');
+INSERT INTO `sys_logininfor` VALUES (324, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-31 15:06:39');
+INSERT INTO `sys_logininfor` VALUES (325, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-31 15:11:37');
+INSERT INTO `sys_logininfor` VALUES (326, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '退出成功', '2020-03-31 15:15:20');
+INSERT INTO `sys_logininfor` VALUES (327, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-31 15:15:34');
+INSERT INTO `sys_logininfor` VALUES (328, 'admin', '192.168.2.94', '内网IP', 'Chrome', 'Windows 7', '0', '登录成功', '2020-03-31 15:42:31');
+INSERT INTO `sys_logininfor` VALUES (329, 'test', '192.168.2.94', '内网IP', 'Chrome', 'Windows 7', '0', '登录成功', '2020-03-31 15:43:21');
+INSERT INTO `sys_logininfor` VALUES (330, 'test', '192.168.5.63', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-31 16:11:58');
+INSERT INTO `sys_logininfor` VALUES (331, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-03-31 20:44:35');
+INSERT INTO `sys_logininfor` VALUES (332, 'admin', '192.168.5.63', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-01 09:26:48');
+INSERT INTO `sys_logininfor` VALUES (333, 'test', '192.168.5.63', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-01 10:52:01');
+INSERT INTO `sys_logininfor` VALUES (334, 'test', '192.168.5.63', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-01 13:49:10');
+INSERT INTO `sys_logininfor` VALUES (335, 'admin', '192.168.5.63', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-02 01:02:07');
+INSERT INTO `sys_logininfor` VALUES (336, 'admin', '192.168.5.63', '内网IP', 'Chrome', 'Windows 10', '0', '退出成功', '2020-04-02 01:06:43');
+INSERT INTO `sys_logininfor` VALUES (337, 'test', '192.168.5.63', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-02 01:06:52');
+INSERT INTO `sys_logininfor` VALUES (338, 'admin', '192.168.1.54', '内网IP', 'Chrome 8', 'Windows 7', '0', '登录成功', '2020-04-02 15:17:05');
+INSERT INTO `sys_logininfor` VALUES (339, 'admin', '192.168.1.54', '内网IP', 'Chrome 8', 'Windows 7', '0', '退出成功', '2020-04-02 15:17:23');
+INSERT INTO `sys_logininfor` VALUES (340, 'test', '192.168.1.54', '内网IP', 'Chrome 8', 'Windows 7', '0', '登录成功', '2020-04-02 15:17:34');
+INSERT INTO `sys_logininfor` VALUES (341, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-02 16:11:23');
+INSERT INTO `sys_logininfor` VALUES (342, 'test', '192.168.5.63', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-02 17:01:49');
+INSERT INTO `sys_logininfor` VALUES (343, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-02 17:01:49');
+INSERT INTO `sys_logininfor` VALUES (344, 'test', '192.168.5.63', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-02 17:01:49');
+INSERT INTO `sys_logininfor` VALUES (345, 'test', '192.168.5.63', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-02 17:01:49');
+INSERT INTO `sys_logininfor` VALUES (346, 'test', '192.168.5.63', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-02 17:01:49');
+INSERT INTO `sys_logininfor` VALUES (347, 'test', '192.168.5.63', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-02 17:01:49');
+INSERT INTO `sys_logininfor` VALUES (348, 'test', '192.168.5.63', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-02 17:01:49');
+INSERT INTO `sys_logininfor` VALUES (349, 'test', '192.168.5.63', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-02 17:01:52');
+INSERT INTO `sys_logininfor` VALUES (350, 'admin', '192.168.5.63', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-02 20:03:13');
+INSERT INTO `sys_logininfor` VALUES (351, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 8', '0', '登录成功', '2020-04-02 23:50:47');
+INSERT INTO `sys_logininfor` VALUES (352, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 8', '0', '退出成功', '2020-04-03 00:01:10');
+INSERT INTO `sys_logininfor` VALUES (353, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 8', '0', '登录成功', '2020-04-03 00:01:19');
+INSERT INTO `sys_logininfor` VALUES (354, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 8', '0', '登录成功', '2020-04-03 10:35:17');
+INSERT INTO `sys_logininfor` VALUES (355, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-03 10:48:28');
+INSERT INTO `sys_logininfor` VALUES (356, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 8', '0', '登录成功', '2020-04-03 14:30:01');
+INSERT INTO `sys_logininfor` VALUES (357, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 8', '0', '登录成功', '2020-04-03 14:39:15');
+INSERT INTO `sys_logininfor` VALUES (358, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 8', '0', '登录成功', '2020-04-03 16:15:33');
+INSERT INTO `sys_logininfor` VALUES (359, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-07 12:28:21');
+INSERT INTO `sys_logininfor` VALUES (360, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-07 12:28:48');
+INSERT INTO `sys_logininfor` VALUES (361, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-07 13:09:08');
+INSERT INTO `sys_logininfor` VALUES (362, 'admin', '192.168.5.63', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-07 17:02:54');
+INSERT INTO `sys_logininfor` VALUES (363, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-07 20:22:55');
+INSERT INTO `sys_logininfor` VALUES (364, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-07 20:25:42');
+INSERT INTO `sys_logininfor` VALUES (365, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-07 22:24:14');
+INSERT INTO `sys_logininfor` VALUES (366, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-08 10:15:22');
+INSERT INTO `sys_logininfor` VALUES (367, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-08 11:06:02');
+INSERT INTO `sys_logininfor` VALUES (368, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-08 11:12:33');
+INSERT INTO `sys_logininfor` VALUES (369, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-08 11:20:15');
+INSERT INTO `sys_logininfor` VALUES (370, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-08 11:24:26');
+INSERT INTO `sys_logininfor` VALUES (371, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-08 11:34:47');
+INSERT INTO `sys_logininfor` VALUES (372, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-08 11:40:43');
+INSERT INTO `sys_logininfor` VALUES (373, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-08 15:51:02');
+INSERT INTO `sys_logininfor` VALUES (374, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-08 15:54:25');
+INSERT INTO `sys_logininfor` VALUES (375, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-08 16:30:52');
+INSERT INTO `sys_logininfor` VALUES (376, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-08 16:45:33');
+INSERT INTO `sys_logininfor` VALUES (377, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-08 16:48:18');
+INSERT INTO `sys_logininfor` VALUES (378, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-08 17:20:19');
+INSERT INTO `sys_logininfor` VALUES (379, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-08 17:50:14');
+INSERT INTO `sys_logininfor` VALUES (380, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-08 18:36:33');
+INSERT INTO `sys_logininfor` VALUES (381, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-08 18:56:40');
+INSERT INTO `sys_logininfor` VALUES (382, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-08 18:59:22');
+INSERT INTO `sys_logininfor` VALUES (383, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-08 19:01:44');
+INSERT INTO `sys_logininfor` VALUES (384, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-08 19:03:15');
+INSERT INTO `sys_logininfor` VALUES (385, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-08 20:46:09');
+INSERT INTO `sys_logininfor` VALUES (386, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-08 20:51:32');
+INSERT INTO `sys_logininfor` VALUES (387, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-08 20:51:58');
+INSERT INTO `sys_logininfor` VALUES (388, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-08 21:01:08');
+INSERT INTO `sys_logininfor` VALUES (389, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-08 21:13:30');
+INSERT INTO `sys_logininfor` VALUES (390, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-09 00:02:18');
+INSERT INTO `sys_logininfor` VALUES (391, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-09 09:18:44');
+INSERT INTO `sys_logininfor` VALUES (392, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-09 09:20:30');
+INSERT INTO `sys_logininfor` VALUES (393, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-09 09:22:19');
+INSERT INTO `sys_logininfor` VALUES (394, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-09 09:24:06');
+INSERT INTO `sys_logininfor` VALUES (395, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-09 09:25:33');
+INSERT INTO `sys_logininfor` VALUES (396, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-09 09:26:27');
+INSERT INTO `sys_logininfor` VALUES (397, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-09 09:27:11');
+INSERT INTO `sys_logininfor` VALUES (398, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-09 09:27:22');
+INSERT INTO `sys_logininfor` VALUES (399, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-09 09:28:14');
+INSERT INTO `sys_logininfor` VALUES (400, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-09 09:51:30');
+INSERT INTO `sys_logininfor` VALUES (401, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-09 09:53:34');
+INSERT INTO `sys_logininfor` VALUES (402, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-09 09:54:22');
+INSERT INTO `sys_logininfor` VALUES (403, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-09 09:54:36');
+INSERT INTO `sys_logininfor` VALUES (404, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-09 09:55:04');
+INSERT INTO `sys_logininfor` VALUES (405, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-09 09:55:33');
+INSERT INTO `sys_logininfor` VALUES (406, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-09 09:56:05');
+INSERT INTO `sys_logininfor` VALUES (407, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-09 10:11:41');
+INSERT INTO `sys_logininfor` VALUES (408, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-09 10:17:14');
+INSERT INTO `sys_logininfor` VALUES (409, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-09 10:43:47');
+INSERT INTO `sys_logininfor` VALUES (410, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-09 10:54:03');
+INSERT INTO `sys_logininfor` VALUES (411, 'test', '192.168.1.54', '内网IP', 'Internet Explorer 11', 'Windows 7', '0', '登录成功', '2020-04-09 15:19:31');
+INSERT INTO `sys_logininfor` VALUES (412, 'test', '192.168.2.84', '内网IP', 'Chrome', 'Windows 7', '0', '登录成功', '2020-04-09 15:28:09');
+INSERT INTO `sys_logininfor` VALUES (413, 'test', '192.168.1.54', '内网IP', 'Chrome 8', 'Windows 7', '0', '登录成功', '2020-04-09 15:28:25');
+INSERT INTO `sys_logininfor` VALUES (414, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-09 16:25:00');
+INSERT INTO `sys_logininfor` VALUES (415, 'test', '192.168.5.63', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-09 16:26:06');
+INSERT INTO `sys_logininfor` VALUES (416, 'test', '192.168.1.54', '内网IP', 'Chrome 8', 'Windows 7', '0', '登录成功', '2020-04-09 17:05:52');
+INSERT INTO `sys_logininfor` VALUES (417, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-09 20:17:28');
+INSERT INTO `sys_logininfor` VALUES (418, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-09 23:04:04');
+INSERT INTO `sys_logininfor` VALUES (419, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-09 23:05:37');
+INSERT INTO `sys_logininfor` VALUES (420, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-09 23:09:22');
+INSERT INTO `sys_logininfor` VALUES (421, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-09 23:11:11');
+INSERT INTO `sys_logininfor` VALUES (422, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-10 14:19:36');
+INSERT INTO `sys_logininfor` VALUES (423, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-10 17:11:17');
+INSERT INTO `sys_logininfor` VALUES (424, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-13 10:36:11');
+INSERT INTO `sys_logininfor` VALUES (425, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-13 10:40:04');
+INSERT INTO `sys_logininfor` VALUES (426, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-13 10:45:33');
+INSERT INTO `sys_logininfor` VALUES (427, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-13 16:14:20');
+INSERT INTO `sys_logininfor` VALUES (428, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-13 16:15:16');
+INSERT INTO `sys_logininfor` VALUES (429, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-14 10:26:45');
+INSERT INTO `sys_logininfor` VALUES (430, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-14 14:06:41');
+INSERT INTO `sys_logininfor` VALUES (431, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-14 14:31:03');
+INSERT INTO `sys_logininfor` VALUES (432, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-14 14:50:49');
+INSERT INTO `sys_logininfor` VALUES (433, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-14 15:55:43');
+INSERT INTO `sys_logininfor` VALUES (434, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '退出成功', '2020-04-14 15:56:01');
+INSERT INTO `sys_logininfor` VALUES (435, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '1', '用户不存在/密码错误', '2020-04-14 15:56:23');
+INSERT INTO `sys_logininfor` VALUES (436, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '1', '用户不存在/密码错误', '2020-04-14 15:56:31');
+INSERT INTO `sys_logininfor` VALUES (437, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-14 15:56:36');
+INSERT INTO `sys_logininfor` VALUES (438, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-14 18:47:37');
+INSERT INTO `sys_logininfor` VALUES (439, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-14 18:52:53');
+INSERT INTO `sys_logininfor` VALUES (440, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '退出成功', '2020-04-14 18:53:15');
+INSERT INTO `sys_logininfor` VALUES (441, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-14 18:53:21');
+INSERT INTO `sys_logininfor` VALUES (442, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-14 19:38:04');
+INSERT INTO `sys_logininfor` VALUES (443, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '退出成功', '2020-04-14 19:38:19');
+INSERT INTO `sys_logininfor` VALUES (444, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '1', '用户不存在/密码错误', '2020-04-14 19:38:26');
+INSERT INTO `sys_logininfor` VALUES (445, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-14 19:38:32');
+INSERT INTO `sys_logininfor` VALUES (446, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-14 19:55:08');
+INSERT INTO `sys_logininfor` VALUES (447, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '退出成功', '2020-04-14 19:55:23');
+INSERT INTO `sys_logininfor` VALUES (448, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '1', '用户不存在/密码错误', '2020-04-14 19:55:39');
+INSERT INTO `sys_logininfor` VALUES (449, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-14 19:55:43');
+INSERT INTO `sys_logininfor` VALUES (450, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-14 20:24:29');
+INSERT INTO `sys_logininfor` VALUES (451, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '退出成功', '2020-04-14 20:24:42');
+INSERT INTO `sys_logininfor` VALUES (452, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-14 20:24:50');
+INSERT INTO `sys_logininfor` VALUES (453, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-16 12:11:33');
+INSERT INTO `sys_logininfor` VALUES (454, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-16 15:05:26');
+INSERT INTO `sys_logininfor` VALUES (455, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-16 16:35:06');
+INSERT INTO `sys_logininfor` VALUES (456, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-16 19:03:29');
+INSERT INTO `sys_logininfor` VALUES (457, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-17 11:06:55');
+INSERT INTO `sys_logininfor` VALUES (458, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 7', '0', '登录成功', '2020-04-17 16:17:53');
+INSERT INTO `sys_logininfor` VALUES (459, 'test', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 7', '0', '登录成功', '2020-04-17 16:18:33');
+INSERT INTO `sys_logininfor` VALUES (460, 'test', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 7', '0', '登录成功', '2020-04-17 16:25:14');
+INSERT INTO `sys_logininfor` VALUES (461, 'test', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 7', '0', '登录成功', '2020-04-17 16:32:42');
+INSERT INTO `sys_logininfor` VALUES (462, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 7', '0', '登录成功', '2020-04-17 17:01:39');
+INSERT INTO `sys_logininfor` VALUES (463, 'test', '192.168.5.63', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-17 17:18:41');
+INSERT INTO `sys_logininfor` VALUES (464, 'test', '192.168.5.63', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-17 17:20:03');
+INSERT INTO `sys_logininfor` VALUES (465, 'test', '192.168.5.63', '内网IP', 'Chrome 8', 'Windows 7', '0', '登录成功', '2020-04-17 17:20:20');
+INSERT INTO `sys_logininfor` VALUES (466, 'test', '192.168.1.90', '内网IP', 'Chrome', 'Windows 7', '0', '登录成功', '2020-04-17 17:21:42');
+INSERT INTO `sys_logininfor` VALUES (467, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-20 09:45:25');
+INSERT INTO `sys_logininfor` VALUES (468, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-20 09:51:56');
+INSERT INTO `sys_logininfor` VALUES (469, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-20 10:59:09');
+INSERT INTO `sys_logininfor` VALUES (470, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-20 11:04:13');
+INSERT INTO `sys_logininfor` VALUES (471, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-20 11:23:43');
+INSERT INTO `sys_logininfor` VALUES (472, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-20 12:14:41');
+INSERT INTO `sys_logininfor` VALUES (473, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-20 12:19:25');
+INSERT INTO `sys_logininfor` VALUES (474, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-20 13:38:44');
+INSERT INTO `sys_logininfor` VALUES (475, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-20 13:51:35');
+INSERT INTO `sys_logininfor` VALUES (476, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-20 14:24:25');
+INSERT INTO `sys_logininfor` VALUES (477, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-20 14:24:30');
+INSERT INTO `sys_logininfor` VALUES (478, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-20 14:24:41');
+INSERT INTO `sys_logininfor` VALUES (479, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-20 14:26:12');
+INSERT INTO `sys_logininfor` VALUES (480, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-20 16:35:01');
+INSERT INTO `sys_logininfor` VALUES (481, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-20 17:00:46');
+INSERT INTO `sys_logininfor` VALUES (482, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-21 10:51:23');
+INSERT INTO `sys_logininfor` VALUES (483, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-21 10:52:25');
+INSERT INTO `sys_logininfor` VALUES (484, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-21 10:54:47');
+INSERT INTO `sys_logininfor` VALUES (485, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-21 15:49:12');
+INSERT INTO `sys_logininfor` VALUES (486, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-21 15:58:28');
+INSERT INTO `sys_logininfor` VALUES (487, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-21 16:18:49');
+INSERT INTO `sys_logininfor` VALUES (488, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-21 16:20:40');
+INSERT INTO `sys_logininfor` VALUES (489, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-21 16:21:54');
+INSERT INTO `sys_logininfor` VALUES (490, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-21 16:23:03');
+INSERT INTO `sys_logininfor` VALUES (491, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-21 16:24:42');
+INSERT INTO `sys_logininfor` VALUES (492, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-21 16:28:39');
+INSERT INTO `sys_logininfor` VALUES (493, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-22 13:36:48');
+INSERT INTO `sys_logininfor` VALUES (494, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-22 17:23:35');
+INSERT INTO `sys_logininfor` VALUES (495, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-22 17:25:06');
+INSERT INTO `sys_logininfor` VALUES (496, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-23 10:17:02');
+INSERT INTO `sys_logininfor` VALUES (497, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-23 16:43:11');
+INSERT INTO `sys_logininfor` VALUES (498, 'test', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 10', '0', '登录成功', '2020-04-23 21:01:16');
+INSERT INTO `sys_logininfor` VALUES (499, 'test', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 10', '0', '登录成功', '2020-04-23 21:01:24');
+INSERT INTO `sys_logininfor` VALUES (500, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-24 10:07:36');
+INSERT INTO `sys_logininfor` VALUES (501, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-24 10:21:09');
+INSERT INTO `sys_logininfor` VALUES (502, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-24 10:21:55');
+INSERT INTO `sys_logininfor` VALUES (503, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-24 11:13:23');
+INSERT INTO `sys_logininfor` VALUES (504, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-24 11:27:00');
+INSERT INTO `sys_logininfor` VALUES (505, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-24 14:16:07');
+INSERT INTO `sys_logininfor` VALUES (506, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-24 14:18:34');
+INSERT INTO `sys_logininfor` VALUES (507, 'test', '127.0.0.1', '内网IP', 'Chrome 8', 'Windows 10', '0', '登录成功', '2020-04-24 17:29:10');
+INSERT INTO `sys_logininfor` VALUES (508, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-24 18:45:51');
+INSERT INTO `sys_logininfor` VALUES (509, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-24 19:49:26');
+INSERT INTO `sys_logininfor` VALUES (510, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '退出成功', '2020-04-24 19:49:33');
+INSERT INTO `sys_logininfor` VALUES (511, 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-24 19:49:43');
+INSERT INTO `sys_logininfor` VALUES (512, 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10', '0', '登录成功', '2020-04-24 20:28:42');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -487,7 +819,7 @@ CREATE TABLE `sys_menu`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '备注',
   PRIMARY KEY (`menu_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1126 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '菜单权限表' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 1127 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '菜单权限表' ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of sys_menu
@@ -495,7 +827,7 @@ CREATE TABLE `sys_menu`  (
 INSERT INTO `sys_menu` VALUES (1, '系统管理', 0, 3, 'system', NULL, 1, 'M', '0', '', 'system', 'admin', '2018-03-16 11:33:00', 'admin', '2020-03-04 17:05:37', '系统管理目录');
 INSERT INTO `sys_menu` VALUES (2, '系统监控', 0, 4, 'monitor', NULL, 1, 'M', '0', '', 'monitor', 'admin', '2018-03-16 11:33:00', 'admin', '2020-03-04 17:05:46', '系统监控目录');
 INSERT INTO `sys_menu` VALUES (3, '系统工具', 0, 5, 'tool', NULL, 1, 'M', '0', '', 'tool', 'admin', '2018-03-16 11:33:00', 'admin', '2020-03-04 17:05:52', '系统工具目录');
-INSERT INTO `sys_menu` VALUES (4, '若依官网', 0, 6, 'http://ruoyi.vip', NULL, 0, 'M', '0', '', 'guide', 'admin', '2018-03-16 11:33:00', 'admin', '2020-03-04 17:05:58', '若依官网地址');
+INSERT INTO `sys_menu` VALUES (4, '若依官网', 0, 6, 'http://ruoyi.vip', NULL, 0, 'M', '1', '', 'guide', 'admin', '2018-03-16 11:33:00', 'admin', '2020-03-18 16:36:59', '若依官网地址');
 INSERT INTO `sys_menu` VALUES (100, '用户管理', 1, 1, 'user', 'system/user/index', 1, 'C', '0', 'system:user:list', 'user', 'admin', '2018-03-16 11:33:00', 'ry', '2018-03-16 11:33:00', '用户管理菜单');
 INSERT INTO `sys_menu` VALUES (101, '角色管理', 1, 2, 'role', 'system/role/index', 1, 'C', '0', 'system:role:list', 'peoples', 'admin', '2018-03-16 11:33:00', 'ry', '2018-03-16 11:33:00', '角色管理菜单');
 INSERT INTO `sys_menu` VALUES (102, '菜单管理', 1, 3, 'menu', 'system/menu/index', 1, 'C', '0', 'system:menu:list', 'tree-table', 'admin', '2018-03-16 11:33:00', 'ry', '2018-03-16 11:33:00', '菜单管理菜单');
@@ -576,7 +908,7 @@ INSERT INTO `sys_menu` VALUES (1059, '预览代码', 114, 4, '#', '', 1, 'F', '0
 INSERT INTO `sys_menu` VALUES (1060, '生成代码', 114, 5, '#', '', 1, 'F', '0', 'tool:gen:code', '#', 'admin', '2018-03-16 11:33:00', 'ry', '2018-03-16 11:33:00', '');
 INSERT INTO `sys_menu` VALUES (1061, '走航分析', 0, 1, 'voyage/analysis', NULL, 1, 'M', '0', '', 'list', 'admin', '2020-02-20 12:19:36', 'admin', '2020-03-05 17:36:36', '');
 INSERT INTO `sys_menu` VALUES (1062, '控制中心', 1061, 1, 'controller', 'voyage/analysis/controller/index', 1, 'C', '0', 'voyage:analysis:controller:index', 'tool', 'admin', '2020-02-20 12:24:43', 'admin', '2020-03-05 17:49:47', '');
-INSERT INTO `sys_menu` VALUES (1063, 'VOC走航', 1061, 2, 'cesium', 'voyage/analysis/cesium/index', 1, 'C', '0', 'voyage:analysis:cesium:index', 'component', 'admin', '2020-02-22 00:05:54', 'admin', '2020-03-05 18:28:03', '');
+INSERT INTO `sys_menu` VALUES (1063, 'VOC走航', 1061, 2, 'map', 'voyage/analysis/map/index', 1, 'C', '0', 'voyage:analysis:map:index', 'component', 'admin', '2020-02-22 00:05:54', 'admin', '2020-03-30 21:24:17', '');
 INSERT INTO `sys_menu` VALUES (1064, '设备管理', 1094, 1, 'device', 'voyage/setting/device/index', 1, 'C', '0', 'voyage:setting:device:index', 'eye', 'admin', '2018-03-01 00:00:00', 'admin', '2020-03-05 17:44:41', '走航菜单');
 INSERT INTO `sys_menu` VALUES (1065, '走航查询', 1064, 1, '#', '', 1, 'F', '0', 'zh:device:query', '#', 'admin', '2018-03-01 00:00:00', 'ry', '2018-03-01 00:00:00', '');
 INSERT INTO `sys_menu` VALUES (1066, '走航新增', 1064, 2, '#', '', 1, 'F', '0', 'zh:device:add', '#', 'admin', '2018-03-01 00:00:00', 'ry', '2018-03-01 00:00:00', '');
@@ -589,7 +921,7 @@ INSERT INTO `sys_menu` VALUES (1072, '走航记录新增', 1070, 2, '#', '', 1, 
 INSERT INTO `sys_menu` VALUES (1073, '走航记录修改', 1070, 3, '#', '', 1, 'F', '0', 'zh:collectRecord:edit', '#', 'admin', '2018-03-01 00:00:00', 'ry', '2018-03-01 00:00:00', '');
 INSERT INTO `sys_menu` VALUES (1074, '走航记录删除', 1070, 4, '#', '', 1, 'F', '0', 'zh:collectRecord:remove', '#', 'admin', '2018-03-01 00:00:00', 'ry', '2018-03-01 00:00:00', '');
 INSERT INTO `sys_menu` VALUES (1075, '走航记录导出', 1070, 5, '#', '', 1, 'F', '0', 'zh:collectRecord:export', '#', 'admin', '2018-03-01 00:00:00', 'ry', '2018-03-01 00:00:00', '');
-INSERT INTO `sys_menu` VALUES (1076, '敏感点', 3, 1, 'point', 'voyage/setting/point/index', 1, 'C', '0', 'zh:point:list', 'example', 'admin', '2018-03-01 00:00:00', 'admin', '2020-03-05 17:47:08', '敏感点菜单');
+INSERT INTO `sys_menu` VALUES (1076, '敏感点', 1094, 1, 'point', 'voyage/setting/point/index', 1, 'C', '0', 'zh:point:list', 'example', 'admin', '2018-03-01 00:00:00', 'admin', '2020-03-26 22:46:52', '敏感点菜单');
 INSERT INTO `sys_menu` VALUES (1077, '敏感点查询', 1076, 1, '#', '', 1, 'F', '0', 'zh:point:query', '#', 'admin', '2018-03-01 00:00:00', 'ry', '2018-03-01 00:00:00', '');
 INSERT INTO `sys_menu` VALUES (1078, '敏感点新增', 1076, 2, '#', '', 1, 'F', '0', 'zh:point:add', '#', 'admin', '2018-03-01 00:00:00', 'ry', '2018-03-01 00:00:00', '');
 INSERT INTO `sys_menu` VALUES (1079, '敏感点修改', 1076, 3, '#', '', 1, 'F', '0', 'zh:point:edit', '#', 'admin', '2018-03-01 00:00:00', 'ry', '2018-03-01 00:00:00', '');
@@ -632,7 +964,8 @@ INSERT INTO `sys_menu` VALUES (1121, '单个颜色各范围新增', 1119, 2, '#'
 INSERT INTO `sys_menu` VALUES (1122, '单个颜色各范围修改', 1119, 3, '#', '', 1, 'F', '0', 'zh:simpleColor:edit', '#', 'admin', '2018-03-01 00:00:00', 'admin', '2020-03-04 17:32:31', '');
 INSERT INTO `sys_menu` VALUES (1123, '单个颜色各范围删除', 1119, 4, '#', '', 1, 'F', '0', 'zh:simpleColor:remove', '#', 'admin', '2018-03-01 00:00:00', 'admin', '2020-03-04 17:32:40', '');
 INSERT INTO `sys_menu` VALUES (1124, '单个颜色各范围导出', 1119, 5, '#', '', 1, 'F', '0', 'zh:simpleColor:export', '#', 'admin', '2018-03-01 00:00:00', 'admin', '2020-03-04 17:32:49', '');
-INSERT INTO `sys_menu` VALUES (1125, '走航测试', 1061, 4, 'cesium/test', 'voyage/analysis/cesium/test', 1, 'C', '0', 'voyage:analysis:cesium:test', '404', 'admin', '2020-03-06 15:21:50', 'admin', '2020-03-06 15:22:25', '');
+INSERT INTO `sys_menu` VALUES (1125, '走航测试', 1061, 4, 'map/test', 'voyage/analysis/map/test', 1, 'C', '0', 'voyage:analysis:map:test', '404', 'admin', '2020-03-06 15:21:50', 'admin', '2020-03-29 21:24:05', '');
+INSERT INTO `sys_menu` VALUES (1126, 'Dt走航', 1061, 5, 'map/common', 'voyage/analysis/map/common', 1, 'C', '0', 'voyage:analysis:map:common', 'build', 'admin', '2020-04-14 20:18:59', 'admin', '2020-04-14 20:21:20', '');
 
 -- ----------------------------
 -- Table structure for sys_notice
@@ -680,7 +1013,7 @@ CREATE TABLE `sys_oper_log`  (
   `error_msg` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '错误消息',
   `oper_time` datetime(0) NULL DEFAULT NULL COMMENT '操作时间',
   PRIMARY KEY (`oper_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 134 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '操作日志记录' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 302 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '操作日志记录' ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of sys_oper_log
@@ -818,6 +1151,174 @@ INSERT INTO `sys_oper_log` VALUES (130, '菜单管理', 2, 'com.ruoyi.project.sy
 INSERT INTO `sys_oper_log` VALUES (131, '菜单管理', 2, 'com.ruoyi.project.system.controller.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/ruoyi/system/menu', '127.0.0.1', '内网IP', '{\"visible\":\"0\",\"icon\":\"component\",\"orderNum\":\"2\",\"menuName\":\"VOC走航\",\"params\":{},\"parentId\":1061,\"path\":\"cesium\",\"component\":\"voyage/analysis/cesium/index\",\"children\":[],\"createTime\":1582301154000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":1063,\"menuType\":\"C\",\"perms\":\"voyage:analysis:cesium:index\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-03-05 18:28:03');
 INSERT INTO `sys_oper_log` VALUES (132, '菜单管理', 1, 'com.ruoyi.project.system.controller.SysMenuController.add()', 'POST', 1, 'admin', NULL, '/ruoyi/system/menu', '127.0.0.1', '内网IP', '{\"visible\":\"0\",\"icon\":\"404\",\"orderNum\":\"4\",\"menuName\":\"走航测试\",\"params\":{},\"parentId\":1061,\"path\":\"cesium\",\"component\":\"voyage/analysis/cesium/test\",\"createBy\":\"admin\",\"children\":[],\"isFrame\":\"1\",\"menuType\":\"C\",\"perms\":\"voyage:analysis:cesium:test\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-03-06 15:21:50');
 INSERT INTO `sys_oper_log` VALUES (133, '菜单管理', 2, 'com.ruoyi.project.system.controller.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/ruoyi/system/menu', '127.0.0.1', '内网IP', '{\"visible\":\"0\",\"icon\":\"404\",\"orderNum\":\"4\",\"menuName\":\"走航测试\",\"params\":{},\"parentId\":1061,\"path\":\"cesium/test\",\"component\":\"voyage/analysis/cesium/test\",\"children\":[],\"createTime\":1583479310000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":1125,\"menuType\":\"C\",\"perms\":\"voyage:analysis:cesium:test\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-03-06 15:22:25');
+INSERT INTO `sys_oper_log` VALUES (134, '颜色标准', 2, 'com.ruoyi.zh.controller.ZhCategoryController.edit()', 'PUT', 1, NULL, NULL, '/ruoyi/zh/category', '127.0.0.1', '内网IP', '{\"name\":\"禾信专用1\",\"updateTime\":1583904868621,\"id\":1,\"params\":{}}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-03-11 13:34:29');
+INSERT INTO `sys_oper_log` VALUES (135, '用户管理', 5, 'com.ruoyi.project.system.controller.SysUserController.export()', 'GET', 1, 'admin', NULL, '/ruoyi/system/user/export', '127.0.0.1', '内网IP', '{}', '{\"msg\":\"9c218594-9d08-4178-9a22-67a240294bfe_用户数据.xlsx\",\"code\":200}', 0, NULL, '2020-03-16 03:57:58');
+INSERT INTO `sys_oper_log` VALUES (136, '用户管理', 5, 'com.ruoyi.project.system.controller.SysUserController.export()', 'GET', 1, 'admin', NULL, '/ruoyi/system/user/export', '127.0.0.1', '内网IP', '{}', '{\"msg\":\"477db32d-0377-4bca-9b05-31bf6b3980a1_用户数据.xlsx\",\"code\":200}', 0, NULL, '2020-03-16 03:58:46');
+INSERT INTO `sys_oper_log` VALUES (137, '菜单管理', 3, 'com.ruoyi.project.system.controller.SysMenuController.remove()', 'DELETE', 1, 'admin', NULL, '/ruoyi/system/menu/4', '127.0.0.1', '内网IP', '{menuId=4}', '{\"msg\":\"菜单已分配,不允许删除\",\"code\":500}', 0, NULL, '2020-03-18 16:36:47');
+INSERT INTO `sys_oper_log` VALUES (138, '菜单管理', 2, 'com.ruoyi.project.system.controller.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/ruoyi/system/menu', '127.0.0.1', '内网IP', '{\"visible\":\"1\",\"icon\":\"guide\",\"orderNum\":\"6\",\"menuName\":\"若依官网\",\"params\":{},\"parentId\":0,\"path\":\"http://ruoyi.vip\",\"children\":[],\"createTime\":1521171180000,\"updateBy\":\"admin\",\"isFrame\":\"0\",\"menuId\":4,\"menuType\":\"M\",\"perms\":\"\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-03-18 16:36:59');
+INSERT INTO `sys_oper_log` VALUES (139, '菜单管理', 3, 'com.ruoyi.project.system.controller.SysMenuController.remove()', 'DELETE', 1, 'admin', NULL, '/ruoyi/system/menu/4', '127.0.0.1', '内网IP', '{menuId=4}', '{\"msg\":\"菜单已分配,不允许删除\",\"code\":500}', 0, NULL, '2020-03-18 16:37:09');
+INSERT INTO `sys_oper_log` VALUES (140, '菜单管理', 2, 'com.ruoyi.project.system.controller.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/ruoyi/system/menu', '127.0.0.1', '内网IP', '{\"visible\":\"0\",\"icon\":\"example\",\"orderNum\":\"1\",\"menuName\":\"敏感点\",\"params\":{},\"parentId\":1094,\"path\":\"point\",\"component\":\"voyage/setting/point/index\",\"children\":[],\"createTime\":1519833600000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":1076,\"menuType\":\"C\",\"perms\":\"zh:point:list\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-03-26 22:46:52');
+INSERT INTO `sys_oper_log` VALUES (141, '菜单管理', 2, 'com.ruoyi.project.system.controller.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/ruoyi/system/menu', '127.0.0.1', '内网IP', '{\"visible\":\"0\",\"icon\":\"component\",\"orderNum\":\"2\",\"menuName\":\"VOC走航\",\"params\":{},\"parentId\":1061,\"path\":\"map\",\"component\":\"voyage/analysis/map/index\",\"children\":[],\"createTime\":1582301154000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":1063,\"menuType\":\"C\",\"perms\":\"voyage:analysis:map:index\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-03-27 20:39:28');
+INSERT INTO `sys_oper_log` VALUES (142, '菜单管理', 2, 'com.ruoyi.project.system.controller.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/ruoyi/system/menu', '127.0.0.1', '内网IP', '{\"visible\":\"1\",\"icon\":\"404\",\"orderNum\":\"4\",\"menuName\":\"走航测试\",\"params\":{},\"parentId\":1061,\"path\":\"cesium/test\",\"component\":\"voyage/analysis/cesium/test\",\"children\":[],\"createTime\":1583479310000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":1125,\"menuType\":\"C\",\"perms\":\"voyage:analysis:cesium:test\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-03-27 20:47:20');
+INSERT INTO `sys_oper_log` VALUES (143, '菜单管理', 2, 'com.ruoyi.project.system.controller.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/ruoyi/system/menu', '127.0.0.1', '内网IP', '{\"visible\":\"0\",\"icon\":\"404\",\"orderNum\":\"4\",\"menuName\":\"走航测试\",\"params\":{},\"parentId\":1061,\"path\":\"cesium/test\",\"component\":\"voyage/analysis/cesium/test\",\"children\":[],\"createTime\":1583479310000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":1125,\"menuType\":\"C\",\"perms\":\"voyage:analysis:cesium:test\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-03-29 21:23:06');
+INSERT INTO `sys_oper_log` VALUES (144, '菜单管理', 2, 'com.ruoyi.project.system.controller.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/ruoyi/system/menu', '127.0.0.1', '内网IP', '{\"visible\":\"0\",\"icon\":\"404\",\"orderNum\":\"4\",\"menuName\":\"走航测试\",\"params\":{},\"parentId\":1061,\"path\":\"map/test\",\"component\":\"voyage/analysis/map/test\",\"children\":[],\"createTime\":1583479310000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":1125,\"menuType\":\"C\",\"perms\":\"voyage:analysis:map:test\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-03-29 21:24:05');
+INSERT INTO `sys_oper_log` VALUES (145, '用户管理', 1, 'com.ruoyi.project.system.controller.SysUserController.add()', 'POST', 1, 'admin', NULL, '/ruoyi/system/user', '127.0.0.1', '内网IP', '{\"phonenumber\":\"18202729451\",\"admin\":false,\"password\":\"$2a$10$NztmF0rI.YDjH2oxpyLCU.5ywHtQuVCrAwCV9O.RGfkgJWCqR1A36\",\"postIds\":[],\"nickName\":\"test\",\"sex\":\"1\",\"deptId\":103,\"params\":{},\"userName\":\"测试\",\"userId\":3,\"createBy\":\"admin\",\"roleIds\":[],\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-03-29 23:04:10');
+INSERT INTO `sys_oper_log` VALUES (146, '角色管理', 2, 'com.ruoyi.project.system.controller.SysRoleController.edit()', 'PUT', 1, 'admin', NULL, '/ruoyi/system/role', '127.0.0.1', '内网IP', '{\"flag\":false,\"roleId\":2,\"admin\":false,\"remark\":\"普通角色\",\"dataScope\":\"2\",\"delFlag\":\"0\",\"params\":{},\"roleSort\":\"2\",\"createTime\":1521171180000,\"updateBy\":\"admin\",\"roleKey\":\"common\",\"roleName\":\"普通角色\",\"menuIds\":[1061,1062,1070,1071,1072,1073,1074,1075,1063,1125],\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-03-29 23:04:28');
+INSERT INTO `sys_oper_log` VALUES (147, '角色管理', 2, 'com.ruoyi.project.system.controller.SysRoleController.edit()', 'PUT', 1, 'admin', NULL, '/ruoyi/system/role', '127.0.0.1', '内网IP', '{\"flag\":false,\"roleId\":2,\"admin\":false,\"remark\":\"普通角色\",\"dataScope\":\"2\",\"delFlag\":\"0\",\"params\":{},\"roleSort\":\"2\",\"createTime\":1521171180000,\"updateBy\":\"admin\",\"roleKey\":\"common\",\"roleName\":\"普通角色\",\"menuIds\":[1062,1070,1071,1072,1073,1074,1075,1063,1061],\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-03-29 23:06:31');
+INSERT INTO `sys_oper_log` VALUES (148, '用户管理', 2, 'com.ruoyi.project.system.controller.SysUserController.edit()', 'PUT', 1, 'admin', NULL, '/ruoyi/system/user', '127.0.0.1', '内网IP', '{\"roles\":[],\"phonenumber\":\"18202729451\",\"admin\":false,\"delFlag\":\"0\",\"password\":\"\",\"updateBy\":\"admin\",\"postIds\":[],\"loginIp\":\"\",\"email\":\"\",\"nickName\":\"测试\",\"sex\":\"1\",\"deptId\":103,\"avatar\":\"\",\"dept\":{\"deptName\":\"研发部门\",\"leader\":\"若依\",\"deptId\":103,\"orderNum\":\"1\",\"params\":{},\"parentId\":101,\"children\":[],\"status\":\"0\"},\"params\":{},\"userName\":\"test\",\"userId\":3,\"createBy\":\"admin\",\"roleIds\":[2],\"createTime\":1585494250000,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-03-29 23:08:04');
+INSERT INTO `sys_oper_log` VALUES (149, '走航记录', 3, 'com.ruoyi.zh.controller.CollectRecordController.remove()', 'DELETE', 1, 'admin', NULL, '/ruoyi/zh/collectRecord/3', '127.0.0.1', '内网IP', '{ids=3}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-03-30 13:04:27');
+INSERT INTO `sys_oper_log` VALUES (150, '菜单管理', 2, 'com.ruoyi.project.system.controller.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/ruoyi/system/menu', '127.0.0.1', '内网IP', '{\"visible\":\"0\",\"icon\":\"component\",\"orderNum\":\"2\",\"menuName\":\"VOC走航\",\"params\":{},\"parentId\":1061,\"path\":\"map\",\"component\":\"voyage/analysis/map/index\",\"children\":[],\"createTime\":1582301154000,\"updateBy\":\"admin\",\"isFrame\":\"0\",\"menuId\":1063,\"menuType\":\"C\",\"perms\":\"voyage:analysis:map:index\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-03-30 21:23:43');
+INSERT INTO `sys_oper_log` VALUES (151, '菜单管理', 2, 'com.ruoyi.project.system.controller.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/ruoyi/system/menu', '127.0.0.1', '内网IP', '{\"visible\":\"0\",\"icon\":\"component\",\"orderNum\":\"2\",\"menuName\":\"VOC走航\",\"params\":{},\"parentId\":1061,\"path\":\"map\",\"component\":\"voyage/analysis/map/index\",\"children\":[],\"createTime\":1582301154000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":1063,\"menuType\":\"C\",\"perms\":\"voyage:analysis:map:index\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-03-30 21:24:17');
+INSERT INTO `sys_oper_log` VALUES (152, '走航记录', 3, 'com.ruoyi.zh.controller.CollectRecordController.remove()', 'DELETE', 1, 'admin', NULL, '/ruoyi/zh/collectRecord/1', '127.0.0.1', '内网IP', '{ids=1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-03-30 21:58:27');
+INSERT INTO `sys_oper_log` VALUES (153, '走航记录', 3, 'com.ruoyi.zh.controller.CollectRecordController.remove()', 'DELETE', 1, 'admin', NULL, '/ruoyi/zh/collectRecord/2', '127.0.0.1', '内网IP', '{ids=2}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-03-31 13:07:43');
+INSERT INTO `sys_oper_log` VALUES (154, '用户管理', 2, 'com.ruoyi.project.system.controller.SysUserController.resetPwd()', 'PUT', 1, 'admin', NULL, '/ruoyi/system/user/resetPwd', '127.0.0.1', '内网IP', '{\"admin\":false,\"password\":\"$2a$10$rL9CRG7zkfgnJK.ZfkSPI.7arg8MkP55L0//OszLA2c5LGSrzdbrG\",\"updateBy\":\"admin\",\"params\":{},\"userId\":3}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-03-31 14:38:33');
+INSERT INTO `sys_oper_log` VALUES (155, '角色管理', 1, 'com.ruoyi.project.system.controller.SysRoleController.add()', 'POST', 1, 'admin', NULL, '/ruoyi/system/role', '127.0.0.1', '内网IP', '{\"flag\":false,\"roleId\":3,\"admin\":false,\"params\":{},\"roleSort\":\"3\",\"createBy\":\"admin\",\"roleKey\":\"测试\",\"roleName\":\"测试人员\",\"deptIds\":[],\"menuIds\":[1062,1070,1071,1072,1073,1074,1075,1063,1064,1065,1066,1067,1068,1069,1076,1077,1078,1079,1080,1081,1061,1094],\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-03-31 14:39:26');
+INSERT INTO `sys_oper_log` VALUES (156, '用户管理', 2, 'com.ruoyi.project.system.controller.SysUserController.edit()', 'PUT', 1, 'admin', NULL, '/ruoyi/system/user', '127.0.0.1', '内网IP', '{\"roles\":[{\"flag\":false,\"roleId\":2,\"admin\":false,\"dataScope\":\"2\",\"params\":{},\"roleSort\":\"2\",\"roleKey\":\"common\",\"roleName\":\"普通角色\",\"status\":\"0\"}],\"phonenumber\":\"18202729451\",\"admin\":false,\"delFlag\":\"0\",\"password\":\"\",\"updateBy\":\"admin\",\"postIds\":[],\"loginIp\":\"\",\"email\":\"\",\"nickName\":\"测试\",\"sex\":\"1\",\"deptId\":103,\"avatar\":\"\",\"dept\":{\"deptName\":\"研发部门\",\"leader\":\"若依\",\"deptId\":103,\"orderNum\":\"1\",\"params\":{},\"parentId\":101,\"children\":[],\"status\":\"0\"},\"params\":{},\"userName\":\"test\",\"userId\":3,\"createBy\":\"admin\",\"roleIds\":[3],\"createTime\":1585494250000,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-03-31 14:39:42');
+INSERT INTO `sys_oper_log` VALUES (157, '走航记录', 3, 'com.ruoyi.zh.controller.CollectRecordController.remove()', 'DELETE', 1, 'admin', NULL, '/ruoyi/zh/collectRecord/1', '127.0.0.1', '内网IP', '{ids=1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-03-31 15:09:04');
+INSERT INTO `sys_oper_log` VALUES (158, '走航', 1, 'com.ruoyi.zh.controller.DeviceController.add()', 'POST', 1, 'test', NULL, '/ruoyi/zh/device', '192.168.5.63', '内网IP', '{\"code\":\"SPIMS002\",\"correctStatus\":0,\"params\":{},\"weatherStatus\":0,\"gpsStatus\":0,\"name\":\"SPIMS\",\"status\":0}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-03-31 16:13:24');
+INSERT INTO `sys_oper_log` VALUES (159, '走航', 2, 'com.ruoyi.zh.controller.DeviceController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/device', '192.168.5.63', '内网IP', '{\"address\":\"大哥大\",\"code\":\"SPIMS002\",\"correctStatus\":0,\"params\":{},\"weatherStatus\":0,\"gpsStatus\":0,\"name\":\"SPIMS\",\"company\":\"广州禾信\",\"id\":2,\"status\":0}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-03-31 16:13:46');
+INSERT INTO `sys_oper_log` VALUES (160, '走航记录', 1, 'com.ruoyi.zh.controller.CollectRecordController.add()', 'POST', 1, 'test', NULL, '/ruoyi/zh/collectRecord', '192.168.5.63', '内网IP', '{\"deviceCode\":\"002\",\"id\":6}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-03-31 16:14:47');
+INSERT INTO `sys_oper_log` VALUES (161, '走航记录', 3, 'com.ruoyi.zh.controller.CollectRecordController.remove()', 'DELETE', 1, 'test', NULL, '/ruoyi/zh/collectRecord/6', '192.168.5.63', '内网IP', '{ids=6}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-03-31 16:14:51');
+INSERT INTO `sys_oper_log` VALUES (162, '走航记录', 1, 'com.ruoyi.zh.controller.CollectRecordController.add()', 'POST', 1, 'test', NULL, '/ruoyi/zh/collectRecord', '192.168.5.63', '内网IP', '{\"deviceCode\":\"123\",\"id\":8}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-01 11:14:17');
+INSERT INTO `sys_oper_log` VALUES (163, '走航记录', 1, 'com.ruoyi.zh.controller.CollectRecordController.add()', 'POST', 1, 'test', NULL, '/ruoyi/zh/collectRecord', '192.168.5.63', '内网IP', '{\"deviceCode\":\"12\",\"id\":9}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-01 11:14:21');
+INSERT INTO `sys_oper_log` VALUES (164, '走航记录', 3, 'com.ruoyi.zh.controller.CollectRecordController.remove()', 'DELETE', 1, 'test', NULL, '/ruoyi/zh/collectRecord/8', '192.168.5.63', '内网IP', '{ids=8}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-01 11:14:26');
+INSERT INTO `sys_oper_log` VALUES (165, '走航记录', 3, 'com.ruoyi.zh.controller.CollectRecordController.remove()', 'DELETE', 1, 'test', NULL, '/ruoyi/zh/collectRecord/9', '192.168.5.63', '内网IP', '{ids=9}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-01 11:14:33');
+INSERT INTO `sys_oper_log` VALUES (166, '走航记录', 1, 'com.ruoyi.zh.controller.CollectRecordController.add()', 'POST', 1, 'test', NULL, '/ruoyi/zh/collectRecord', '192.168.5.63', '内网IP', '{\"deviceCode\":\"45\",\"id\":10}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-01 11:14:37');
+INSERT INTO `sys_oper_log` VALUES (167, '走航记录', 3, 'com.ruoyi.zh.controller.CollectRecordController.remove()', 'DELETE', 1, 'test', NULL, '/ruoyi/zh/collectRecord/10', '192.168.5.63', '内网IP', '{ids=10}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-01 11:14:42');
+INSERT INTO `sys_oper_log` VALUES (168, '走航', 1, 'com.ruoyi.zh.controller.DeviceController.add()', 'POST', 1, 'test', NULL, '/ruoyi/zh/device', '192.168.5.63', '内网IP', '{\"code\":\"01\",\"correctStatus\":0,\"params\":{},\"weatherStatus\":0,\"gpsStatus\":0,\"name\":\"251\",\"status\":0}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-01 11:15:09');
+INSERT INTO `sys_oper_log` VALUES (169, '走航', 3, 'com.ruoyi.zh.controller.DeviceController.remove()', 'DELETE', 1, 'test', NULL, '/ruoyi/zh/device/3', '192.168.5.63', '内网IP', '{ids=3}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-01 11:15:15');
+INSERT INTO `sys_oper_log` VALUES (170, '走航', 1, 'com.ruoyi.zh.controller.DeviceController.add()', 'POST', 1, 'test', NULL, '/ruoyi/zh/device', '192.168.5.63', '内网IP', '{\"code\":\"12\",\"correctStatus\":0,\"params\":{},\"weatherStatus\":0,\"gpsStatus\":0,\"name\":\"54\",\"status\":0}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-01 11:15:21');
+INSERT INTO `sys_oper_log` VALUES (171, '走航', 3, 'com.ruoyi.zh.controller.DeviceController.remove()', 'DELETE', 1, 'test', NULL, '/ruoyi/zh/device/4', '192.168.5.63', '内网IP', '{ids=4}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-01 11:15:29');
+INSERT INTO `sys_oper_log` VALUES (172, '控点', 1, 'com.ruoyi.zh.controller.PointController.add()', 'POST', 1, 'test', NULL, '/ruoyi/zh/point', '192.168.5.63', '内网IP', '{\"lng\":\"41\",\"params\":{},\"name\":\"325\",\"id\":2,\"lat\":\"12\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-01 11:15:47');
+INSERT INTO `sys_oper_log` VALUES (173, '控点', 3, 'com.ruoyi.zh.controller.PointController.remove()', 'DELETE', 1, 'test', NULL, '/ruoyi/zh/point/2', '192.168.5.63', '内网IP', '{ids=2}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-01 11:15:52');
+INSERT INTO `sys_oper_log` VALUES (174, '控点', 1, 'com.ruoyi.zh.controller.PointController.add()', 'POST', 1, 'test', NULL, '/ruoyi/zh/point', '192.168.5.63', '内网IP', '{\"lng\":\"45\",\"params\":{},\"name\":\"124\",\"id\":3,\"lat\":\"154\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-01 11:15:58');
+INSERT INTO `sys_oper_log` VALUES (175, '控点', 3, 'com.ruoyi.zh.controller.PointController.remove()', 'DELETE', 1, 'test', NULL, '/ruoyi/zh/point/3', '192.168.5.63', '内网IP', '{ids=3}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-01 11:16:02');
+INSERT INTO `sys_oper_log` VALUES (176, '走航记录', 1, 'com.ruoyi.zh.controller.CollectRecordController.add()', 'POST', 1, 'test', NULL, '/ruoyi/zh/collectRecord', '192.168.5.63', '内网IP', '{\"deviceCode\":\"132\",\"id\":11}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-01 11:22:55');
+INSERT INTO `sys_oper_log` VALUES (177, '走航记录', 1, 'com.ruoyi.zh.controller.CollectRecordController.add()', 'POST', 1, 'test', NULL, '/ruoyi/zh/collectRecord', '192.168.5.63', '内网IP', '{\"deviceCode\":\"54451\",\"id\":12}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-01 11:23:00');
+INSERT INTO `sys_oper_log` VALUES (178, '走航记录', 1, 'com.ruoyi.zh.controller.CollectRecordController.add()', 'POST', 1, 'test', NULL, '/ruoyi/zh/collectRecord', '192.168.5.63', '内网IP', '{\"deviceCode\":\"-=0-=-\",\"id\":13}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-01 11:23:06');
+INSERT INTO `sys_oper_log` VALUES (179, '走航记录', 3, 'com.ruoyi.zh.controller.CollectRecordController.remove()', 'DELETE', 1, 'test', NULL, '/ruoyi/zh/collectRecord/11,12,13', '192.168.5.63', '内网IP', '{ids=11,12,13}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-01 11:23:23');
+INSERT INTO `sys_oper_log` VALUES (180, '走航记录', 1, 'com.ruoyi.zh.controller.CollectRecordController.add()', 'POST', 1, 'test', NULL, '/ruoyi/zh/collectRecord', '192.168.5.63', '内网IP', '{\"deviceCode\":\"163\",\"id\":14}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-01 11:23:31');
+INSERT INTO `sys_oper_log` VALUES (181, '走航记录', 3, 'com.ruoyi.zh.controller.CollectRecordController.remove()', 'DELETE', 1, 'test', NULL, '/ruoyi/zh/collectRecord/14', '192.168.5.63', '内网IP', '{ids=14}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-01 11:26:52');
+INSERT INTO `sys_oper_log` VALUES (182, '走航记录', 3, 'com.ruoyi.zh.controller.CollectRecordController.remove()', 'DELETE', 1, 'test', NULL, '/ruoyi/zh/collectRecord/9', '192.168.5.63', '内网IP', '{ids=9}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-01 17:09:17');
+INSERT INTO `sys_oper_log` VALUES (183, '走航记录', 3, 'com.ruoyi.zh.controller.CollectRecordController.remove()', 'DELETE', 1, 'test', NULL, '/ruoyi/zh/collectRecord/8', '192.168.5.63', '内网IP', '{ids=8}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-01 17:09:20');
+INSERT INTO `sys_oper_log` VALUES (184, '走航记录', 3, 'com.ruoyi.zh.controller.CollectRecordController.remove()', 'DELETE', 1, 'test', NULL, '/ruoyi/zh/collectRecord/7,10,11', '192.168.5.63', '内网IP', '{ids=7,10,11}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-01 17:09:37');
+INSERT INTO `sys_oper_log` VALUES (185, '走航记录', 3, 'com.ruoyi.zh.controller.CollectRecordController.remove()', 'DELETE', 1, 'test', NULL, '/ruoyi/zh/collectRecord/12', '192.168.5.63', '内网IP', '{ids=12}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-01 17:09:47');
+INSERT INTO `sys_oper_log` VALUES (186, '根据id导出走航记录', 5, 'com.ruoyi.zh.controller.CollectRecordController.exportByIds()', 'GET', 1, 'admin', NULL, '/ruoyi/zh/collectRecord/exportByIds/1,2', '192.168.5.63', '内网IP', '{ids=1,2}', '{\"msg\":\"合并文件2020-04-02 20：06：53.txt\",\"code\":200}', 0, NULL, '2020-04-02 20:06:53');
+INSERT INTO `sys_oper_log` VALUES (187, '根据id导出走航记录', 5, 'com.ruoyi.zh.controller.CollectRecordController.exportByIds()', 'GET', 1, 'admin', NULL, '/ruoyi/zh/collectRecord/exportByIds/1,2', '192.168.5.63', '内网IP', '{ids=1,2}', '{\"msg\":\"合并文件2020-04-02 20：07：21.txt\",\"code\":200}', 0, NULL, '2020-04-02 20:07:21');
+INSERT INTO `sys_oper_log` VALUES (188, '根据id导出走航记录', 5, 'com.ruoyi.zh.controller.CollectRecordController.exportByIds()', 'GET', 1, 'test', NULL, '/ruoyi/zh/collectRecord/exportByIds/10,11', '127.0.0.1', '内网IP', '{ids=10,11}', '{\"msg\":\"合并文件2020-04-03 10：46：44.txt\",\"code\":200}', 0, NULL, '2020-04-03 10:46:44');
+INSERT INTO `sys_oper_log` VALUES (189, '根据id导出走航记录', 5, 'com.ruoyi.zh.controller.CollectRecordController.exportByIds()', 'GET', 1, 'test', NULL, '/ruoyi/zh/collectRecord/exportByIds/10,11', '127.0.0.1', '内网IP', '{ids=10,11}', '{\"msg\":\"合并文件2020-04-03 10：47：01.txt\",\"code\":200}', 0, NULL, '2020-04-03 10:47:02');
+INSERT INTO `sys_oper_log` VALUES (190, '走航记录', 3, 'com.ruoyi.zh.controller.CollectRecordController.remove()', 'DELETE', 1, 'test', NULL, '/ruoyi/zh/collectRecord/9', '127.0.0.1', '内网IP', '{ids=9}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-03 10:47:23');
+INSERT INTO `sys_oper_log` VALUES (191, '根据id导出走航记录', 5, 'com.ruoyi.zh.controller.CollectRecordController.exportByIds()', 'GET', 1, 'test', NULL, '/ruoyi/zh/collectRecord/exportByIds/10,11', '127.0.0.1', '内网IP', '{ids=10,11}', '{\"msg\":\"合并文件2020-04-03 10：47：40.txt\",\"code\":200}', 0, NULL, '2020-04-03 10:47:40');
+INSERT INTO `sys_oper_log` VALUES (192, '根据id导出走航记录', 5, 'com.ruoyi.zh.controller.CollectRecordController.exportByIds()', 'GET', 1, 'test', NULL, '/ruoyi/zh/collectRecord/exportByIds/10,11', '127.0.0.1', '内网IP', '{ids=10,11}', '{\"msg\":\"合并文件2020-04-03 10：48：42.txt\",\"code\":200}', 0, NULL, '2020-04-03 10:48:42');
+INSERT INTO `sys_oper_log` VALUES (193, '根据id导出走航记录', 5, 'com.ruoyi.zh.controller.CollectRecordController.exportByIds()', 'GET', 1, 'test', NULL, '/ruoyi/zh/collectRecord/exportByIds/10,11', '127.0.0.1', '内网IP', '{ids=10,11}', '{\"msg\":\"合并文件2020-04-03 10：49：43.txt\",\"code\":200}', 0, NULL, '2020-04-03 10:49:44');
+INSERT INTO `sys_oper_log` VALUES (194, '根据id导出走航记录', 5, 'com.ruoyi.zh.controller.CollectRecordController.exportByIds()', 'GET', 1, 'test', NULL, '/ruoyi/zh/collectRecord/exportByIds/10,11', '127.0.0.1', '内网IP', '{ids=10,11}', '{\"msg\":\"合并文件2020-04-03 10：52：45.txt\",\"code\":200}', 0, NULL, '2020-04-03 10:52:45');
+INSERT INTO `sys_oper_log` VALUES (195, '走航记录', 3, 'com.ruoyi.zh.controller.CollectRecordController.remove()', 'DELETE', 1, 'test', NULL, '/ruoyi/zh/collectRecord/7', '127.0.0.1', '内网IP', '{ids=7}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-03 11:23:43');
+INSERT INTO `sys_oper_log` VALUES (196, '走航记录', 1, 'com.ruoyi.zh.controller.CollectRecordController.add()', 'POST', 1, 'test', NULL, '/ruoyi/zh/collectRecord', '127.0.0.1', '内网IP', '{\"deviceCode\":\"123\",\"id\":29}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-03 14:09:01');
+INSERT INTO `sys_oper_log` VALUES (197, '走航记录', 3, 'com.ruoyi.zh.controller.CollectRecordController.remove()', 'DELETE', 1, 'test', NULL, '/ruoyi/zh/collectRecord/29', '127.0.0.1', '内网IP', '{ids=29}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-03 14:11:56');
+INSERT INTO `sys_oper_log` VALUES (198, '根据id导出走航记录', 5, 'com.ruoyi.zh.controller.CollectRecordController.exportByIds()', 'GET', 1, 'test', NULL, '/ruoyi/zh/collectRecord/exportByIds/1,2,3,4,27', '127.0.0.1', '内网IP', '{ids=1,2,3,4,27}', '{\"msg\":\"合并文件2020-04-03 14：21：11.txt\",\"code\":200}', 0, NULL, '2020-04-03 14:21:11');
+INSERT INTO `sys_oper_log` VALUES (199, '走航记录', 3, 'com.ruoyi.zh.controller.CollectRecordController.remove()', 'DELETE', 1, 'test', NULL, '/ruoyi/zh/collectRecord/27', '127.0.0.1', '内网IP', '{ids=27}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-03 14:51:29');
+INSERT INTO `sys_oper_log` VALUES (200, '走航记录', 3, 'com.ruoyi.zh.controller.CollectRecordController.remove()', 'DELETE', 1, 'test', NULL, '/ruoyi/zh/collectRecord/23,24,25,26,28,30,31,32,33,34', '127.0.0.1', '内网IP', '{ids=23,24,25,26,28,30,31,32,33,34}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-03 14:52:38');
+INSERT INTO `sys_oper_log` VALUES (201, '走航记录', 3, 'com.ruoyi.zh.controller.CollectRecordController.remove()', 'DELETE', 1, 'test', NULL, '/ruoyi/zh/collectRecord/35,36,37', '127.0.0.1', '内网IP', '{ids=35,36,37}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-03 14:52:55');
+INSERT INTO `sys_oper_log` VALUES (202, '走航记录', 3, 'com.ruoyi.zh.controller.CollectRecordController.remove()', 'DELETE', 1, 'test', NULL, '/ruoyi/zh/collectRecord/13,14,15,16,17,18,19,20,21,22', '127.0.0.1', '内网IP', '{ids=13,14,15,16,17,18,19,20,21,22}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-03 14:53:06');
+INSERT INTO `sys_oper_log` VALUES (203, '走航记录', 3, 'com.ruoyi.zh.controller.CollectRecordController.remove()', 'DELETE', 1, 'test', NULL, '/ruoyi/zh/collectRecord/1,2,3,4,5,6,8,10,11,12', '127.0.0.1', '内网IP', '{ids=1,2,3,4,5,6,8,10,11,12}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-03 14:53:11');
+INSERT INTO `sys_oper_log` VALUES (204, '根据id导出走航记录', 5, 'com.ruoyi.zh.controller.CollectRecordController.exportByIds()', 'GET', 1, 'test', NULL, '/ruoyi/zh/collectRecord/exportByIds/4,5', '127.0.0.1', '内网IP', '{ids=4,5}', '{\"msg\":\"合并文件2020-04-08 17：00：57.txt\",\"code\":200}', 0, NULL, '2020-04-08 17:00:57');
+INSERT INTO `sys_oper_log` VALUES (205, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114,\"zoom\":12,\"params\":{},\"flashtime\":3,\"angle\":0,\"id\":1,\"lat\":22,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 00:04:52');
+INSERT INTO `sys_oper_log` VALUES (206, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0383834838867,\"zoom\":1.0E-5,\"params\":{},\"flashtime\":3,\"angle\":0,\"id\":1,\"lat\":22.78897285461426,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 00:10:38');
+INSERT INTO `sys_oper_log` VALUES (207, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0383834838867,\"zoom\":10.0,\"params\":{},\"flashtime\":3,\"angle\":0,\"id\":1,\"lat\":22.78897285461426,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 00:10:53');
+INSERT INTO `sys_oper_log` VALUES (208, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0424041748047,\"zoom\":10.0,\"params\":{},\"flashtime\":3,\"angle\":45,\"id\":1,\"lat\":22.80051040649414,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 09:52:20');
+INSERT INTO `sys_oper_log` VALUES (209, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0423889160156,\"zoom\":10.0,\"params\":{},\"flashtime\":3,\"angle\":60,\"id\":1,\"lat\":22.8002986907959,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 09:52:30');
+INSERT INTO `sys_oper_log` VALUES (210, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0423202514648,\"zoom\":1.0E-5,\"params\":{},\"flashtime\":3,\"angle\":60,\"id\":1,\"lat\":22.79989242553711,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 09:52:44');
+INSERT INTO `sys_oper_log` VALUES (211, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0422897338867,\"zoom\":1.0E-6,\"params\":{},\"flashtime\":3,\"angle\":60,\"id\":1,\"lat\":22.79952621459961,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 09:52:58');
+INSERT INTO `sys_oper_log` VALUES (212, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0422897338867,\"zoom\":10.0,\"params\":{},\"flashtime\":3,\"angle\":60,\"id\":1,\"lat\":22.79952621459961,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 10:08:12');
+INSERT INTO `sys_oper_log` VALUES (213, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0422821044922,\"zoom\":1.0E-5,\"params\":{},\"flashtime\":3,\"angle\":60,\"id\":1,\"lat\":22.79946136474609,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 10:08:34');
+INSERT INTO `sys_oper_log` VALUES (214, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0422592163086,\"zoom\":1.0E-5,\"params\":{},\"flashtime\":3,\"angle\":60,\"id\":1,\"lat\":22.79915809631348,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 10:09:50');
+INSERT INTO `sys_oper_log` VALUES (215, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0422286987305,\"zoom\":1.0E-5,\"params\":{},\"flashtime\":3,\"angle\":60,\"id\":1,\"lat\":22.79887390136719,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 10:10:59');
+INSERT INTO `sys_oper_log` VALUES (216, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0421905517578,\"zoom\":1.0E-6,\"params\":{},\"flashtime\":3,\"angle\":60,\"id\":1,\"lat\":22.79855346679688,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 10:12:10');
+INSERT INTO `sys_oper_log` VALUES (217, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0424423217773,\"zoom\":1.0E-6,\"params\":{},\"flashtime\":3,\"angle\":60,\"id\":1,\"lat\":22.80091094970703,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 10:44:39');
+INSERT INTO `sys_oper_log` VALUES (218, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '192.168.1.54', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.3897516666667,\"zoom\":1.0E-6,\"params\":{},\"flashtime\":3,\"angle\":90,\"id\":1,\"lat\":31.536805,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 16:16:30');
+INSERT INTO `sys_oper_log` VALUES (219, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '192.168.5.63', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.3591966666667,\"zoom\":10.0,\"params\":{},\"flashtime\":3,\"angle\":90,\"id\":1,\"lat\":31.54228666666667,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 16:28:47');
+INSERT INTO `sys_oper_log` VALUES (220, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '192.168.1.54', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.3897516666667,\"zoom\":10.0,\"params\":{},\"flashtime\":3,\"angle\":90,\"id\":1,\"lat\":31.536805,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 16:29:29');
+INSERT INTO `sys_oper_log` VALUES (221, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '192.168.1.54', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.3897516666667,\"zoom\":100.0,\"params\":{},\"flashtime\":3,\"angle\":90,\"id\":1,\"lat\":31.536805,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 16:30:15');
+INSERT INTO `sys_oper_log` VALUES (222, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '192.168.1.54', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.3591966666667,\"zoom\":10.0,\"params\":{},\"flashtime\":3,\"angle\":90,\"id\":1,\"lat\":31.54228666666667,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 16:32:46');
+INSERT INTO `sys_oper_log` VALUES (223, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '192.168.5.63', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.3591966666667,\"zoom\":10.0,\"params\":{},\"flashtime\":3,\"angle\":60,\"id\":1,\"lat\":31.54228666666667,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 16:38:30');
+INSERT INTO `sys_oper_log` VALUES (224, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '192.168.1.54', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.3591966666667,\"zoom\":10.0,\"params\":{},\"flashtime\":3,\"angle\":5,\"id\":1,\"lat\":31.54228666666667,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 17:06:11');
+INSERT INTO `sys_oper_log` VALUES (225, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '192.168.1.54', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.3591966666667,\"zoom\":10.0,\"params\":{},\"flashtime\":3,\"angle\":10,\"id\":1,\"lat\":31.54228666666667,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 17:06:28');
+INSERT INTO `sys_oper_log` VALUES (226, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '192.168.1.54', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.3591966666667,\"zoom\":10.0,\"params\":{},\"flashtime\":3,\"angle\":180,\"id\":1,\"lat\":31.54228666666667,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 17:06:38');
+INSERT INTO `sys_oper_log` VALUES (227, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '192.168.1.54', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.3591966666667,\"zoom\":10.0,\"params\":{},\"flashtime\":3,\"angle\":30,\"id\":1,\"lat\":31.54228666666667,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 17:06:52');
+INSERT INTO `sys_oper_log` VALUES (228, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '192.168.1.54', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.3591966666667,\"zoom\":10.0,\"params\":{},\"flashtime\":3,\"angle\":30,\"id\":1,\"lat\":31.54228666666667,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 17:07:07');
+INSERT INTO `sys_oper_log` VALUES (229, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '192.168.1.54', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.3591966666667,\"zoom\":10.0,\"params\":{},\"flashtime\":3,\"angle\":30,\"id\":1,\"lat\":31.54228666666667,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 17:07:16');
+INSERT INTO `sys_oper_log` VALUES (230, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '192.168.1.54', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.3591966666667,\"zoom\":10.0,\"params\":{},\"flashtime\":3,\"angle\":30,\"id\":1,\"lat\":31.54228666666667,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 17:07:28');
+INSERT INTO `sys_oper_log` VALUES (231, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '192.168.1.54', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.3591966666667,\"zoom\":10.0,\"params\":{},\"flashtime\":3,\"angle\":30,\"id\":1,\"lat\":31.54228666666667,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 17:07:45');
+INSERT INTO `sys_oper_log` VALUES (232, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '192.168.1.54', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.3591966666667,\"zoom\":10.0,\"params\":{},\"flashtime\":3,\"angle\":30,\"id\":1,\"lat\":31.54228666666667,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 17:08:00');
+INSERT INTO `sys_oper_log` VALUES (233, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '192.168.1.54', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.3591966666667,\"zoom\":10.0,\"params\":{},\"flashtime\":3,\"angle\":30,\"id\":1,\"lat\":31.54228666666667,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 17:08:08');
+INSERT INTO `sys_oper_log` VALUES (234, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '192.168.1.54', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.3591966666667,\"zoom\":10.0,\"params\":{},\"flashtime\":3,\"angle\":300,\"id\":1,\"lat\":31.54228666666667,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 17:08:36');
+INSERT INTO `sys_oper_log` VALUES (235, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '192.168.1.54', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.3591966666667,\"zoom\":10.0,\"params\":{},\"flashtime\":3,\"angle\":360,\"id\":1,\"lat\":31.54228666666667,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 17:08:48');
+INSERT INTO `sys_oper_log` VALUES (236, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '192.168.1.54', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.3591966666667,\"zoom\":10.0,\"params\":{},\"flashtime\":1,\"angle\":360,\"id\":1,\"lat\":31.54228666666667,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 17:09:16');
+INSERT INTO `sys_oper_log` VALUES (237, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '192.168.1.54', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.3591966666667,\"zoom\":10.0,\"params\":{},\"flashtime\":10,\"angle\":360,\"id\":1,\"lat\":31.54228666666667,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 17:09:47');
+INSERT INTO `sys_oper_log` VALUES (238, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '192.168.1.54', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.3591966666667,\"zoom\":10.0,\"params\":{},\"flashtime\":30,\"angle\":360,\"id\":1,\"lat\":31.54228666666667,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 17:10:08');
+INSERT INTO `sys_oper_log` VALUES (239, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '192.168.1.54', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.3591966666667,\"zoom\":10.0,\"params\":{},\"flashtime\":3,\"angle\":360,\"id\":1,\"lat\":31.54228666666667,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 17:16:44');
+INSERT INTO `sys_oper_log` VALUES (240, '根据id导出走航记录', 5, 'com.ruoyi.zh.controller.CollectRecordController.exportByIds()', 'GET', 1, 'test', NULL, '/ruoyi/zh/collectRecord/exportByIds/11,12', '192.168.1.54', '内网IP', '{ids=11,12}', '{\"msg\":\"合并文件2020-04-09 17：20：52.txt\",\"code\":200}', 0, NULL, '2020-04-09 17:20:52');
+INSERT INTO `sys_oper_log` VALUES (241, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '192.168.5.63', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.3598083333333,\"zoom\":10.0,\"params\":{},\"flashtime\":1,\"angle\":60,\"id\":1,\"lat\":31.52596833333334,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 19:54:29');
+INSERT INTO `sys_oper_log` VALUES (242, '走航记录', 3, 'com.ruoyi.zh.controller.CollectRecordController.remove()', 'DELETE', 1, 'test', NULL, '/ruoyi/zh/collectRecord/14', '192.168.5.63', '内网IP', '{ids=14}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 19:59:50');
+INSERT INTO `sys_oper_log` VALUES (243, '走航记录', 3, 'com.ruoyi.zh.controller.CollectRecordController.remove()', 'DELETE', 1, 'test', NULL, '/ruoyi/zh/collectRecord/13', '192.168.5.63', '内网IP', '{ids=13}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 19:59:53');
+INSERT INTO `sys_oper_log` VALUES (244, '走航记录', 3, 'com.ruoyi.zh.controller.CollectRecordController.remove()', 'DELETE', 1, 'test', NULL, '/ruoyi/zh/collectRecord/12', '192.168.5.63', '内网IP', '{ids=12}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 19:59:55');
+INSERT INTO `sys_oper_log` VALUES (245, '走航记录', 3, 'com.ruoyi.zh.controller.CollectRecordController.remove()', 'DELETE', 1, 'test', NULL, '/ruoyi/zh/collectRecord/11', '192.168.5.63', '内网IP', '{ids=11}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 20:00:00');
+INSERT INTO `sys_oper_log` VALUES (246, '走航记录', 3, 'com.ruoyi.zh.controller.CollectRecordController.remove()', 'DELETE', 1, 'test', NULL, '/ruoyi/zh/collectRecord/10', '192.168.5.63', '内网IP', '{ids=10}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 20:00:03');
+INSERT INTO `sys_oper_log` VALUES (247, '走航记录', 3, 'com.ruoyi.zh.controller.CollectRecordController.remove()', 'DELETE', 1, 'test', NULL, '/ruoyi/zh/collectRecord/9', '192.168.5.63', '内网IP', '{ids=9}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 20:00:05');
+INSERT INTO `sys_oper_log` VALUES (248, '走航记录', 3, 'com.ruoyi.zh.controller.CollectRecordController.remove()', 'DELETE', 1, 'test', NULL, '/ruoyi/zh/collectRecord/8', '192.168.5.63', '内网IP', '{ids=8}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 20:00:08');
+INSERT INTO `sys_oper_log` VALUES (249, '走航记录', 3, 'com.ruoyi.zh.controller.CollectRecordController.remove()', 'DELETE', 1, 'test', NULL, '/ruoyi/zh/collectRecord/1,2,3,4,5,6,7', '192.168.5.63', '内网IP', '{ids=1,2,3,4,5,6,7}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 20:00:13');
+INSERT INTO `sys_oper_log` VALUES (250, '根据id导出走航记录', 5, 'com.ruoyi.zh.controller.CollectRecordController.exportByIds()', 'GET', 1, 'test', NULL, '/ruoyi/zh/collectRecord/exportByIds/21,22', '127.0.0.1', '内网IP', '{ids=21,22}', '{\"msg\":\"合并文件2020-04-09 20：25：42.txt\",\"code\":200}', 0, NULL, '2020-04-09 20:25:43');
+INSERT INTO `sys_oper_log` VALUES (251, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0424041748047,\"zoom\":1.0E-4,\"params\":{},\"flashtime\":1,\"angle\":60,\"id\":1,\"lat\":22.80055046081543,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 23:04:43');
+INSERT INTO `sys_oper_log` VALUES (252, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0423812866211,\"zoom\":1.0E-6,\"params\":{},\"flashtime\":1,\"angle\":60,\"id\":1,\"lat\":22.80019760131836,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 23:05:04');
+INSERT INTO `sys_oper_log` VALUES (253, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0423355102539,\"zoom\":1.0E-5,\"params\":{},\"flashtime\":1,\"angle\":60,\"id\":1,\"lat\":22.79998207092285,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-09 23:05:13');
+INSERT INTO `sys_oper_log` VALUES (254, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0424041748047,\"zoom\":1.0E-6,\"params\":{},\"flashtime\":1,\"angle\":60,\"id\":1,\"lat\":22.80055046081543,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-10 14:21:18');
+INSERT INTO `sys_oper_log` VALUES (255, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0423355102539,\"zoom\":1.0,\"params\":{},\"flashtime\":1,\"angle\":60,\"id\":1,\"lat\":22.79998207092285,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-10 17:12:38');
+INSERT INTO `sys_oper_log` VALUES (256, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0423126220703,\"zoom\":0.2,\"params\":{},\"flashtime\":1,\"angle\":60,\"id\":1,\"lat\":22.79976272583008,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-10 17:12:47');
+INSERT INTO `sys_oper_log` VALUES (257, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0422973632813,\"zoom\":1.0E-6,\"params\":{},\"flashtime\":1,\"angle\":60,\"id\":1,\"lat\":22.79966926574707,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-13 10:41:21');
+INSERT INTO `sys_oper_log` VALUES (258, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0422592163086,\"zoom\":1.0E-7,\"params\":{},\"flashtime\":1,\"angle\":60,\"id\":1,\"lat\":22.79930686950684,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-13 10:41:40');
+INSERT INTO `sys_oper_log` VALUES (259, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.042236328125,\"zoom\":1.0E-8,\"params\":{},\"flashtime\":1,\"angle\":60,\"id\":1,\"lat\":22.79889488220215,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-13 10:42:01');
+INSERT INTO `sys_oper_log` VALUES (260, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0423965454102,\"zoom\":1.0E-6,\"params\":{},\"flashtime\":1,\"angle\":60,\"id\":1,\"lat\":22.80047225952148,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-13 10:46:17');
+INSERT INTO `sys_oper_log` VALUES (261, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0423812866211,\"zoom\":1.0E-5,\"params\":{},\"flashtime\":1,\"angle\":60,\"id\":1,\"lat\":22.80019760131836,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-13 10:46:32');
+INSERT INTO `sys_oper_log` VALUES (262, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0423126220703,\"zoom\":1.0E-7,\"params\":{},\"flashtime\":1,\"angle\":60,\"id\":1,\"lat\":22.79976272583008,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-13 10:46:54');
+INSERT INTO `sys_oper_log` VALUES (263, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0423126220703,\"zoom\":10.0,\"params\":{},\"flashtime\":1,\"angle\":60,\"id\":1,\"lat\":22.79976272583008,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-14 10:27:50');
+INSERT INTO `sys_oper_log` VALUES (264, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.3591966666667,\"zoom\":1.0,\"params\":{},\"flashtime\":1,\"angle\":60,\"id\":1,\"lat\":31.54228666666667,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-14 10:30:35');
+INSERT INTO `sys_oper_log` VALUES (265, '根据id导出走航记录', 5, 'com.ruoyi.zh.controller.CollectRecordController.exportByIds()', 'GET', 1, 'test', NULL, '/ruoyi/zh/collectRecord/exportByIds/8,9', '127.0.0.1', '内网IP', '{ids=8,9}', '{\"msg\":\"合并文件2020-04-14 10：34：12.txt\",\"code\":200}', 0, NULL, '2020-04-14 10:34:12');
+INSERT INTO `sys_oper_log` VALUES (266, '根据id导出走航记录', 5, 'com.ruoyi.zh.controller.CollectRecordController.exportByIds()', 'GET', 1, 'test', NULL, '/ruoyi/zh/collectRecord/exportByIds/13,14', '127.0.0.1', '内网IP', '{ids=13,14}', '{\"msg\":\"合并文件2020-04-14 10：40：12.txt\",\"code\":200}', 0, NULL, '2020-04-14 10:40:12');
+INSERT INTO `sys_oper_log` VALUES (267, '根据id导出走航记录', 5, 'com.ruoyi.zh.controller.CollectRecordController.exportByIds()', 'GET', 1, 'test', NULL, '/ruoyi/zh/collectRecord/exportByIds/16,17', '127.0.0.1', '内网IP', '{ids=16,17}', '{\"msg\":\"合并文件2020-04-14 10：41：45.txt\",\"code\":200}', 0, NULL, '2020-04-14 10:41:45');
+INSERT INTO `sys_oper_log` VALUES (268, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.3712483333333,\"zoom\":5.0,\"params\":{},\"flashtime\":1,\"angle\":60,\"id\":1,\"lat\":31.52468,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-14 10:44:35');
+INSERT INTO `sys_oper_log` VALUES (269, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'admin', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.389925,\"zoom\":5.0,\"params\":{},\"flashtime\":1,\"angle\":60,\"id\":1,\"lat\":31.5365,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-14 16:18:11');
+INSERT INTO `sys_oper_log` VALUES (270, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'admin', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0422821044922,\"zoom\":10.0,\"params\":{},\"flashtime\":1,\"angle\":60,\"id\":1,\"lat\":22.79949188232422,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-14 16:21:31');
+INSERT INTO `sys_oper_log` VALUES (271, '菜单管理', 1, 'com.ruoyi.project.system.controller.SysMenuController.add()', 'POST', 1, 'admin', NULL, '/ruoyi/system/menu', '127.0.0.1', '内网IP', '{\"visible\":\"0\",\"icon\":\"build\",\"orderNum\":\"5\",\"menuName\":\"Dt走航\",\"params\":{},\"parentId\":1061,\"path\":\"controller\",\"component\":\"voyage/analysis/controller/common\",\"createBy\":\"admin\",\"children\":[],\"isFrame\":\"1\",\"menuType\":\"C\",\"perms\":\"voyage:analysis:controller:common\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-14 20:18:59');
+INSERT INTO `sys_oper_log` VALUES (272, '菜单管理', 2, 'com.ruoyi.project.system.controller.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/ruoyi/system/menu', '127.0.0.1', '内网IP', '{\"visible\":\"0\",\"icon\":\"build\",\"orderNum\":\"5\",\"menuName\":\"Dt走航\",\"params\":{},\"parentId\":1061,\"path\":\"map/common\",\"component\":\"voyage/analysis/map/common\",\"children\":[],\"createTime\":1586866739000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":1126,\"menuType\":\"C\",\"perms\":\"voyage:analysis:map:common\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-14 20:21:20');
+INSERT INTO `sys_oper_log` VALUES (273, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'admin', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":121.4667750666667,\"zoom\":1.0,\"params\":{},\"flashtime\":1,\"angle\":60,\"id\":1,\"lat\":28.67940996666667,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-14 20:40:08');
+INSERT INTO `sys_oper_log` VALUES (274, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0424041748047,\"zoom\":1.0E-6,\"params\":{},\"flashtime\":1,\"angle\":60,\"id\":1,\"lat\":22.80055046081543,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-16 12:12:22');
+INSERT INTO `sys_oper_log` VALUES (275, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0423889160156,\"zoom\":1.0E-7,\"params\":{},\"flashtime\":1,\"angle\":60,\"id\":1,\"lat\":22.80031776428223,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-16 12:12:37');
+INSERT INTO `sys_oper_log` VALUES (276, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0423049926758,\"zoom\":1.0E-5,\"params\":{},\"flashtime\":1,\"angle\":60,\"id\":1,\"lat\":22.79963302612305,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-16 19:22:04');
+INSERT INTO `sys_oper_log` VALUES (277, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0422439575195,\"zoom\":1.0E-6,\"params\":{},\"flashtime\":1,\"angle\":60,\"id\":1,\"lat\":22.79901313781738,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-16 19:22:36');
+INSERT INTO `sys_oper_log` VALUES (278, '走航记录', 3, 'com.ruoyi.zh.controller.CollectRecordController.remove()', 'DELETE', 1, 'test', NULL, '/ruoyi/zh/collectRecord/10', '127.0.0.1', '内网IP', '{ids=10}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-17 11:08:11');
+INSERT INTO `sys_oper_log` VALUES (279, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.359835,\"zoom\":10.0,\"params\":{},\"flashtime\":1,\"angle\":60,\"id\":1,\"lat\":31.52595166666667,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-17 11:14:03');
+INSERT INTO `sys_oper_log` VALUES (280, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.3896116666667,\"zoom\":15.0,\"params\":{},\"flashtime\":1,\"angle\":60,\"id\":1,\"lat\":31.537045,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-20 11:25:56');
+INSERT INTO `sys_oper_log` VALUES (281, '根据id导出走航记录', 5, 'com.ruoyi.zh.controller.CollectRecordController.exportByIds()', 'GET', 1, 'test', NULL, '/ruoyi/zh/collectRecord/exportByIds/21,22', '127.0.0.1', '内网IP', '{ids=21,22}', '{\"msg\":\"合并文件2020-04-21 16：00：25.txt\",\"code\":200}', 0, NULL, '2020-04-21 16:00:25');
+INSERT INTO `sys_oper_log` VALUES (282, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.3713966666667,\"zoom\":15.0,\"params\":{},\"flashtime\":1,\"angle\":60,\"id\":1,\"lat\":31.52481,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-21 16:01:30');
+INSERT INTO `sys_oper_log` VALUES (283, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.3713966666667,\"zoom\":15.0,\"params\":{},\"flashtime\":1,\"angle\":70,\"id\":1,\"lat\":31.52481,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-21 16:01:35');
+INSERT INTO `sys_oper_log` VALUES (284, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.3713966666667,\"zoom\":15.0,\"params\":{},\"flashtime\":3,\"angle\":70,\"id\":1,\"lat\":31.52481,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-21 16:01:41');
+INSERT INTO `sys_oper_log` VALUES (285, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.3714266666667,\"zoom\":10.0,\"params\":{},\"flashtime\":3,\"angle\":70,\"id\":1,\"lat\":31.52482666666667,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-21 16:01:48');
+INSERT INTO `sys_oper_log` VALUES (286, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":80,\"lng\":120.3714266666667,\"zoom\":10.0,\"params\":{},\"flashtime\":3,\"angle\":70,\"id\":1,\"lat\":31.52482666666667,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-21 16:01:56');
+INSERT INTO `sys_oper_log` VALUES (287, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.3714266666667,\"zoom\":10.0,\"params\":{},\"flashtime\":3,\"angle\":70,\"id\":1,\"lat\":31.52482666666667,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-21 16:02:07');
+INSERT INTO `sys_oper_log` VALUES (288, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0423812866211,\"zoom\":1.0E-6,\"params\":{},\"flashtime\":3,\"angle\":70,\"id\":1,\"lat\":22.80021286010742,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-22 17:24:35');
+INSERT INTO `sys_oper_log` VALUES (289, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0422592163086,\"zoom\":1.0E-8,\"params\":{},\"flashtime\":3,\"angle\":70,\"id\":1,\"lat\":22.79927253723145,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-22 17:25:27');
+INSERT INTO `sys_oper_log` VALUES (290, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0422286987305,\"zoom\":1.0E-5,\"params\":{},\"flashtime\":3,\"angle\":70,\"id\":1,\"lat\":22.79887390136719,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-22 17:25:49');
+INSERT INTO `sys_oper_log` VALUES (291, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":113.263265,\"zoom\":10.0,\"params\":{},\"flashtime\":3,\"angle\":70,\"id\":1,\"lat\":23.10373833333333,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-23 10:17:43');
+INSERT INTO `sys_oper_log` VALUES (292, '走航记录', 3, 'com.ruoyi.zh.controller.CollectRecordController.remove()', 'DELETE', 1, 'test', NULL, '/ruoyi/zh/collectRecord/32', '127.0.0.1', '内网IP', '{ids=32}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-23 16:51:09');
+INSERT INTO `sys_oper_log` VALUES (293, '走航记录', 3, 'com.ruoyi.zh.controller.CollectRecordController.remove()', 'DELETE', 1, 'test', NULL, '/ruoyi/zh/collectRecord/37', '127.0.0.1', '内网IP', '{ids=37}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-24 10:29:16');
+INSERT INTO `sys_oper_log` VALUES (294, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0423889160156,\"zoom\":1.0E-5,\"params\":{},\"flashtime\":3,\"angle\":70,\"id\":1,\"lat\":22.80027770996094,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-24 10:31:38');
+INSERT INTO `sys_oper_log` VALUES (295, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.042350769043,\"zoom\":1.0E-7,\"params\":{},\"flashtime\":3,\"angle\":70,\"id\":1,\"lat\":22.80004119873047,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-24 10:31:48');
+INSERT INTO `sys_oper_log` VALUES (296, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":114.0422973632813,\"zoom\":1.0E-6,\"params\":{},\"flashtime\":3,\"angle\":70,\"id\":1,\"lat\":22.79961776733398,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-24 10:32:11');
+INSERT INTO `sys_oper_log` VALUES (297, '走航记录', 2, 'com.ruoyi.zh.controller.CollectRecordController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/collectRecord', '127.0.0.1', '内网IP', '{\"factorCount\":57,\"pointName\":\"广州禾信\",\"show\":true,\"startTime\":1563589423000,\"deviceCode\":\"SPIMS001\",\"endTime\":1562774400000,\"id\":10}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-24 13:42:13');
+INSERT INTO `sys_oper_log` VALUES (298, '配置信息', 2, 'com.ruoyi.zh.controller.ZhConfigController.edit()', 'PUT', 1, 'test', NULL, '/ruoyi/zh/config', '127.0.0.1', '内网IP', '{\"shapetype\":1,\"distance\":200,\"lng\":120.3390533333333,\"zoom\":10.0,\"params\":{},\"flashtime\":3,\"angle\":70,\"id\":1,\"lat\":31.53379,\"direction\":60}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-24 14:01:27');
+INSERT INTO `sys_oper_log` VALUES (299, '代码生成', 6, 'com.ruoyi.project.tool.gen.controller.GenController.importTableSave()', 'POST', 1, 'admin', NULL, '/ruoyi/tool/gen/importTable', '127.0.0.1', '内网IP', 'zh_file', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-24 19:50:10');
+INSERT INTO `sys_oper_log` VALUES (300, '代码生成', 2, 'com.ruoyi.project.tool.gen.controller.GenController.editSave()', 'PUT', 1, 'admin', NULL, '/ruoyi/tool/gen', '127.0.0.1', '内网IP', '{\"functionAuthor\":\"hxsdd\",\"columns\":[{\"usableColumn\":false,\"columnId\":103,\"isIncrement\":\"1\",\"increment\":true,\"insert\":true,\"dictType\":\"\",\"required\":false,\"superColumn\":false,\"updateBy\":\"\",\"isInsert\":\"1\",\"javaField\":\"id\",\"htmlType\":\"input\",\"edit\":false,\"query\":false,\"columnComment\":\"主键\",\"sort\":1,\"list\":false,\"params\":{},\"javaType\":\"Long\",\"queryType\":\"EQ\",\"columnType\":\"int(11) unsigned\",\"createBy\":\"admin\",\"isPk\":\"1\",\"createTime\":1587729009000,\"tableId\":14,\"pk\":true,\"columnName\":\"id\"},{\"usableColumn\":false,\"columnId\":104,\"isIncrement\":\"0\",\"increment\":false,\"insert\":true,\"isList\":\"1\",\"dictType\":\"\",\"required\":false,\"superColumn\":false,\"updateBy\":\"\",\"isInsert\":\"1\",\"javaField\":\"fileName\",\"htmlType\":\"input\",\"edit\":true,\"query\":true,\"columnComment\":\"文件名\",\"isQuery\":\"1\",\"sort\":2,\"list\":true,\"params\":{},\"javaType\":\"String\",\"queryType\":\"LIKE\",\"columnType\":\"varchar(255)\",\"createBy\":\"admin\",\"isPk\":\"0\",\"createTime\":1587729009000,\"isEdit\":\"1\",\"tableId\":14,\"pk\":false,\"columnName\":\"file_name\"},{\"usableColumn\":false,\"columnId\":105,\"isIncrement\":\"0\",\"increment\":false,\"insert\":true,\"isList\":\"1\",\"dictType\":\"\",\"required\":false,\"superColumn\":false,\"updateBy\":\"\",\"isInsert\":\"1\",\"javaField\":\"size\",\"htmlType\":\"input\",\"edit\":true,\"query\":true,\"columnComment\":\"文件大小kb\",\"isQuery\":\"1\",\"sort\":3,\"list\":true,\"params\":{},\"javaType\":\"Long\",\"queryType\":\"EQ\",\"columnType\":\"int(11)\",\"createBy\":\"admin\",\"isPk\":\"0\",\"createTime\":1587729009000,\"isEdit\":\"1\",\"tableId\":14,\"pk\":false,\"columnName\":\"size\"},{\"usableColumn\":false,\"columnId\":106,\"isIncrement\":\"0\",\"increment\":false,\"insert\":true,\"isList\":\"1\",\"dictType\":\"\",\"required\":false,\"superColumn\":false,\"updateBy\":\"\",\"isInsert\":\"1\",\"javaField\":\"path\",\"htmlType\":\"textarea\",\"edit\":true,\"query\":true,\"columnComment\":\"文件路径\",\"isQuery\":\"1\",\"sort\":4,\"list\":true,\"params\":{},\"javaType\":\"String\",\"queryType\":\"EQ\",\"columnType\":\"varchar(1000)\",\"createBy\":\"admin\",\"isPk\":\"0\",\"createTime\":1587729009000,\"isEdit\":\"1\",\"tableId\":14,\"pk\":false,\"columnName\":\"path\"},{\"usableColumn\":false,\"co', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2020-04-24 19:50:43');
+INSERT INTO `sys_oper_log` VALUES (301, '代码生成', 8, 'com.ruoyi.project.tool.gen.controller.GenController.batchGenCode()', 'GET', 1, 'admin', NULL, '/ruoyi/tool/gen/batchGenCode', '127.0.0.1', '内网IP', '{}', 'null', 0, NULL, '2020-04-24 19:50:48');
 
 -- ----------------------------
 -- Table structure for sys_post
@@ -863,13 +1364,14 @@ CREATE TABLE `sys_role`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`role_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色信息表' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色信息表' ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of sys_role
 -- ----------------------------
 INSERT INTO `sys_role` VALUES (1, '管理员', 'admin', 1, '1', '0', '0', 'admin', '2018-03-16 11:33:00', 'ry', '2018-03-16 11:33:00', '管理员');
-INSERT INTO `sys_role` VALUES (2, '普通角色', 'common', 2, '2', '0', '0', 'admin', '2018-03-16 11:33:00', 'ry', '2018-03-16 11:33:00', '普通角色');
+INSERT INTO `sys_role` VALUES (2, '普通角色', 'common', 2, '2', '0', '0', 'admin', '2018-03-16 11:33:00', 'admin', '2020-03-29 23:06:31', '普通角色');
+INSERT INTO `sys_role` VALUES (3, '测试人员', '测试', 3, '1', '0', '0', 'admin', '2020-03-31 14:39:26', '', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_role_dept
@@ -901,89 +1403,37 @@ CREATE TABLE `sys_role_menu`  (
 -- ----------------------------
 -- Records of sys_role_menu
 -- ----------------------------
-INSERT INTO `sys_role_menu` VALUES (2, 1);
-INSERT INTO `sys_role_menu` VALUES (2, 2);
-INSERT INTO `sys_role_menu` VALUES (2, 3);
-INSERT INTO `sys_role_menu` VALUES (2, 4);
-INSERT INTO `sys_role_menu` VALUES (2, 100);
-INSERT INTO `sys_role_menu` VALUES (2, 101);
-INSERT INTO `sys_role_menu` VALUES (2, 102);
-INSERT INTO `sys_role_menu` VALUES (2, 103);
-INSERT INTO `sys_role_menu` VALUES (2, 104);
-INSERT INTO `sys_role_menu` VALUES (2, 105);
-INSERT INTO `sys_role_menu` VALUES (2, 106);
-INSERT INTO `sys_role_menu` VALUES (2, 107);
-INSERT INTO `sys_role_menu` VALUES (2, 108);
-INSERT INTO `sys_role_menu` VALUES (2, 109);
-INSERT INTO `sys_role_menu` VALUES (2, 110);
-INSERT INTO `sys_role_menu` VALUES (2, 111);
-INSERT INTO `sys_role_menu` VALUES (2, 112);
-INSERT INTO `sys_role_menu` VALUES (2, 113);
-INSERT INTO `sys_role_menu` VALUES (2, 114);
-INSERT INTO `sys_role_menu` VALUES (2, 115);
-INSERT INTO `sys_role_menu` VALUES (2, 500);
-INSERT INTO `sys_role_menu` VALUES (2, 501);
-INSERT INTO `sys_role_menu` VALUES (2, 1000);
-INSERT INTO `sys_role_menu` VALUES (2, 1001);
-INSERT INTO `sys_role_menu` VALUES (2, 1002);
-INSERT INTO `sys_role_menu` VALUES (2, 1003);
-INSERT INTO `sys_role_menu` VALUES (2, 1004);
-INSERT INTO `sys_role_menu` VALUES (2, 1005);
-INSERT INTO `sys_role_menu` VALUES (2, 1006);
-INSERT INTO `sys_role_menu` VALUES (2, 1007);
-INSERT INTO `sys_role_menu` VALUES (2, 1008);
-INSERT INTO `sys_role_menu` VALUES (2, 1009);
-INSERT INTO `sys_role_menu` VALUES (2, 1010);
-INSERT INTO `sys_role_menu` VALUES (2, 1011);
-INSERT INTO `sys_role_menu` VALUES (2, 1012);
-INSERT INTO `sys_role_menu` VALUES (2, 1013);
-INSERT INTO `sys_role_menu` VALUES (2, 1014);
-INSERT INTO `sys_role_menu` VALUES (2, 1015);
-INSERT INTO `sys_role_menu` VALUES (2, 1016);
-INSERT INTO `sys_role_menu` VALUES (2, 1017);
-INSERT INTO `sys_role_menu` VALUES (2, 1018);
-INSERT INTO `sys_role_menu` VALUES (2, 1019);
-INSERT INTO `sys_role_menu` VALUES (2, 1020);
-INSERT INTO `sys_role_menu` VALUES (2, 1021);
-INSERT INTO `sys_role_menu` VALUES (2, 1022);
-INSERT INTO `sys_role_menu` VALUES (2, 1023);
-INSERT INTO `sys_role_menu` VALUES (2, 1024);
-INSERT INTO `sys_role_menu` VALUES (2, 1025);
-INSERT INTO `sys_role_menu` VALUES (2, 1026);
-INSERT INTO `sys_role_menu` VALUES (2, 1027);
-INSERT INTO `sys_role_menu` VALUES (2, 1028);
-INSERT INTO `sys_role_menu` VALUES (2, 1029);
-INSERT INTO `sys_role_menu` VALUES (2, 1030);
-INSERT INTO `sys_role_menu` VALUES (2, 1031);
-INSERT INTO `sys_role_menu` VALUES (2, 1032);
-INSERT INTO `sys_role_menu` VALUES (2, 1033);
-INSERT INTO `sys_role_menu` VALUES (2, 1034);
-INSERT INTO `sys_role_menu` VALUES (2, 1035);
-INSERT INTO `sys_role_menu` VALUES (2, 1036);
-INSERT INTO `sys_role_menu` VALUES (2, 1037);
-INSERT INTO `sys_role_menu` VALUES (2, 1038);
-INSERT INTO `sys_role_menu` VALUES (2, 1039);
-INSERT INTO `sys_role_menu` VALUES (2, 1040);
-INSERT INTO `sys_role_menu` VALUES (2, 1041);
-INSERT INTO `sys_role_menu` VALUES (2, 1042);
-INSERT INTO `sys_role_menu` VALUES (2, 1043);
-INSERT INTO `sys_role_menu` VALUES (2, 1044);
-INSERT INTO `sys_role_menu` VALUES (2, 1045);
-INSERT INTO `sys_role_menu` VALUES (2, 1046);
-INSERT INTO `sys_role_menu` VALUES (2, 1047);
-INSERT INTO `sys_role_menu` VALUES (2, 1048);
-INSERT INTO `sys_role_menu` VALUES (2, 1049);
-INSERT INTO `sys_role_menu` VALUES (2, 1050);
-INSERT INTO `sys_role_menu` VALUES (2, 1051);
-INSERT INTO `sys_role_menu` VALUES (2, 1052);
-INSERT INTO `sys_role_menu` VALUES (2, 1053);
-INSERT INTO `sys_role_menu` VALUES (2, 1054);
-INSERT INTO `sys_role_menu` VALUES (2, 1055);
-INSERT INTO `sys_role_menu` VALUES (2, 1056);
-INSERT INTO `sys_role_menu` VALUES (2, 1057);
-INSERT INTO `sys_role_menu` VALUES (2, 1058);
-INSERT INTO `sys_role_menu` VALUES (2, 1059);
-INSERT INTO `sys_role_menu` VALUES (2, 1060);
+INSERT INTO `sys_role_menu` VALUES (2, 1061);
+INSERT INTO `sys_role_menu` VALUES (2, 1062);
+INSERT INTO `sys_role_menu` VALUES (2, 1063);
+INSERT INTO `sys_role_menu` VALUES (2, 1070);
+INSERT INTO `sys_role_menu` VALUES (2, 1071);
+INSERT INTO `sys_role_menu` VALUES (2, 1072);
+INSERT INTO `sys_role_menu` VALUES (2, 1073);
+INSERT INTO `sys_role_menu` VALUES (2, 1074);
+INSERT INTO `sys_role_menu` VALUES (2, 1075);
+INSERT INTO `sys_role_menu` VALUES (3, 1061);
+INSERT INTO `sys_role_menu` VALUES (3, 1062);
+INSERT INTO `sys_role_menu` VALUES (3, 1063);
+INSERT INTO `sys_role_menu` VALUES (3, 1064);
+INSERT INTO `sys_role_menu` VALUES (3, 1065);
+INSERT INTO `sys_role_menu` VALUES (3, 1066);
+INSERT INTO `sys_role_menu` VALUES (3, 1067);
+INSERT INTO `sys_role_menu` VALUES (3, 1068);
+INSERT INTO `sys_role_menu` VALUES (3, 1069);
+INSERT INTO `sys_role_menu` VALUES (3, 1070);
+INSERT INTO `sys_role_menu` VALUES (3, 1071);
+INSERT INTO `sys_role_menu` VALUES (3, 1072);
+INSERT INTO `sys_role_menu` VALUES (3, 1073);
+INSERT INTO `sys_role_menu` VALUES (3, 1074);
+INSERT INTO `sys_role_menu` VALUES (3, 1075);
+INSERT INTO `sys_role_menu` VALUES (3, 1076);
+INSERT INTO `sys_role_menu` VALUES (3, 1077);
+INSERT INTO `sys_role_menu` VALUES (3, 1078);
+INSERT INTO `sys_role_menu` VALUES (3, 1079);
+INSERT INTO `sys_role_menu` VALUES (3, 1080);
+INSERT INTO `sys_role_menu` VALUES (3, 1081);
+INSERT INTO `sys_role_menu` VALUES (3, 1094);
 
 -- ----------------------------
 -- Table structure for sys_user
@@ -1010,13 +1460,14 @@ CREATE TABLE `sys_user`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`user_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户信息表' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户信息表' ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
 INSERT INTO `sys_user` VALUES (1, 103, 'admin', '若依', '00', 'ry@163.com', '15888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', 'ry', '2018-03-16 11:33:00', '管理员');
 INSERT INTO `sys_user` VALUES (2, 105, 'ry', '若依', '00', 'ry@qq.com', '15666666666', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', 'ry', '2018-03-16 11:33:00', '测试员');
+INSERT INTO `sys_user` VALUES (3, 103, 'test', '测试', '00', '', '18202729451', '1', '', '$2a$10$rL9CRG7zkfgnJK.ZfkSPI.7arg8MkP55L0//OszLA2c5LGSrzdbrG', '0', '0', '', NULL, 'admin', '2020-03-29 23:04:10', 'admin', '2020-03-31 14:39:42', NULL);
 
 -- ----------------------------
 -- Table structure for sys_user_post
@@ -1049,6 +1500,7 @@ CREATE TABLE `sys_user_role`  (
 -- ----------------------------
 INSERT INTO `sys_user_role` VALUES (1, 1);
 INSERT INTO `sys_user_role` VALUES (2, 2);
+INSERT INTO `sys_user_role` VALUES (3, 3);
 
 -- ----------------------------
 -- Table structure for zh_category
@@ -1067,7 +1519,7 @@ CREATE TABLE `zh_category`  (
 -- ----------------------------
 -- Records of zh_category
 -- ----------------------------
-INSERT INTO `zh_category` VALUES (1, '禾信专用', NULL, '2020-03-04 17:29:02', NULL, NULL);
+INSERT INTO `zh_category` VALUES (1, '禾信专用1', NULL, '2020-03-04 17:29:02', NULL, '2020-03-11 13:34:29');
 
 -- ----------------------------
 -- Table structure for zh_collect_record
@@ -1079,13 +1531,15 @@ CREATE TABLE `zh_collect_record`  (
   `start_time` datetime(0) NULL DEFAULT NULL COMMENT '开始时间',
   `end_time` datetime(0) NULL DEFAULT NULL COMMENT '结束时间',
   `point_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '控点名称',
+  `factor_count` int(5) NULL DEFAULT 0 COMMENT '因子个数',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of zh_collect_record
 -- ----------------------------
-INSERT INTO `zh_collect_record` VALUES (1, 'SPIMS001', '2020-02-27 23:36:16', '2020-02-27 23:36:56', '广州禾信');
+INSERT INTO `zh_collect_record` VALUES (1, 'SPIMS001', '2019-07-20 10:23:43', '2019-07-20 10:44:37', '广州禾信', 57);
+INSERT INTO `zh_collect_record` VALUES (2, 'SPIMS001', '2019-07-20 09:57:57', '2019-07-20 10:23:38', '广州禾信', 57);
 
 -- ----------------------------
 -- Table structure for zh_color
@@ -1099,13 +1553,38 @@ CREATE TABLE `zh_color`  (
   `update_by` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修改人',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '颜色' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '颜色' ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of zh_color
 -- ----------------------------
 INSERT INTO `zh_color` VALUES (1, '4CE600', NULL, '2020-03-04 17:29:49', NULL, NULL);
 INSERT INTO `zh_color` VALUES (2, 'E60000', NULL, '2020-03-04 17:30:50', NULL, NULL);
+INSERT INTO `zh_color` VALUES (3, 'D1FF73', NULL, NULL, NULL, NULL);
+INSERT INTO `zh_color` VALUES (4, 'C500FF', NULL, NULL, NULL, NULL);
+INSERT INTO `zh_color` VALUES (5, '53261f', NULL, NULL, NULL, NULL);
+
+-- ----------------------------
+-- Table structure for zh_config
+-- ----------------------------
+DROP TABLE IF EXISTS `zh_config`;
+CREATE TABLE `zh_config`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `zoom` double(20, 10) NULL DEFAULT NULL COMMENT '走航放大倍数',
+  `direction` int(3) NULL DEFAULT NULL COMMENT '方向',
+  `angle` int(3) NULL DEFAULT NULL COMMENT '角度',
+  `distance` int(5) NULL DEFAULT NULL COMMENT '走航间隔',
+  `flashtime` int(10) NULL DEFAULT NULL COMMENT '动画时间',
+  `shapetype` int(2) NULL DEFAULT NULL COMMENT '图形类型',
+  `lng` double(20, 15) NULL DEFAULT NULL COMMENT '经度',
+  `lat` double(20, 15) NULL DEFAULT NULL COMMENT '纬度',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '配置信息' ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of zh_config
+-- ----------------------------
+INSERT INTO `zh_config` VALUES (1, 10.0000000000, 60, 70, 200, 3, 1, 120.339053333333300, 31.533790000000000);
 
 -- ----------------------------
 -- Table structure for zh_device
@@ -1125,12 +1604,13 @@ CREATE TABLE `zh_device`  (
   `created_date` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `updated_date` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of zh_device
 -- ----------------------------
 INSERT INTO `zh_device` VALUES (1, 'SPIMS测试', 'SPIMS001', '广州禾信', '加速器', '第三方', 0, 0, 0, 0, '2020-02-19 00:00:00', '2020-02-23 00:00:00');
+INSERT INTO `zh_device` VALUES (2, 'SPIMS', 'SPIMS002', '广州禾信', '大哥大', NULL, 0, 0, 0, 0, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for zh_factor
@@ -1150,13 +1630,39 @@ CREATE TABLE `zh_factor`  (
   `update_by` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '修改人',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '因子表' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '因子表' ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of zh_factor
 -- ----------------------------
 INSERT INTO `zh_factor` VALUES (1, 'TVOC', 'TVOC', '', 0.000, '', NULL, NULL, NULL, '2020-03-04 17:28:27', NULL, NULL);
 INSERT INTO `zh_factor` VALUES (2, '丁烯', 'DX', '', 0.000, '', NULL, NULL, NULL, '2020-03-04 17:28:49', NULL, NULL);
+INSERT INTO `zh_factor` VALUES (3, '甲苯', 'JB', '', 0.000, '', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `zh_factor` VALUES (4, '三氯乙烯', 'SLYX', '', 0.000, '', NULL, NULL, NULL, NULL, NULL, NULL);
+
+-- ----------------------------
+-- Table structure for zh_file
+-- ----------------------------
+DROP TABLE IF EXISTS `zh_file`;
+CREATE TABLE `zh_file`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `file_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '文件名',
+  `size` int(11) NULL DEFAULT NULL COMMENT '文件大小kb',
+  `path` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '文件路径',
+  `collect_record_id` int(11) NOT NULL COMMENT '走航id',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文件表' ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of zh_file
+-- ----------------------------
+INSERT INTO `zh_file` VALUES (1, '20号上午 - 副本 (2).txt', 111280, 'E:\\hexin\\zh_pc\\2020-04-24\\196da0315ef14bde965208ccf67e66c8.txt', 1, '', '2020-04-24 20:47:32', '', NULL, NULL);
+INSERT INTO `zh_file` VALUES (2, '20号上午 - 副本（1）.txt', 175222, 'E:\\hexin\\zh_pc\\2020-04-24\\e39f199b68614139969d665a77ae193b.txt', 2, '', '2020-04-24 20:47:32', '', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for zh_link_category_factor_color
@@ -1177,8 +1683,8 @@ CREATE TABLE `zh_link_category_factor_color`  (
 -- ----------------------------
 -- Records of zh_link_category_factor_color
 -- ----------------------------
-INSERT INTO `zh_link_category_factor_color` VALUES (1, 1, 1, 1, NULL, '2020-03-04 17:33:38', NULL, NULL);
-INSERT INTO `zh_link_category_factor_color` VALUES (2, 1, 2, 2, NULL, '2020-03-04 17:33:42', NULL, NULL);
+INSERT INTO `zh_link_category_factor_color` VALUES (1, 1, 2, 5, NULL, '2020-03-04 17:33:38', NULL, NULL);
+INSERT INTO `zh_link_category_factor_color` VALUES (2, 1, 4, 4, NULL, '2020-03-04 17:33:42', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for zh_link_category_factor_simple_color
