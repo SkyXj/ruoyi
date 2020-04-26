@@ -6,9 +6,7 @@ import com.ruoyi.common.utils.TimeTool;
 import com.ruoyi.framework.config.RuoYiConfig;
 import com.ruoyi.framework.influxdb.BatchData;
 import com.ruoyi.framework.influxdb.InfluxdbUtils;
-import com.ruoyi.framework.security.LoginUser;
 import com.ruoyi.mina.DensityVo;
-import com.ruoyi.project.system.domain.SysUser;
 import com.ruoyi.zh.domain.DensityLog;
 import com.ruoyi.zh.domain.DensityRealTime;
 import com.ruoyi.zh.domain.ZhCollectRecord;
@@ -22,8 +20,6 @@ import com.ruoyi.zh.service.ICollectRecordService;
 import com.ruoyi.zh.service.IZhFileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -35,7 +31,6 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * 走航记录Service业务层处理
@@ -69,6 +64,24 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
     @Override
     public ZhCollectRecord selectCollectRecordById(Long id) {
         return collectRecordMapper.selectCollectRecordById(id);
+    }
+
+    @Override
+    public List<ZhCollectRecordDto> selectCollectRecordDtoList(ZhCollectRecord zhCollectRecord) {
+        List<ZhCollectRecord> collectRecords = collectRecordMapper.selectCollectRecordList(zhCollectRecord);
+        List<ZhCollectRecordDto> list=new ZhCollectRecordDto().zhCollectRecordDtos(collectRecords);
+        if(list!=null&&list.size()>0){
+            for (ZhCollectRecordDto zhCollectRecordDto:list){
+                ZhFile zhFile = zhFileService.selectZhFileByCollectId(zhCollectRecordDto.getId());
+                zhCollectRecordDto.setZhFile(zhFile);
+            }
+        }
+        return list;
+    }
+
+    @Override
+    public Integer selectCollectRecordCount(ZhCollectRecord zhCollectRecord) {
+        return collectRecordMapper.selectCollectRecordCount(zhCollectRecord);
     }
 
     /**
@@ -315,6 +328,30 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
         }
         return datas;
     }
+
+    @Override
+    public List<String> readStrMic(String filePath) {
+        List<String> datas=new ArrayList<>();
+        try {
+            BufferedReader bf = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), "GBK"));
+            String temp = null;
+            int index = 1;
+            // 按行读取字符串
+            String[] names = null;
+            while ((temp = bf.readLine()) != null) {
+                if(temp.isEmpty()){
+                    continue;
+                }
+                datas.add(temp);
+            }
+            bf.close();
+        }catch (Exception e) {
+            log.error(e.getMessage());
+            return null;
+        }
+        return datas;
+    }
+
 
     @Override
     public ZhCollectRecordDto getRecently() {
@@ -648,7 +685,14 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
             if(zhCollectRecord.getEndTime()!=null){
                 densityDto.setEndDate(sim.format(zhCollectRecord.getEndTime()));
             }
-            List<String> datas = searchStrMic(densityDto);
+            List<String> datas = new ArrayList<>();
+            //文件信息
+            ZhFile zhFile = zhFileService.selectZhFileByCollectId(zhCollectRecord.getId());
+            if(zhFile!=null){
+                datas=readStrMic(zhFile.getPath());
+            }else{
+                datas=searchStrMic(densityDto);
+            }
             zhCollectRecordDto.setDatas(datas);
             zhCollectRecordDtos.add(zhCollectRecordDto);
         }
@@ -671,8 +715,15 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
             if(zhCollectRecord.getEndTime()!=null){
                 densityDto.setEndDate(sim.format(zhCollectRecord.getEndTime()));
             }
-            List<DensityVo> datas = searchMic(densityDto);
-            zhCollectRecordDto.setPoints(datas);
+//            List<DensityVo> datas = searchMic(densityDto);
+//            zhCollectRecordDto.setPoints(datas);
+            List<String> datas=new ArrayList<>();
+            ZhFile zhFile = zhFileService.selectZhFileByCollectId(zhCollectRecord.getId());
+            if(zhFile!=null){
+                datas=readStrMic(zhFile.getPath());
+            }else{
+                datas=searchStrMic(densityDto);
+            }
             zhCollectRecordDtos.add(zhCollectRecordDto);
         }
         return zhCollectRecordDtos;
@@ -782,6 +833,11 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
         }
     }
 
+    public void createFileNameByDatas(List<String> points,String fileName){
+
+    }
+
+
     @Override
     public String exportDataByIds(Long[] ids) {
         List<ZhCollectRecordDto> zhCollectRecordDtos = getPointsByIds(ids);
@@ -800,11 +856,29 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
     }
 
     @Override
-    public List<ZhCollectRecord> selectCollectRecordByIds(Long[] ids) {
+    public List<ZhCollectRecordDto> selectCollectRecordByIds(Long[] ids) {
         if(ids==null){
-            return new ArrayList<ZhCollectRecord>();
+            return new ArrayList<ZhCollectRecordDto>();
         }
-        return collectRecordMapper.selectCollectRecordByIds(ids);
+        List<ZhCollectRecord> collectRecords = collectRecordMapper.selectCollectRecordByIds(ids);
+        return getZhCollectRecordDtoByZhCollectRecord(collectRecords);
+    }
+
+    @Override
+    public Integer selectCollectRecordCountByIds(Long[] ids) {
+        return collectRecordMapper.selectCollectRecordCountByIds(ids);
+    }
+
+    @Override
+    public List<ZhCollectRecordDto> getZhCollectRecordDtoByZhCollectRecord(List<ZhCollectRecord> collectRecords) {
+        List<ZhCollectRecordDto> collectRecordDtos=new ZhCollectRecordDto().zhCollectRecordDtos(collectRecords);
+        if(collectRecordDtos==null||collectRecordDtos.size()>0){
+            for (ZhCollectRecordDto zhCollectRecordDto: collectRecordDtos) {
+                ZhFile zhFile = zhFileService.selectZhFileByCollectId(zhCollectRecordDto.getId());
+                zhCollectRecordDto.setZhFile(zhFile);
+            }
+        }
+        return collectRecordDtos;
     }
 
     @Override

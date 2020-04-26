@@ -8,8 +8,8 @@ import com.ruoyi.framework.web.domain.BaseEntity;
 /**
  * 文件对象 zh_file
  * 
- * @author hxsdd
- * @date 2020-04-24
+ * @author ruoyi
+ * @date 2020-04-26
  */
 public class ZhFile extends BaseEntity
 {
@@ -29,6 +29,10 @@ public class ZhFile extends BaseEntity
     /** 文件路径 */
     @Excel(name = "文件路径")
     private String path;
+
+    /** 是否入库 */
+    @Excel(name = "是否入库")
+    private Integer durability;
 
     /** 走航id */
     @Excel(name = "走航id")
@@ -70,6 +74,15 @@ public class ZhFile extends BaseEntity
     {
         return path;
     }
+    public void setDurability(Integer durability) 
+    {
+        this.durability = durability;
+    }
+
+    public Integer getDurability() 
+    {
+        return durability;
+    }
     public void setCollectRecordId(Long collectRecordId) 
     {
         this.collectRecordId = collectRecordId;
@@ -87,6 +100,7 @@ public class ZhFile extends BaseEntity
             .append("fileName", getFileName())
             .append("size", getSize())
             .append("path", getPath())
+            .append("durability", getDurability())
             .append("collectRecordId", getCollectRecordId())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())

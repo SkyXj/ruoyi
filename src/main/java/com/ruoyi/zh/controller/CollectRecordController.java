@@ -1,18 +1,14 @@
 package com.ruoyi.zh.controller;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.Page;
 import com.ruoyi.mina.DensityVo;
-import com.ruoyi.mina.handler.MsgHandler;
 import com.ruoyi.zh.domain.TestExcel;
 import com.ruoyi.zh.dto.DensityDto;
 import com.ruoyi.zh.dto.ZhCollectRecordDto;
 import io.swagger.annotations.ApiOperation;
-import org.aspectj.weaver.loadtime.Aj;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.ruoyi.framework.aspectj.lang.annotation.Log;
@@ -50,12 +46,29 @@ public class CollectRecordController extends BaseController
         return getDataTable(list);
     }
 
+    @GetMapping("/listDto")
+    public TableDataInfo listDto(ZhCollectRecord zhCollectRecord)
+    {
+        startPage();
+        List<ZhCollectRecordDto> list = zhCollectRecordService.selectCollectRecordDtoList(zhCollectRecord);
+        Integer count = zhCollectRecordService.selectCollectRecordCount(zhCollectRecord);
+        TableDataInfo dataTable = getDataTable(list);
+        dataTable.setTotal(count);
+        return dataTable;
+    }
+
     @GetMapping("/selectByIds")
     public TableDataInfo selectByIds(Long[] ids)
     {
+        if(ids==null){
+            return getDataTable(new ArrayList<ZhCollectRecordDto>());
+        }
         startPage();
-        List<ZhCollectRecord> list = zhCollectRecordService.selectCollectRecordByIds(ids);
-        return getDataTable(list);
+        List<ZhCollectRecordDto> list = zhCollectRecordService.selectCollectRecordByIds(ids);
+        Integer count = zhCollectRecordService.selectCollectRecordCountByIds(ids);
+        TableDataInfo dataTable = getDataTable(list);
+        dataTable.setTotal(count);
+        return dataTable;
     }
 
     /**

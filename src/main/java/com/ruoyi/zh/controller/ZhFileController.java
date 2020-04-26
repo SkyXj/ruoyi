@@ -23,8 +23,8 @@ import com.ruoyi.framework.web.page.TableDataInfo;
 /**
  * 文件Controller
  * 
- * @author hxsdd
- * @date 2020-04-24
+ * @author ruoyi
+ * @date 2020-04-26
  */
 @RestController
 @RequestMapping("/zh/file")
@@ -36,7 +36,7 @@ public class ZhFileController extends BaseController
     /**
      * 查询文件列表
      */
-    @PreAuthorize("@ss.hasPermi('zh:file:list')")
+//    @PreAuthorize("@ss.hasPermi('zh:file:list')")
     @GetMapping("/list")
     public TableDataInfo list(ZhFile zhFile)
     {
@@ -48,7 +48,7 @@ public class ZhFileController extends BaseController
     /**
      * 导出文件列表
      */
-    @PreAuthorize("@ss.hasPermi('zh:file:export')")
+//    @PreAuthorize("@ss.hasPermi('zh:file:export')")
     @Log(title = "文件", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
     public AjaxResult export(ZhFile zhFile)
@@ -61,7 +61,7 @@ public class ZhFileController extends BaseController
     /**
      * 获取文件详细信息
      */
-    @PreAuthorize("@ss.hasPermi('zh:file:query')")
+//    @PreAuthorize("@ss.hasPermi('zh:file:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
@@ -71,7 +71,7 @@ public class ZhFileController extends BaseController
     /**
      * 新增文件
      */
-    @PreAuthorize("@ss.hasPermi('zh:file:add')")
+//    @PreAuthorize("@ss.hasPermi('zh:file:add')")
     @Log(title = "文件", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody ZhFile zhFile)
@@ -82,7 +82,7 @@ public class ZhFileController extends BaseController
     /**
      * 修改文件
      */
-    @PreAuthorize("@ss.hasPermi('zh:file:edit')")
+//    @PreAuthorize("@ss.hasPermi('zh:file:edit')")
     @Log(title = "文件", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody ZhFile zhFile)
@@ -93,7 +93,7 @@ public class ZhFileController extends BaseController
     /**
      * 删除文件
      */
-    @PreAuthorize("@ss.hasPermi('zh:file:remove')")
+//    @PreAuthorize("@ss.hasPermi('zh:file:remove')")
     @Log(title = "文件", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)

@@ -9,6 +9,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="fileName"    column="file_name"    />
         <result property="size"    column="size"    />
         <result property="path"    column="path"    />
+        <result property="durability"    column="durability"    />
         <result property="collectRecordId"    column="collect_record_id"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
@@ -18,7 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectZhFileVo">
-        select id, file_name, size, path, collect_record_id, create_by, create_time, update_by, update_time, remark from zh_file
+        select id, file_name, size, path, durability, collect_record_id, create_by, create_time, update_by, update_time, remark from zh_file
     </sql>
 
     <select id="selectZhFileList" parameterType="ZhFile" resultMap="ZhFileResult">
@@ -27,6 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fileName != null  and fileName != ''"> and file_name like concat('%', #{fileName}, '%')</if>
             <if test="size != null "> and size = #{size}</if>
             <if test="path != null  and path != ''"> and path = #{path}</if>
+            <if test="durability != null "> and durability = #{durability}</if>
             <if test="collectRecordId != null "> and collect_record_id = #{collectRecordId}</if>
         </where>
     </select>
@@ -35,6 +37,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectZhFileVo"/>
         where id = #{id}
     </select>
+
+    <select id="selectZhFileByCollectId" parameterType="Long" resultMap="ZhFileResult">
+        <include refid="selectZhFileVo"/>
+        where collect_record_id = #{collect_record_id}
+    </select>
         
     <insert id="insertZhFile" parameterType="ZhFile" useGeneratedKeys="true" keyProperty="id">
         insert into zh_file
@@ -42,6 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fileName != null  and fileName != ''">file_name,</if>
             <if test="size != null ">size,</if>
             <if test="path != null  and path != ''">path,</if>
+            <if test="durability != null ">durability,</if>
             <if test="collectRecordId != null ">collect_record_id,</if>
             <if test="createBy != null  and createBy != ''">create_by,</if>
             <if test="createTime != null ">create_time,</if>
@@ -53,6 +61,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fileName != null  and fileName != ''">#{fileName},</if>
             <if test="size != null ">#{size},</if>
             <if test="path != null  and path != ''">#{path},</if>
+            <if test="durability != null ">#{durability},</if>
             <if test="collectRecordId != null ">#{collectRecordId},</if>
             <if test="createBy != null  and createBy != ''">#{createBy},</if>
             <if test="createTime != null ">#{createTime},</if>
@@ -68,6 +77,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fileName != null  and fileName != ''">file_name = #{fileName},</if>
             <if test="size != null ">size = #{size},</if>
             <if test="path != null  and path != ''">path = #{path},</if>
+            <if test="durability != null ">durability = #{durability},</if>
             <if test="collectRecordId != null ">collect_record_id = #{collectRecordId},</if>
             <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
             <if test="createTime != null ">create_time = #{createTime},</if>

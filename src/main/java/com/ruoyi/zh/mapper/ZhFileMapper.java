@@ -6,8 +6,8 @@ import java.util.List;
 /**
  * 文件Mapper接口
  * 
- * @author hxsdd
- * @date 2020-04-24
+ * @author ruoyi
+ * @date 2020-04-26
  */
 public interface ZhFileMapper 
 {
@@ -18,6 +18,15 @@ public interface ZhFileMapper
      * @return 文件
      */
     public ZhFile selectZhFileById(Long id);
+
+
+    /**
+     * 查询文件
+     *
+     * @param collect_record_id 走航记录
+     * @return 文件
+     */
+    public ZhFile selectZhFileByCollectId(Long collect_record_id);
 
     /**
      * 查询文件列表

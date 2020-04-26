@@ -19,7 +19,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectCollectRecordList" parameterType="ZhCollectRecord" resultMap="CollectRecordResult">
         <include refid="selectCollectRecordVo"/>
+        where (id in (select collect_record_id from zh_file where durability=1)
+        or id not in (select collect_record_id from zh_file))
         <where>  
+            <if test="deviceCode != null  and deviceCode != ''"> and device_code like concat('%', #{deviceCode}, '%')</if>
+            <if test="startTime != null "> and start_time &gt;= #{startTime}</if>
+            <if test="endTime != null "> and end_time &lt;= #{endTime}</if>
+            <if test="factorCount != null "> and factor_count = #{factorCount}</if>
+            <if test="pointName != null  and pointName != ''"> and point_name like concat('%', #{pointName}, '%')</if>
+        </where>
+    </select>
+
+
+    <select id="selectCollectRecordCount" parameterType="ZhCollectRecord" resultType="integer">
+        select count(0) from zh_collect_record
+        where id in (select collect_record_id from zh_file where durability=1)
+        <where>
             <if test="deviceCode != null  and deviceCode != ''"> and device_code like concat('%', #{deviceCode}, '%')</if>
             <if test="startTime != null "> and start_time &gt;= #{startTime}</if>
             <if test="endTime != null "> and end_time &lt;= #{endTime}</if>
@@ -40,7 +55,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </select>
-        
+
+    <select id="selectCollectRecordCountByIds" parameterType="String" resultType="integer">
+        select count(0) from zh_collect_record
+        where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
     <insert id="insertCollectRecord" parameterType="ZhCollectRecord" useGeneratedKeys="true" keyProperty="id">
         insert into zh_collect_record
         <trim prefix="(" suffix=")" suffixOverrides=",">

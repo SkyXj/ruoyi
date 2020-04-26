@@ -4,6 +4,7 @@ import com.ruoyi.mina.DensityVo;
 import com.ruoyi.zh.domain.ZhCollectRecord;
 import com.ruoyi.zh.dto.DensityDto;
 import com.ruoyi.zh.dto.ZhCollectRecordDto;
+import io.swagger.models.auth.In;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -27,6 +28,17 @@ public interface ICollectRecordService
     /**
      * 查询走航记录列表
      * 
+     * @param zhCollectRecord 走航记录
+     * @return 走航记录集合
+     */
+    public List<ZhCollectRecordDto> selectCollectRecordDtoList(ZhCollectRecord zhCollectRecord);
+
+    public Integer selectCollectRecordCount(ZhCollectRecord zhCollectRecord);
+
+
+    /**
+     * 查询走航记录列表
+     *
      * @param zhCollectRecord 走航记录
      * @return 走航记录集合
      */
@@ -70,6 +82,8 @@ public interface ICollectRecordService
 
     public List<String> searchStrMic(DensityDto densityDto);
 
+    public List<String> readStrMic(String filePath);
+
     public ZhCollectRecordDto getRecently();
 
     public Long importData(String deviceCode, /*String recordName,*/ MultipartFile file,String pointname);
@@ -88,7 +102,11 @@ public interface ICollectRecordService
 
     public String exportDataByIds(Long[] ids);
 
-    public List<ZhCollectRecord> selectCollectRecordByIds(Long[] ids);
+    public List<ZhCollectRecordDto> selectCollectRecordByIds(Long[] ids);
+
+    public Integer selectCollectRecordCountByIds(Long[] ids);
+
+    public List<ZhCollectRecordDto> getZhCollectRecordDtoByZhCollectRecord(List<ZhCollectRecord> collectRecords);
 
     public void closeRecord();
 }

@@ -11,8 +11,8 @@ import com.ruoyi.zh.service.IZhFileService;
 /**
  * 文件Service业务层处理
  * 
- * @author hxsdd
- * @date 2020-04-24
+ * @author ruoyi
+ * @date 2020-04-26
  */
 @Service
 public class ZhFileServiceImpl implements IZhFileService 
@@ -30,6 +30,11 @@ public class ZhFileServiceImpl implements IZhFileService
     public ZhFile selectZhFileById(Long id)
     {
         return zhFileMapper.selectZhFileById(id);
+    }
+
+    @Override
+    public ZhFile selectZhFileByCollectId(Long collect_record_id) {
+        return zhFileMapper.selectZhFileByCollectId(collect_record_id);
     }
 
     /**

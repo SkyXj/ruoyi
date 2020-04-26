@@ -1,9 +1,7 @@
 package com.ruoyi.zh.mapper;
 
 import com.ruoyi.zh.domain.ZhCollectRecord;
-import com.ruoyi.zh.dto.ZhCollectRecordDto;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -24,13 +22,17 @@ public interface CollectRecordMapper
 
     public List<ZhCollectRecord> selectCollectRecordByIds(Long[] ids);
 
+    public Integer selectCollectRecordCountByIds(Long[] ids);
+
     /**
      * 查询走航记录列表
-     * 
+     *
      * @param zhCollectRecord 走航记录
      * @return 走航记录集合
      */
     public List<ZhCollectRecord> selectCollectRecordList(ZhCollectRecord zhCollectRecord);
+
+    public Integer selectCollectRecordCount(ZhCollectRecord zhCollectRecord);
 
     /**
      * 新增走航记录

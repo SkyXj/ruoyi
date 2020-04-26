@@ -1,9 +1,10 @@
 package com.ruoyi.zh.domain;
 
+import com.ruoyi.zh.dto.ZhCollectRecordDto;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.framework.aspectj.lang.annotation.Excel;
-import com.ruoyi.framework.web.domain.BaseEntity;
+
 import java.util.Date;
 
 /**
@@ -111,5 +112,18 @@ public class ZhCollectRecord
             .append("endTime", getEndTime())
             .append("pointName", getPointName())
             .toString();
+    }
+    public ZhCollectRecord(){
+
+    }
+
+    public ZhCollectRecord(ZhCollectRecordDto zhCollectRecordDto){
+        this.id=zhCollectRecordDto.getId();
+        this.deviceCode=zhCollectRecordDto.getDeviceCode();
+        this.startTime=zhCollectRecordDto.getStartTime();
+        this.endTime=zhCollectRecordDto.getEndTime();
+        this.pointName=zhCollectRecordDto.getPointName();
+        this.factorCount=zhCollectRecordDto.getFactorCount();
+        this.show=zhCollectRecordDto.getShow();
     }
 }

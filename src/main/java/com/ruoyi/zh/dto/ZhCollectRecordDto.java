@@ -5,8 +5,8 @@ import com.ruoyi.mina.DensityVo;
 import com.ruoyi.zh.domain.ZhCollectRecord;
 import com.ruoyi.zh.domain.ZhFile;
 import lombok.Data;
-import org.apache.poi.openxml4j.opc.internal.ZipHelper;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -51,6 +51,26 @@ public class ZhCollectRecordDto {
         this.pointName=zhCollectRecord.getPointName();
         this.factorCount=zhCollectRecord.getFactorCount();
         this.show=zhCollectRecord.getShow();
+    }
+
+    public List<ZhCollectRecordDto> zhCollectRecordDtos(List<ZhCollectRecord> zhCollectRecords){
+        List<ZhCollectRecordDto> zhCollectRecordDtos=new ArrayList<>();
+        if(zhCollectRecords!=null&&zhCollectRecords.size()>0){
+            for (ZhCollectRecord zhCollectRecord:zhCollectRecords){
+                zhCollectRecordDtos.add(new ZhCollectRecordDto(zhCollectRecord));
+            }
+        }
+        return zhCollectRecordDtos;
+    }
+
+    public List<ZhCollectRecord> ZhCollectRecords(List<ZhCollectRecordDto> zhCollectRecordDtos){
+        List<ZhCollectRecord> ZhCollectRecord=new ArrayList<>();
+        if(zhCollectRecordDtos!=null&&zhCollectRecordDtos.size()>0){
+            for (ZhCollectRecordDto zhCollectRecordDto:zhCollectRecordDtos){
+                ZhCollectRecord.add(new ZhCollectRecord(zhCollectRecordDto));
+            }
+        }
+        return ZhCollectRecord;
     }
 
     public ZhCollectRecordDto(){
