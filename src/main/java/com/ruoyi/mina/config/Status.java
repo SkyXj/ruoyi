@@ -19,6 +19,8 @@ public class Status {
 
     private Long collectId;
 
+    private boolean saveFatorCount;
+
     //敏感点名称
     private boolean pointname;
     //设备名称

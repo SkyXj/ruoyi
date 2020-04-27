@@ -6,10 +6,10 @@ spring:
         druid:
             # 主库数据源
             master:
-                url: jdbc:mysql://192.168.1.246:3306/voyage?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+                url: jdbc:mysql://localhost:3307/voyage?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
                 username: root
                 #                password: root123..————————————————
-                password: 123456
+                password: root123456
             # 从库数据源
             slave:
                 # 从数据源开关/默认关闭
@@ -58,7 +58,7 @@ spring:
                         multi-statement-allow: true
     redis:
         # 地址
-        host: 192.168.1.246
+        host: localhost
         # 端口，默认为6379
         port: 6379
         # 密码
@@ -79,9 +79,9 @@ spring:
 influxdb:
     username: root
     password: 123456
-    host: 192.168.1.246
+    host: localhost
     port: 8086
-    database: SPIMS_Meas_Test
+    database: SPIMS_Meas
 
 voyage:
     env: localreal

@@ -556,11 +556,12 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
     public List<ZhCollectRecordDto> readListData(String deviceCode, List<MultipartFile> files, String pointname) {
         List<ZhCollectRecordDto> collectRecordDtos=new ArrayList<>();
         String jar_parent_path="";
-        try {
-            jar_parent_path = new File(ResourceUtils.getURL("classpath:").getPath()).getParentFile().getParentFile().getParent();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            jar_parent_path = new File(ResourceUtils.getURL("classpath:").getPath()).getParentFile().getParentFile().getParent();
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+        jar_parent_path=RuoYiConfig.getProfile();
         String rootPath=jar_parent_path+File.separator+"importData"+File.separator+DateUtils.getDate();
         File fileRoot=new File(rootPath);
         if(!fileRoot.exists()){
@@ -724,6 +725,7 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
             }else{
                 datas=searchStrMic(densityDto);
             }
+            zhCollectRecordDto.setDatas(datas);
             zhCollectRecordDtos.add(zhCollectRecordDto);
         }
         return zhCollectRecordDtos;
@@ -786,6 +788,7 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
         return fileName;
     }
 
+
     public void createFileName(List<DensityVo> points,String fileName){
         String profile = RuoYiConfig.getDownloadPath();
         File downloaPath=new File(profile);
@@ -829,29 +832,94 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
             fileWriter.close();
         } catch (IOException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            log.error("导出文件发生错误："+e.getMessage());
         }
     }
 
-    public void createFileNameByDatas(List<String> points,String fileName){
-
+    public void createFileNameByDatas(List<List<String>> datas,String fileName){
+        String profile = RuoYiConfig.getDownloadPath();
+        File downloaPath = new File(profile);
+        if (!downloaPath.exists()) {
+            downloaPath.mkdirs();
+        }
+        if (datas == null || datas.size() <= 0) {
+            return;
+        }
+        List<String> data = datas.get(0);
+        if (data == null || data.size() <= 0) {
+            return;
+        }
+        List<String> names = Arrays.asList(data.get(0).split(";"));
+        List<String> result=new ArrayList<>();
+        //加入第一行 名称
+        result.add(data.get(0));
+        for (int i = 0; i < datas.size(); i++) {
+            List<String> dataTemp=datas.get(0);
+            //当前名称数组
+            List<String> nameCur = Arrays.asList(dataTemp.get(0).split(";"));
+//            StringBuffer sb=new StringBuffer();
+//            sb.append(dataTemp.get(0)+";");
+//            sb.append(dataTemp.get(1)+";");
+//            sb.append(dataTemp.get(2)+";");
+            for (int j = 1; j < dataTemp.size(); j++) {
+                if(i==0){
+//                    result.add(dataTemp.get(j));
+                }else{
+                    StringBuffer sb = new StringBuffer();
+                    //当前行
+                    String[] split = dataTemp.get(j).split(";");
+                    sb.append(split[0] + ";");
+                    sb.append(split[1] + ";");
+                    sb.append(split[2] + ";");
+                    for (int k = 3; k < names.size(); k++) {
+                        int index = nameCur.indexOf(names.get(k));
+                        sb.append(split[index]);
+                        if(k < names.size()-1){
+                          sb.append(";");
+                        }
+                    }
+                    result.add(sb.toString());
+                }
+            }
+        }
+        BufferedWriter bufferedWriter=null;
+        String filePath=profile+fileName;
+        try {
+            bufferedWriter=new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(filePath)),"GBK"));
+            for (int i = 0; i < result.size(); i++) {
+                bufferedWriter.write(result.get(i));
+                if(i<result.size()-1){
+                    //写入 \r\n换行
+                    bufferedWriter.write("\r\n");
+                }
+            }
+            bufferedWriter.flush();
+            bufferedWriter.close();
+        } catch (IOException e) {
+            log.error("导出文件发生错误："+e.getMessage());
+        }
     }
 
 
     @Override
     public String exportDataByIds(Long[] ids) {
         List<ZhCollectRecordDto> zhCollectRecordDtos = getPointsByIds(ids);
-        List<DensityVo> points = new ArrayList<>();
+//        List<DensityVo> points = new ArrayList<>();
+        List<List<String>>  datas=new ArrayList<>();
         if(zhCollectRecordDtos==null||zhCollectRecordDtos.size()<=0){
             return "";
         }
 //        Set<Integer> sets=new HashSet<>();
+        //顺序按第一个为标准
+        ZhCollectRecordDto zhCollectRecordDto = zhCollectRecordDtos.get(0);
+
         for (int i = 0; i < zhCollectRecordDtos.size(); i++) {
-            points.addAll(zhCollectRecordDtos.get(i).getPoints());
+//            points.addAll(zhCollectRecordDtos.get(i).getPoints());
+            datas.add(zhCollectRecordDtos.get(i).getDatas());
         }
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH：mm：ss");
         String fileName="合并文件"+sdf.format(new Date())+".txt";
-        createFileName(points,fileName);
+        createFileNameByDatas(datas,fileName);
         return fileName;
     }
 

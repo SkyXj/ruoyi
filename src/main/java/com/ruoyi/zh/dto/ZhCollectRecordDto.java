@@ -1,5 +1,6 @@
 package com.ruoyi.zh.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.framework.aspectj.lang.annotation.Excel;
 import com.ruoyi.mina.DensityVo;
 import com.ruoyi.zh.domain.ZhCollectRecord;
@@ -21,10 +22,12 @@ public class ZhCollectRecordDto {
 
     /** 开始时间 */
     @Excel(name = "开始时间", width = 30, dateFormat = "yyyy-MM-dd")
+//    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date startTime;
 
     /** 结束时间 */
     @Excel(name = "结束时间", width = 30, dateFormat = "yyyy-MM-dd")
+//    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date endTime;
 
     /** 敏感点名称 */

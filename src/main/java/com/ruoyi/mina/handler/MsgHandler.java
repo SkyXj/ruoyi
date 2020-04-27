@@ -13,6 +13,8 @@ import com.ruoyi.mina.entity.Material;
 import com.ruoyi.mina.entity.Msg;
 import com.ruoyi.mina.entity.StatusDetail;
 import com.ruoyi.webSocket.WebSocketServer;
+import com.ruoyi.zh.domain.ZhCollectRecord;
+import com.ruoyi.zh.service.ICollectRecordService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,10 +47,18 @@ public class MsgHandler {
 
     public static boolean gpsAvailability=false;
 
+    public static ICollectRecordService collectRecordService;
+
     @Autowired
     public  void setList(List<DensityVo> list)
     {
         MsgHandler.list = list;
+    }
+
+    @Autowired
+    public  void setCollectRecordService(ICollectRecordService collectRecordService)
+    {
+        MsgHandler.collectRecordService = collectRecordService;
     }
 
 
@@ -140,6 +150,14 @@ public class MsgHandler {
             densityVo.setThisDatas();
             if(MsgHandler.gpsAvailability==true||env.equals("localtest")){
                 influxdbUtils.batchInsertAndTime(batchDatas);
+            }
+            //是更新因子数目
+            if(!SessionManage.status.isSaveFatorCount()){
+                ZhCollectRecord zhCollectRecord=new ZhCollectRecord();
+                zhCollectRecord.setId(SessionManage.status.getCollectId());
+                zhCollectRecord.setFactorCount(values.size());
+                collectRecordService.updateCollectRecord(zhCollectRecord);
+                SessionManage.status.setSaveFatorCount(true);
             }
             //插入定位点
             Map<String, String> logTags = new HashMap<>(5);

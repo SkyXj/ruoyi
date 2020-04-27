@@ -2,6 +2,10 @@ package com.ruoyi.framework.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ResourceUtils;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 
 /**
  * 读取项目相关配置
@@ -72,7 +76,14 @@ public class RuoYiConfig
 
     public static String getProfile()
     {
-        return profile;
+        String jar_parent_path="";
+        try {
+            jar_parent_path = new File(ResourceUtils.getURL("classpath:").getPath()).getParentFile().getParentFile().getParent();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return jar_parent_path;
+//        return profile;
     }
 
     public void setProfile(String profile)
@@ -95,7 +106,7 @@ public class RuoYiConfig
      */
     public static String getAvatarPath()
     {
-        return getProfile() + "/avatar";
+        return getProfile() + File.separator+"avatar";
     }
 
     /**
@@ -103,7 +114,7 @@ public class RuoYiConfig
      */
     public static String getDownloadPath()
     {
-        return getProfile() + "/download/";
+        return getProfile() + File.separator+"download"+File.separator;
     }
 
     /**
@@ -111,6 +122,6 @@ public class RuoYiConfig
      */
     public static String getUploadPath()
     {
-        return getProfile() + "/upload";
+        return getProfile() + File.separator+"upload";
     }
 }
