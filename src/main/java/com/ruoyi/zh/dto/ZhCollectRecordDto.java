@@ -38,7 +38,27 @@ public class ZhCollectRecordDto {
     @Excel(name = "物质总数")
     private Integer factorCount;
 
+    /** 创建者 */
+    private String createBy;
+
+    /** 创建时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
+
+    /** 更新者 */
+    private String updateBy;
+
+    /** 更新时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date updateTime;
+
+    /** 备注 */
+    private String remark;
+
+    private Integer type;
+
     private Boolean show;
+
 
     private List<DensityVo> points;
 
@@ -54,6 +74,12 @@ public class ZhCollectRecordDto {
         this.pointName=zhCollectRecord.getPointName();
         this.factorCount=zhCollectRecord.getFactorCount();
         this.show=zhCollectRecord.getShow();
+        this.createBy=zhCollectRecord.getCreateBy();
+        this.createTime=zhCollectRecord.getCreateTime();
+        this.updateBy=zhCollectRecord.getUpdateBy();
+        this.updateTime=zhCollectRecord.getUpdateTime();
+        this.remark=zhCollectRecord.getRemark();
+        this.type=zhCollectRecord.getType();
     }
 
     public List<ZhCollectRecordDto> zhCollectRecordDtos(List<ZhCollectRecord> zhCollectRecords){

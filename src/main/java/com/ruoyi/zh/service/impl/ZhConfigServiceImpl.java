@@ -1,7 +1,12 @@
 package com.ruoyi.zh.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.framework.security.LoginUser;
+import com.ruoyi.project.system.domain.SysUser;
+import com.ruoyi.zh.tool.UserInfoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import com.ruoyi.zh.mapper.ZhConfigMapper;
 import com.ruoyi.zh.domain.ZhConfig;
@@ -31,6 +36,11 @@ public class ZhConfigServiceImpl implements IZhConfigService
         return zhConfigMapper.selectZhConfigById(id);
     }
 
+    @Override
+    public ZhConfig selectZhConfigByUserName() {
+        return zhConfigMapper.selectZhConfigByUserName(UserInfoUtil.getUserName());
+    }
+
     /**
      * 查询配置信息列表
      * 
@@ -52,6 +62,7 @@ public class ZhConfigServiceImpl implements IZhConfigService
     @Override
     public int insertZhConfig(ZhConfig zhConfig)
     {
+        zhConfig.setCreateBy(UserInfoUtil.getUserName());
         return zhConfigMapper.insertZhConfig(zhConfig);
     }
 
@@ -64,7 +75,19 @@ public class ZhConfigServiceImpl implements IZhConfigService
     @Override
     public int updateZhConfig(ZhConfig zhConfig)
     {
+        zhConfig.setUpdateBy(UserInfoUtil.getUserName());
         return zhConfigMapper.updateZhConfig(zhConfig);
+    }
+
+    @Override
+    public int insertOrUpdateZhConfig(ZhConfig zhConfig) {
+        ZhConfig old = selectZhConfigByUserName();
+        if (old == null) {
+            return insertZhConfig(zhConfig);
+        } else {
+            zhConfig.setId(old.getId());
+            return updateZhConfig(zhConfig);
+        }
     }
 
     /**

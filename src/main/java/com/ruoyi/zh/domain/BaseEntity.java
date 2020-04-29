@@ -1,4 +1,4 @@
-package com.ruoyi.framework.web.domain;
+package com.ruoyi.zh.domain;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -12,7 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  * Entity基类
- * 
+ *
  * @author ruoyi
  */
 public class BaseEntity implements Serializable
@@ -42,13 +42,13 @@ public class BaseEntity implements Serializable
     /** 数据权限 */
     private String dataScope;
 
-    /** 开始时间 */
-    @JsonIgnore
-    private String beginTime;
-
-    /** 结束时间 */
-    @JsonIgnore
-    private String endTime;
+//    /** 开始时间 */
+//    @JsonIgnore
+//    private String beginTime;
+//
+//    /** 结束时间 */
+//    @JsonIgnore
+//    private String endTime;
 
     /** 请求参数 */
     private Map<String, Object> params;
@@ -70,6 +70,7 @@ public class BaseEntity implements Serializable
 
     public void setCreateBy(String createBy)
     {
+
         this.createBy = createBy;
     }
 
@@ -123,25 +124,25 @@ public class BaseEntity implements Serializable
         this.dataScope = dataScope;
     }
 
-    public String getBeginTime()
-    {
-        return beginTime;
-    }
+//    public String getBeginTime()
+//    {
+//        return beginTime;
+//    }
+//
+//    public void setBeginTime(String beginTime)
+//    {
+//        this.beginTime = beginTime;
+//    }
+//
+//    public String getEndTime()
+//    {
+//        return endTime;
+//    }
 
-    public void setBeginTime(String beginTime)
-    {
-        this.beginTime = beginTime;
-    }
-
-    public String getEndTime()
-    {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime)
-    {
-        this.endTime = endTime;
-    }
+//    public void setEndTime(String endTime)
+//    {
+//        this.endTime = endTime;
+//    }
 
     public Map<String, Object> getParams()
     {
@@ -157,3 +158,4 @@ public class BaseEntity implements Serializable
         this.params = params;
     }
 }
+

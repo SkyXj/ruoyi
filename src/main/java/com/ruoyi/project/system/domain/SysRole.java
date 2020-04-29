@@ -118,11 +118,13 @@ public class SysRole extends BaseEntity
         this.roleSort = roleSort;
     }
 
+    @Override
     public String getDataScope()
     {
         return dataScope;
     }
 
+    @Override
     public void setDataScope(String dataScope)
     {
         this.dataScope = dataScope;

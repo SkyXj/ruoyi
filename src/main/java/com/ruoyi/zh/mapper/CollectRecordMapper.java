@@ -1,6 +1,7 @@
 package com.ruoyi.zh.mapper;
 
 import com.ruoyi.zh.domain.ZhCollectRecord;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -20,9 +21,9 @@ public interface CollectRecordMapper
      */
     public ZhCollectRecord selectCollectRecordById(Long id);
 
-    public List<ZhCollectRecord> selectCollectRecordByIds(Long[] ids);
+    public List<ZhCollectRecord> selectCollectRecordByIds(@Param("ids") Long[] ids,@Param("username") String username);
 
-    public Integer selectCollectRecordCountByIds(Long[] ids);
+    public Integer selectCollectRecordCountByIds(@Param("ids") Long[] ids,@Param("username") String username);
 
     /**
      * 查询走航记录列表
@@ -66,9 +67,9 @@ public interface CollectRecordMapper
      */
     public int deleteCollectRecordByIds(Long[] ids);
 
-    public Long getMaxId();
+    public Long getMaxId(String username);
 
-    public ZhCollectRecord getRecently();
+    public ZhCollectRecord getRecently(String username);
 
-    public void closeRecord();
+    public void closeRecord(String username);
 }

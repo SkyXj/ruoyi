@@ -82,6 +82,7 @@ public class RuoYiConfig
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        jar_parent_path=jar_parent_path.replace("file:","");
         return jar_parent_path;
 //        return profile;
     }

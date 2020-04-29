@@ -6,7 +6,9 @@ import com.ruoyi.common.utils.TimeTool;
 import com.ruoyi.framework.config.RuoYiConfig;
 import com.ruoyi.framework.influxdb.BatchData;
 import com.ruoyi.framework.influxdb.InfluxdbUtils;
+import com.ruoyi.framework.security.LoginUser;
 import com.ruoyi.mina.DensityVo;
+import com.ruoyi.project.system.domain.SysUser;
 import com.ruoyi.zh.domain.DensityLog;
 import com.ruoyi.zh.domain.DensityRealTime;
 import com.ruoyi.zh.domain.ZhCollectRecord;
@@ -18,8 +20,10 @@ import com.ruoyi.zh.service.IDensityLogService;
 import com.ruoyi.zh.service.IDensityRealTimeService;
 import com.ruoyi.zh.service.ICollectRecordService;
 import com.ruoyi.zh.service.IZhFileService;
+import com.ruoyi.zh.tool.UserInfoUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -92,6 +96,8 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
      */
     @Override
     public List<ZhCollectRecord> selectCollectRecordList(ZhCollectRecord zhCollectRecord) {
+        zhCollectRecord.setCreateBy(UserInfoUtil.getUserName());
+        zhCollectRecord.setType(1);
         return collectRecordMapper.selectCollectRecordList(zhCollectRecord);
     }
 
@@ -103,6 +109,7 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
      */
     @Override
     public int insertCollectRecord(ZhCollectRecord zhCollectRecord) {
+        zhCollectRecord.setCreateBy(UserInfoUtil.getUserName());
         return collectRecordMapper.insertCollectRecord(zhCollectRecord);
     }
 
@@ -141,7 +148,7 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
 
     @Override
     public Long getMaxId() {
-        return collectRecordMapper.getMaxId();
+        return collectRecordMapper.getMaxId(UserInfoUtil.getUserName());
     }
 
     @Override
@@ -356,7 +363,7 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
     @Override
     public ZhCollectRecordDto getRecently() {
         SimpleDateFormat sim=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        ZhCollectRecord zhCollectRecord=collectRecordMapper.getRecently();
+        ZhCollectRecord zhCollectRecord=collectRecordMapper.getRecently(UserInfoUtil.getUserName());
         if(zhCollectRecord==null){
             return null;
         }
@@ -553,6 +560,7 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
     }
 
     @Override
+    @Transactional
     public List<ZhCollectRecordDto> readListData(String deviceCode, List<MultipartFile> files, String pointname) {
         List<ZhCollectRecordDto> collectRecordDtos=new ArrayList<>();
         String jar_parent_path="";
@@ -579,8 +587,8 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
             zhFile.setFileName(fileOldName);
             zhFile.setPath(filePath);
             zhFile.setSize(file.getSize());
-//            zhFile.setCreateBy(DateUtils.getTime());
-//            zhFile.setCreateBy(sysUser.getCreateBy());
+            zhFile.setCreateTime(new Date());
+            zhFile.setCreateBy(UserInfoUtil.getUserName());
             //保存本地文件
             File fileLocal=new File(filePath);
 
@@ -633,6 +641,8 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
                 collectionRecord.setEndTime(endTime);
                 collectionRecord.setFactorCount(names.length-3);
                 collectionRecord.setPointName(pointname);
+                collectionRecord.setType(0);
+                collectionRecord.setCreateBy(UserInfoUtil.getUserName());
                 collectRecordMapper.insertCollectRecord(collectionRecord);
                 zhFile.setCollectRecordId(collectionRecord.getId());
                 ZhCollectRecordDto zhCollectRecordDto=new ZhCollectRecordDto(collectionRecord);
@@ -674,7 +684,7 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
     public List<ZhCollectRecordDto> getPointsStrByIds(Long[] ids) {
         SimpleDateFormat sim=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         List<ZhCollectRecordDto> zhCollectRecordDtos=new ArrayList<>();
-        List<ZhCollectRecord> zhCollectRecords = collectRecordMapper.selectCollectRecordByIds(ids);
+        List<ZhCollectRecord> zhCollectRecords = collectRecordMapper.selectCollectRecordByIds(ids,UserInfoUtil.getUserName());
         if(zhCollectRecords==null||zhCollectRecords.size()<=0){
             return zhCollectRecordDtos;
         }
@@ -704,7 +714,7 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
     public List<ZhCollectRecordDto> getPointsByIds(Long[] ids) {
         SimpleDateFormat sim=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         List<ZhCollectRecordDto> zhCollectRecordDtos=new ArrayList<>();
-        List<ZhCollectRecord> zhCollectRecords = collectRecordMapper.selectCollectRecordByIds(ids);
+        List<ZhCollectRecord> zhCollectRecords = collectRecordMapper.selectCollectRecordByIds(ids,UserInfoUtil.getUserName());
         if(zhCollectRecords==null||zhCollectRecords.size()<=0){
             return zhCollectRecordDtos;
         }
@@ -852,9 +862,9 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
         List<String> names = Arrays.asList(data.get(0).split(";"));
         List<String> result=new ArrayList<>();
         //加入第一行 名称
-        result.add(data.get(0));
+//        result.add(data.get(0));
         for (int i = 0; i < datas.size(); i++) {
-            List<String> dataTemp=datas.get(0);
+            List<String> dataTemp=datas.get(i);
             //当前名称数组
             List<String> nameCur = Arrays.asList(dataTemp.get(0).split(";"));
 //            StringBuffer sb=new StringBuffer();
@@ -863,7 +873,7 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
 //            sb.append(dataTemp.get(2)+";");
             for (int j = 1; j < dataTemp.size(); j++) {
                 if(i==0){
-//                    result.add(dataTemp.get(j));
+                    result.add(dataTemp.get(j));
                 }else{
                     StringBuffer sb = new StringBuffer();
                     //当前行
@@ -882,6 +892,8 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
                 }
             }
         }
+        Collections.sort(result);
+        result.add(0,data.get(0));
         BufferedWriter bufferedWriter=null;
         String filePath=profile+fileName;
         try {
@@ -928,13 +940,13 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
         if(ids==null){
             return new ArrayList<ZhCollectRecordDto>();
         }
-        List<ZhCollectRecord> collectRecords = collectRecordMapper.selectCollectRecordByIds(ids);
+        List<ZhCollectRecord> collectRecords = collectRecordMapper.selectCollectRecordByIds(ids,UserInfoUtil.getUserName());
         return getZhCollectRecordDtoByZhCollectRecord(collectRecords);
     }
 
     @Override
     public Integer selectCollectRecordCountByIds(Long[] ids) {
-        return collectRecordMapper.selectCollectRecordCountByIds(ids);
+        return collectRecordMapper.selectCollectRecordCountByIds(ids,UserInfoUtil.getUserName());
     }
 
     @Override
@@ -951,7 +963,7 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
 
     @Override
     public void closeRecord() {
-        collectRecordMapper.closeRecord();
+        collectRecordMapper.closeRecord(UserInfoUtil.getUserName());
     }
 
 

@@ -1,5 +1,6 @@
 package com.ruoyi.zh.domain;
 
+import io.swagger.models.auth.In;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.framework.aspectj.lang.annotation.Excel;
@@ -49,6 +50,14 @@ public class ZhConfig extends BaseEntity
     /** 纬度 */
     @Excel(name = "纬度")
     private Double lat;
+
+    /** IP地址 */
+    @Excel(name = "IP地址")
+    private String ip;
+
+    /** 端口 */
+    @Excel(name = "端口")
+    private Integer port;
 
     public void setId(Long id) 
     {
@@ -132,18 +141,37 @@ public class ZhConfig extends BaseEntity
         return lat;
     }
 
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public Integer getPort() {
+        return port;
+    }
+
+    public void setPort(Integer port) {
+        this.port = port;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("zoom", getZoom())
-            .append("direction", getDirection())
-            .append("angle", getAngle())
-            .append("distance", getDistance())
-            .append("flashtime", getFlashtime())
-            .append("shapetype", getShapetype())
-            .append("lng", getLng())
-            .append("lat", getLat())
-            .toString();
+        String s = new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("id", getId())
+                .append("zoom", getZoom())
+                .append("direction", getDirection())
+                .append("angle", getAngle())
+                .append("distance", getDistance())
+                .append("flashtime", getFlashtime())
+                .append("shapetype", getShapetype())
+                .append("lng", getLng())
+                .append("lat", getLat())
+                .append("ip", getIp())
+                .append("port", getPort())
+                .toString();
+        return s;
     }
 }

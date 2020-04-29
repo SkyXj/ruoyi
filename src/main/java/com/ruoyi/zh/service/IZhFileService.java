@@ -66,4 +66,6 @@ public interface IZhFileService
      * @return 结果
      */
     public int deleteZhFileById(Long id);
+
+    public int warehouse(Long id);
 }

@@ -11,35 +11,44 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="endTime"    column="end_time"    />
         <result property="pointName"    column="point_name"    />
         <result property="factorCount"    column="factor_count"    />
+        <result property="type"    column="type"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
     </resultMap>
 
     <sql id="selectCollectRecordVo">
-        select id, device_code, start_time, end_time, point_name,factor_count from zh_collect_record
+        select id, device_code, start_time, end_time, point_name, factor_count, type, create_by, create_time, update_by, update_time, remark from zh_collect_record
     </sql>
 
     <select id="selectCollectRecordList" parameterType="ZhCollectRecord" resultMap="CollectRecordResult">
         <include refid="selectCollectRecordVo"/>
-        where (id in (select collect_record_id from zh_file where durability=1)
-        or id not in (select collect_record_id from zh_file))
-        <where>  
-            <if test="deviceCode != null  and deviceCode != ''"> and device_code like concat('%', #{deviceCode}, '%')</if>
-            <if test="startTime != null "> and start_time &gt;= #{startTime}</if>
-            <if test="endTime != null "> and end_time &lt;= #{endTime}</if>
-            <if test="factorCount != null "> and factor_count = #{factorCount}</if>
-            <if test="pointName != null  and pointName != ''"> and point_name like concat('%', #{pointName}, '%')</if>
-        </where>
-    </select>
-
-
-    <select id="selectCollectRecordCount" parameterType="ZhCollectRecord" resultType="integer">
-        select count(0) from zh_collect_record
-        where id in (select collect_record_id from zh_file where durability=1)
+--         where (id in (select collect_record_id from zh_file where durability=1)
+--         or id not in (select collect_record_id from zh_file))
         <where>
             <if test="deviceCode != null  and deviceCode != ''"> and device_code like concat('%', #{deviceCode}, '%')</if>
             <if test="startTime != null "> and start_time &gt;= #{startTime}</if>
             <if test="endTime != null "> and end_time &lt;= #{endTime}</if>
             <if test="factorCount != null "> and factor_count = #{factorCount}</if>
             <if test="pointName != null  and pointName != ''"> and point_name like concat('%', #{pointName}, '%')</if>
+            <if test="type != null "> and type = #{type}</if>
+            <if test="createBy != null "> and create_by = #{createBy}</if>
+        </where>
+    </select>
+
+
+    <select id="selectCollectRecordCount" parameterType="ZhCollectRecord" resultType="integer">
+        select count(0) from zh_collect_record
+        <where>
+            <if test="deviceCode != null  and deviceCode != ''"> and device_code like concat('%', #{deviceCode}, '%')</if>
+            <if test="startTime != null "> and start_time &gt;= #{startTime}</if>
+            <if test="endTime != null "> and end_time &lt;= #{endTime}</if>
+            <if test="factorCount != null "> and factor_count = #{factorCount}</if>
+            <if test="pointName != null  and pointName != ''"> and point_name like concat('%', #{pointName}, '%')</if>
+            <if test="type != null "> and type = #{type}</if>
+            <if test="createBy != null "> and create_by = #{createBy}</if>
         </where>
     </select>
     
@@ -48,18 +57,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
 
-    <select id="selectCollectRecordByIds" parameterType="String" resultMap="CollectRecordResult">
+    <select id="selectCollectRecordByIds" resultMap="CollectRecordResult">
         <include refid="selectCollectRecordVo"/>
-        where id in
-        <foreach item="id" collection="array" open="(" separator="," close=")">
+        where 1=1 and
+        <if test="username != null  and username != ''">create_by = #{username} and </if>
+        id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
             #{id}
         </foreach>
+
     </select>
 
-    <select id="selectCollectRecordCountByIds" parameterType="String" resultType="integer">
+    <select id="selectCollectRecordCountByIds" resultType="integer">
         select count(0) from zh_collect_record
-        where id in
-        <foreach item="id" collection="array" open="(" separator="," close=")">
+        where 1=1 and
+        <if test="username != null  and username != ''">create_by = #{username} and </if>
+        id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
             #{id}
         </foreach>
     </select>
@@ -72,14 +86,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="endTime != null ">end_time,</if>
             <if test="factorCount != null ">factor_count,</if>
             <if test="pointName != null  and pointName != ''">point_name,</if>
-         </trim>
+            <if test="type != null ">type,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            create_time,
+            <if test="remark != null  and remark != ''">remark,</if>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="deviceCode != null  and deviceCode != ''">#{deviceCode},</if>
             <if test="startTime != null ">#{startTime},</if>
             <if test="endTime != null ">#{endTime},</if>
             <if test="factorCount != null ">#{factorCount},</if>
             <if test="pointName != null  and pointName != ''">#{pointName},</if>
-         </trim>
+            <if test="type != null ">#{type},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            sysdate()
+            <if test="remark != null  and remark != ''">#{remark},</if>
+        </trim>
     </insert>
 
     <update id="updateCollectRecord" parameterType="ZhCollectRecord">
@@ -90,12 +112,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="endTime != null ">end_time = #{endTime},</if>
             <if test="factorCount != null ">factor_count=#{factorCount},</if>
             <if test="pointName != null  and pointName != ''">point_name = #{pointName},</if>
+            <if test="type != null ">type = #{type},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            update_time = sysdate()
         </trim>
         where id = #{id}
     </update>
 
     <update id="closeRecord">
-        update zh_collect_record set end_time=now() where end_time is null;
+        update zh_collect_record set end_time=now() where end_time is null and create_by =#{createBy};
     </update>
 
     <delete id="deleteCollectRecordById" parameterType="Long">
@@ -110,11 +136,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <select id="getMaxId" resultType="java.lang.Long">
-        select max(id) id from zh_collect_record
+        select max(id) id from zh_collect_record where type=1
+        and create_by =#{createBy}
     </select>
 
     <select id="getRecently" resultMap="CollectRecordResult">
-        select * from zh_collect_record where id=(select max(id) from zh_collect_record where end_time is null)
+        select * from zh_collect_record where id=(select max(id) from zh_collect_record where end_time is null and create_by =#{createBy})
     </select>
 
 </mapper>

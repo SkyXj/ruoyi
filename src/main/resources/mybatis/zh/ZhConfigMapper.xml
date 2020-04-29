@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.zh.mapper.ZhConfigMapper">
-    
+
     <resultMap type="ZhConfig" id="ZhConfigResult">
         <result property="id"    column="id"    />
         <result property="zoom"    column="zoom"    />
@@ -14,15 +14,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="shapetype"    column="shapetype"    />
         <result property="lng"    column="lng"    />
         <result property="lat"    column="lat"    />
+        <result property="ip"    column="ip"    />
+        <result property="port"    column="port"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
     </resultMap>
 
     <sql id="selectZhConfigVo">
-        select id, zoom, direction, angle, distance, flashtime, shapetype, lng, lat from zh_config
+        select id, zoom, direction, angle, distance, flashtime, shapetype, lng, lat,ip,port, create_by, create_time, update_by, update_time, remark from zh_config
     </sql>
 
     <select id="selectZhConfigList" parameterType="ZhConfig" resultMap="ZhConfigResult">
         <include refid="selectZhConfigVo"/>
-        <where>  
+        <where>
             <if test="zoom != null "> and zoom = #{zoom}</if>
             <if test="direction != null "> and direction = #{direction}</if>
             <if test="angle != null "> and angle = #{angle}</if>
@@ -31,14 +38,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="shapetype != null "> and shapetype = #{shapetype}</if>
             <if test="lng != null "> and lng = #{lng}</if>
             <if test="lat != null "> and lat = #{lat}</if>
+            <if test="ip != null "> and lat = #{ip}</if>
+            <if test="port != null "> and lat = #{port}</if>
+            <if test="createBy != null "> and create_by = #{createBy}</if>
         </where>
     </select>
-    
+
     <select id="selectZhConfigById" parameterType="Long" resultMap="ZhConfigResult">
         <include refid="selectZhConfigVo"/>
         where id = #{id}
     </select>
-        
+
+    <select id="selectZhConfigByUserName" parameterType="String" resultMap="ZhConfigResult">
+        <include refid="selectZhConfigVo"/>
+        where create_by = #{username}
+    </select>
+
     <insert id="insertZhConfig" parameterType="ZhConfig" useGeneratedKeys="true" keyProperty="id">
         insert into zh_config
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -50,7 +65,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="shapetype != null ">shapetype,</if>
             <if test="lng != null ">lng,</if>
             <if test="lat != null ">lat,</if>
-         </trim>
+            <if test="ip != null ">ip,</if>
+            <if test="port != null ">port,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            create_time,
+            <if test="remark != null  and remark != ''">remark,</if>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="zoom != null ">#{zoom},</if>
             <if test="direction != null ">#{direction},</if>
@@ -60,7 +80,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="shapetype != null ">#{shapetype},</if>
             <if test="lng != null ">#{lng},</if>
             <if test="lat != null ">#{lat},</if>
-         </trim>
+            <if test="ip != null ">#{ip},</if>
+            <if test="port != null ">#{port},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            sysdate(),
+            <if test="remark != null  and remark != ''">#{remark},</if>
+        </trim>
     </insert>
 
     <update id="updateZhConfig" parameterType="ZhConfig">
@@ -74,6 +99,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="shapetype != null ">shapetype = #{shapetype},</if>
             <if test="lng != null ">lng = #{lng},</if>
             <if test="lat != null ">lat = #{lat},</if>
+            <if test="ip != null ">ip = #{ip},</if>
+            <if test="port != null ">port = #{port},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            update_time = sysdate()
         </trim>
         where id = #{id}
     </update>
@@ -83,10 +112,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteZhConfigByIds" parameterType="String">
-        delete from zh_config where id in 
+        delete from zh_config where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
-    
+
 </mapper>

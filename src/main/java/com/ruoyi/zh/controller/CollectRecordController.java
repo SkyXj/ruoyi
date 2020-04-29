@@ -8,6 +8,7 @@ import com.ruoyi.mina.DensityVo;
 import com.ruoyi.zh.domain.TestExcel;
 import com.ruoyi.zh.dto.DensityDto;
 import com.ruoyi.zh.dto.ZhCollectRecordDto;
+import com.ruoyi.zh.tool.UserInfoUtil;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -50,6 +51,7 @@ public class CollectRecordController extends BaseController
     public TableDataInfo listDto(ZhCollectRecord zhCollectRecord)
     {
         startPage();
+        zhCollectRecord.setCreateBy(UserInfoUtil.getUserName());
         List<ZhCollectRecordDto> list = zhCollectRecordService.selectCollectRecordDtoList(zhCollectRecord);
         Integer count = zhCollectRecordService.selectCollectRecordCount(zhCollectRecord);
         TableDataInfo dataTable = getDataTable(list);

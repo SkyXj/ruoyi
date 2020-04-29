@@ -19,6 +19,8 @@ public interface IZhConfigService
      */
     public ZhConfig selectZhConfigById(Long id);
 
+    public ZhConfig selectZhConfigByUserName();
+
     /**
      * 查询配置信息列表
      * 
@@ -42,6 +44,8 @@ public interface IZhConfigService
      * @return 结果
      */
     public int updateZhConfig(ZhConfig zhConfig);
+
+    public int insertOrUpdateZhConfig(ZhConfig zhConfig);
 
     /**
      * 批量删除配置信息

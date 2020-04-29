@@ -1,6 +1,8 @@
 package com.ruoyi.zh.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.zh.tool.UserInfoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.zh.mapper.DeviceMapper;
@@ -40,6 +42,7 @@ public class DeviceServiceImpl implements IDeviceService
     @Override
     public List<ZhDevice> selectDeviceList(ZhDevice zhDevice)
     {
+        zhDevice.setCreateBy(UserInfoUtil.getUserName());
         return deviceMapper.selectDeviceList(zhDevice);
     }
 
@@ -52,6 +55,7 @@ public class DeviceServiceImpl implements IDeviceService
     @Override
     public int insertDevice(ZhDevice zhDevice)
     {
+        zhDevice.setCreateBy(UserInfoUtil.getUserName());
         return deviceMapper.insertDevice(zhDevice);
     }
 
@@ -64,6 +68,7 @@ public class DeviceServiceImpl implements IDeviceService
     @Override
     public int updateDevice(ZhDevice zhDevice)
     {
+        zhDevice.setUpdateBy(UserInfoUtil.getUserName());
         return deviceMapper.updateDevice(zhDevice);
     }
 

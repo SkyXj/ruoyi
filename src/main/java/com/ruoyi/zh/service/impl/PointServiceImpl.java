@@ -1,6 +1,8 @@
 package com.ruoyi.zh.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.zh.tool.UserInfoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.zh.mapper.PointMapper;
@@ -40,6 +42,7 @@ public class PointServiceImpl implements IPointService
     @Override
     public List<ZhPoint> selectPointList(ZhPoint zhPoint)
     {
+        zhPoint.setCreateBy(UserInfoUtil.getUserName());
         return pointMapper.selectPointList(zhPoint);
     }
 
@@ -52,6 +55,7 @@ public class PointServiceImpl implements IPointService
     @Override
     public int insertPoint(ZhPoint zhPoint)
     {
+        zhPoint.setCreateBy(UserInfoUtil.getUserName());
         return pointMapper.insertPoint(zhPoint);
     }
 
@@ -64,6 +68,7 @@ public class PointServiceImpl implements IPointService
     @Override
     public int updatePoint(ZhPoint zhPoint)
     {
+        zhPoint.setUpdateBy(UserInfoUtil.getUserName());
         return pointMapper.updatePoint(zhPoint);
     }
 

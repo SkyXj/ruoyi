@@ -10,6 +10,7 @@ import com.ruoyi.mina.entity.StatusDetail;
 import com.ruoyi.mina.socket.IoListener;
 import com.ruoyi.zh.domain.ZhCollectRecord;
 import com.ruoyi.zh.service.ICollectRecordService;
+import com.ruoyi.zh.tool.UserInfoUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -78,6 +79,7 @@ public class SendMessageController {
         zhCollectRecord.setDeviceCode(code);
         zhCollectRecord.setPointName(pointname);
         zhCollectRecord.setStartTime(new Date());
+        zhCollectRecord.setCreateBy(UserInfoUtil.getUserName());
         zhCollectRecordService.insertCollectRecord(zhCollectRecord);
         SessionManage.status.setCollectId(zhCollectRecord.getId());
         AjaxResult ajax = AjaxResult.success();
@@ -101,6 +103,7 @@ public class SendMessageController {
         //采集状态未false
         StatusDetail statusDetail=new StatusDetail(false,false);
         SessionManage.status.setCollectStatus(statusDetail);
+        SessionManage.status.setSaveFatorCount(false);
 
         this.stopGps();
 

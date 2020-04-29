@@ -1,54 +1,58 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.zh.mapper.PointMapper">
-    
+
     <resultMap type="ZhPoint" id="ZhPointResult">
         <result property="id"    column="id"    />
         <result property="name"    column="name"    />
         <result property="lng"    column="lng"    />
         <result property="lat"    column="lat"    />
-        <result property="createdTime"    column="created_time"    />
-        <result property="updatedTime"    column="updated_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
     </resultMap>
 
     <sql id="selectZhPointVo">
-        select id, name, lng, lat, created_time, updated_time from zh_point
+        select id, name, lng, lat, create_by, create_time, update_by, update_time, remark from zh_point
     </sql>
 
     <select id="selectPointList" parameterType="ZhPoint" resultMap="ZhPointResult">
         <include refid="selectZhPointVo"/>
-        <where>  
+        <where>
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
             <if test="lng != null  and lng != ''"> and lng = #{lng}</if>
             <if test="lat != null  and lat != ''"> and lat = #{lat}</if>
-            <if test="createdTime != null "> and created_time = #{createdTime}</if>
-            <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+            <if test="createBy != null "> and create_by = #{createBy}</if>
         </where>
     </select>
-    
+
     <select id="selectPointById" parameterType="Long" resultMap="ZhPointResult">
         <include refid="selectZhPointVo"/>
         where id = #{id}
     </select>
-        
+
     <insert id="insertPoint" parameterType="ZhPoint" useGeneratedKeys="true" keyProperty="id">
         insert into zh_point
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="name != null  and name != ''">name,</if>
             <if test="lng != null  and lng != ''">lng,</if>
             <if test="lat != null  and lat != ''">lat,</if>
-            <if test="createdTime != null ">created_time,</if>
-            <if test="updatedTime != null ">updated_time,</if>
-         </trim>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            create_time,
+            <if test="remark != null  and remark != ''">remark,</if>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="name != null  and name != ''">#{name},</if>
             <if test="lng != null  and lng != ''">#{lng},</if>
             <if test="lat != null  and lat != ''">#{lat},</if>
-            <if test="createdTime != null ">#{createdTime},</if>
-            <if test="updatedTime != null ">#{updatedTime},</if>
-         </trim>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            sysdate(),
+            <if test="remark != null  and remark != ''">#{remark},</if>
+        </trim>
     </insert>
 
     <update id="updatePoint" parameterType="ZhPoint">
@@ -57,8 +61,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="name != null  and name != ''">name = #{name},</if>
             <if test="lng != null  and lng != ''">lng = #{lng},</if>
             <if test="lat != null  and lat != ''">lat = #{lat},</if>
-            <if test="createdTime != null ">created_time = #{createdTime},</if>
-            <if test="updatedTime != null ">updated_time = #{updatedTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate(),
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
         </trim>
         where id = #{id}
     </update>
@@ -68,10 +73,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deletePointByIds" parameterType="String">
-        delete from zh_point where id in 
+        delete from zh_point where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
-    
+
 </mapper>

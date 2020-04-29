@@ -180,14 +180,16 @@ public class MinaClientConfig {
                             if (SessionManage.session.isConnected()) {
                                 log.info("断线重连[" + connector.getDefaultRemoteAddress().getHostName() + ":" + connector.getDefaultRemoteAddress().getPort() + "]成功");
                                 //重新发送开始采集和gps
-                                SessionManage.startMic();
-                                SessionManage.startGps();
+                                if(SessionManage.status.getCollectStatus().isStatus()){
+                                    SessionManage.startMic();
+                                    SessionManage.startGps();
+                                }
                                 break;
                             }
                         } catch (Exception ex) {
                             log.info("重连服务器登录失败,3秒再连接一次:" + ex.getMessage());
                             MinaClientConfig.reConnectTimes++;
-                            if(MinaClientConfig.reConnectTimes>3){
+                            if(MinaClientConfig.reConnectTimes>10){
                                 log.info("重连服务器已超过次数限制,不在重连");
                                 MinaClientConfig.reConnectTimes=0;
                                 SessionManage.status=new Status();

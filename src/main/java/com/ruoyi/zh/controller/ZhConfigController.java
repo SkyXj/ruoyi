@@ -68,6 +68,12 @@ public class ZhConfigController extends BaseController
         return AjaxResult.success(zhConfigService.selectZhConfigById(id));
     }
 
+    @GetMapping(value = "/getCurrentConfig")
+    public AjaxResult getCurrentConfig()
+    {
+        return AjaxResult.success(zhConfigService.selectZhConfigByUserName());
+    }
+
     /**
      * 新增配置信息
      */
@@ -87,7 +93,7 @@ public class ZhConfigController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody ZhConfig zhConfig)
     {
-        return toAjax(zhConfigService.updateZhConfig(zhConfig));
+        return toAjax(zhConfigService.insertOrUpdateZhConfig(zhConfig));
     }
 
     /**

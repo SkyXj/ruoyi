@@ -20,6 +20,14 @@ public interface ZhConfigMapper
     public ZhConfig selectZhConfigById(Long id);
 
     /**
+     * 查询配置信息
+     *
+     * @param username 用户名称
+     * @return 配置信息
+     */
+    public ZhConfig selectZhConfigByUserName(String username);
+
+    /**
      * 查询配置信息列表
      * 
      * @param zhConfig 配置信息

@@ -2,11 +2,16 @@ package com.ruoyi.zh.service.impl;
 
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.zh.domain.ZhCollectRecord;
+import com.ruoyi.zh.mapper.CollectRecordMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.zh.mapper.ZhFileMapper;
 import com.ruoyi.zh.domain.ZhFile;
 import com.ruoyi.zh.service.IZhFileService;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 /**
  * 文件Service业务层处理
@@ -15,10 +20,14 @@ import com.ruoyi.zh.service.IZhFileService;
  * @date 2020-04-26
  */
 @Service
+@Slf4j
 public class ZhFileServiceImpl implements IZhFileService 
 {
     @Autowired
     private ZhFileMapper zhFileMapper;
+
+    @Autowired
+    private CollectRecordMapper collectRecordMapper;
 
     /**
      * 查询文件
@@ -97,5 +106,22 @@ public class ZhFileServiceImpl implements IZhFileService
     public int deleteZhFileById(Long id)
     {
         return zhFileMapper.deleteZhFileById(id);
+    }
+
+    @Override
+    @Transactional
+    public int warehouse(Long id) {
+        try {
+            ZhFile zhFile = selectZhFileById(id);
+            zhFile.setDurability(1);
+            ZhCollectRecord zhCollectRecord = collectRecordMapper.selectCollectRecordById(zhFile.getCollectRecordId());
+            zhCollectRecord.setType(1);
+            collectRecordMapper.updateCollectRecord(zhCollectRecord);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return 0;
+        }
+        return 1;
     }
 }

@@ -100,4 +100,12 @@ public class ZhFileController extends BaseController
     {
         return toAjax(zhFileService.deleteZhFileByIds(ids));
     }
+
+
+    @Log(title = "文件", businessType = BusinessType.UPDATE)
+	@GetMapping("/warehouse/{id}")
+    public AjaxResult warehouse(@PathVariable("id") Long id)
+    {
+        return toAjax(zhFileService.warehouse(id));
+    }
 }
