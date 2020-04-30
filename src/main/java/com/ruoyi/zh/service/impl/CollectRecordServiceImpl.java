@@ -600,6 +600,7 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
             Date startTime = null;
             Date endTime = null;
             ZhCollectRecord collectionRecord=null;
+            Integer suffixcount=3;
 
             try {
 //                BufferedReader bf = new BufferedReader(new InputStreamReader(file.getInputStream(), "GBK"));
@@ -615,20 +616,32 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
                     datas.add(temp);
                     //标题
                     if (index == 1) {
+                        if(!temp.contains("时间")){
+                            suffixcount=2;
+                        }
                         names = temp.split(";");
                     } else {
                         //浓度值
                         String[] values = temp.split(";");
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                        Date time = sdf.parse(values[0]);
-                        //判断起始时间
-                        startTime = startTime == null ? time : startTime;
-                        endTime = endTime == null ? time : endTime;
-                        if (startTime.getTime() > time.getTime()) {
-                            startTime = time;
+                        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+                        Date time=null;
+                        if(values[0].contains("-")){
+                            time = sdf.parse(values[0]);
+                        }else if(values[0].contains("/")){
+                            time = sdf1.parse(values[0]);
                         }
-                        if (endTime.getTime() < time.getTime()) {
-                            endTime = time;
+//                        Date time = sdf.parse(values[0]);
+                        //判断起始时间
+                        if(time!=null){
+                            startTime = startTime == null ? time : startTime;
+                            endTime = endTime == null ? time : endTime;
+                            if (startTime.getTime() > time.getTime()) {
+                                startTime = time;
+                            }
+                            if (endTime.getTime() < time.getTime()) {
+                                endTime = time;
+                            }
                         }
                     }
                     index++;
@@ -637,12 +650,19 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
                 //插入走航记录
                 collectionRecord = new ZhCollectRecord();
                 collectionRecord.setDeviceCode(deviceCode);
-                collectionRecord.setStartTime(startTime);
-                collectionRecord.setEndTime(endTime);
                 collectionRecord.setFactorCount(names.length-3);
                 collectionRecord.setPointName(pointname);
                 collectionRecord.setType(0);
                 collectionRecord.setCreateBy(UserInfoUtil.getUserName());
+                if(startTime==null||endTime==null){
+                    Date starttemp=new Date();
+                    starttemp.setTime(System.currentTimeMillis()-datas.size()*5*1000);
+                    collectionRecord.setStartTime(starttemp);
+                    collectionRecord.setEndTime(new Date());
+                }else{
+                    collectionRecord.setStartTime(startTime);
+                    collectionRecord.setEndTime(endTime);
+                }
                 collectRecordMapper.insertCollectRecord(collectionRecord);
                 zhFile.setCollectRecordId(collectionRecord.getId());
                 ZhCollectRecordDto zhCollectRecordDto=new ZhCollectRecordDto(collectionRecord);

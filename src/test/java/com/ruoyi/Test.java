@@ -120,8 +120,11 @@ public class Test {
 //    }
     @org.junit.Test
     public void test(){
-        System.out.println("sdf");
-        float x=123.4f;
+        System.out.println(new Date().getTime());
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new Date().getTime());
     }
 
 }
