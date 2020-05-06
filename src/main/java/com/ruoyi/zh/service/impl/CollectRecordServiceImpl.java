@@ -2,13 +2,12 @@ package com.ruoyi.zh.service.impl;
 
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.IdUtils;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.TimeTool;
 import com.ruoyi.framework.config.RuoYiConfig;
 import com.ruoyi.framework.influxdb.BatchData;
 import com.ruoyi.framework.influxdb.InfluxdbUtils;
-import com.ruoyi.framework.security.LoginUser;
 import com.ruoyi.mina.DensityVo;
-import com.ruoyi.project.system.domain.SysUser;
 import com.ruoyi.zh.domain.DensityLog;
 import com.ruoyi.zh.domain.DensityRealTime;
 import com.ruoyi.zh.domain.ZhCollectRecord;
@@ -23,11 +22,9 @@ import com.ruoyi.zh.service.IZhFileService;
 import com.ruoyi.zh.tool.UserInfoUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -390,12 +387,16 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
             String[] names = null;
             List<BatchData> batchDatas = new ArrayList<>();
             List<BatchData> logBatchDatas = new ArrayList<>();
+            Integer suffixcount=3;
             while ((temp = bf.readLine()) != null) {
                 if(temp.isEmpty()){
                     continue;
                 }
                 //标题
                 if (index == 1) {
+                    if(!temp.contains("时间")){
+                        suffixcount=2;
+                    }
                     names = temp.split(";");
                 } else {
                     //浓度值
@@ -456,7 +457,7 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
             collectionRecord.setDeviceCode(deviceCode);
             collectionRecord.setStartTime(startTime);
             collectionRecord.setEndTime(endTime);
-            collectionRecord.setFactorCount(names.length-3);
+            collectionRecord.setFactorCount(names.length-suffixcount);
             collectionRecord.setPointName(pointname);
             collectRecordMapper.insertCollectRecord(collectionRecord);
         }catch (Exception e) {
@@ -489,12 +490,16 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
                 int index = 1;
                 // 按行读取字符串
                 String[] names = null;
+                Integer suffixcount=3;
                 while ((temp = bf.readLine()) != null) {
                     if(temp.isEmpty()){
                         continue;
                     }
                     //标题
                     if (index == 1) {
+                        if(!temp.contains("时间")){
+                            suffixcount=2;
+                        }
                         names = temp.split(";");
                     } else {
                         //浓度值
@@ -546,7 +551,7 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
                 collectionRecord.setDeviceCode(deviceCode);
                 collectionRecord.setStartTime(startTime);
                 collectionRecord.setEndTime(endTime);
-                collectionRecord.setFactorCount(names.length-3);
+                collectionRecord.setFactorCount(names.length-suffixcount);
                 collectionRecord.setPointName(pointname);
                 collectRecordMapper.insertCollectRecord(collectionRecord);
                 ids.add(collectionRecord.getId());
@@ -576,8 +581,8 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
             fileRoot.mkdirs();
         }
         for (MultipartFile file: files) {
-            ZhFile zhFile=new ZhFile();
             List<String> datas=new ArrayList<>();
+            ZhFile zhFile=new ZhFile();
             //文件名
             String fileOldName=file.getOriginalFilename();
             //文件后缀名
@@ -610,7 +615,7 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
                 // 按行读取字符串
                 String[] names = null;
                 while ((temp = bf.readLine()) != null) {
-                    if(temp.isEmpty()){
+                    if(isErrorData(temp)){
                         continue;
                     }
                     datas.add(temp);
@@ -619,7 +624,9 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
                         if(!temp.contains("时间")){
                             suffixcount=2;
                         }
-                        names = temp.split(";");
+                        if(temp.contains("经度;纬度;")){
+                            names = temp.split(";");
+                        }
                     } else {
                         //浓度值
                         String[] values = temp.split(";");
@@ -648,29 +655,31 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
                 }
                 bf.close();
                 //插入走航记录
-                collectionRecord = new ZhCollectRecord();
-                collectionRecord.setDeviceCode(deviceCode);
-                collectionRecord.setFactorCount(names.length-3);
-                collectionRecord.setPointName(pointname);
-                collectionRecord.setType(0);
-                collectionRecord.setCreateBy(UserInfoUtil.getUserName());
-                if(startTime==null||endTime==null){
-                    Date starttemp=new Date();
-                    starttemp.setTime(System.currentTimeMillis()-datas.size()*5*1000);
-                    collectionRecord.setStartTime(starttemp);
-                    collectionRecord.setEndTime(new Date());
-                }else{
-                    collectionRecord.setStartTime(startTime);
-                    collectionRecord.setEndTime(endTime);
+                if(names!=null&&names.length>=3){
+                    collectionRecord = new ZhCollectRecord();
+                    collectionRecord.setDeviceCode(deviceCode);
+                    collectionRecord.setFactorCount(names.length-suffixcount);
+                    collectionRecord.setPointName(pointname);
+                    collectionRecord.setType(0);
+                    collectionRecord.setCreateBy(UserInfoUtil.getUserName());
+                    if(startTime==null||endTime==null){
+                        Date starttemp=new Date();
+                        starttemp.setTime(System.currentTimeMillis()-datas.size()*5*1000);
+                        collectionRecord.setStartTime(starttemp);
+                        collectionRecord.setEndTime(new Date());
+                    }else{
+                        collectionRecord.setStartTime(startTime);
+                        collectionRecord.setEndTime(endTime);
+                    }
+                    collectRecordMapper.insertCollectRecord(collectionRecord);
+                    zhFile.setCollectRecordId(collectionRecord.getId());
+                    ZhCollectRecordDto zhCollectRecordDto=new ZhCollectRecordDto(collectionRecord);
+                    zhCollectRecordDto.setDatas(datas);
+                    zhCollectRecordDto.setZhFile(zhFile);
+                    collectRecordDtos.add(zhCollectRecordDto);
+                    //走航文件
+                    int i = zhFileService.insertZhFile(zhFile);
                 }
-                collectRecordMapper.insertCollectRecord(collectionRecord);
-                zhFile.setCollectRecordId(collectionRecord.getId());
-                ZhCollectRecordDto zhCollectRecordDto=new ZhCollectRecordDto(collectionRecord);
-                zhCollectRecordDto.setDatas(datas);
-                zhCollectRecordDto.setZhFile(zhFile);
-                collectRecordDtos.add(zhCollectRecordDto);
-                //走航文件
-                int i = zhFileService.insertZhFile(zhFile);
             }catch (Exception e) {
                 log.error(e.getMessage());
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -681,6 +690,29 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
     }
 
     @Override
+    public boolean checkFiles(List<ZhCollectRecordDto> zhCollectRecordDtos) {
+        if(zhCollectRecordDtos==null||zhCollectRecordDtos.size()<=0){
+            return false;
+        }
+        for (ZhCollectRecordDto zhCollectRecordDto:zhCollectRecordDtos ) {
+            List<String> datas = zhCollectRecordDto.getDatas();
+            if(datas.size()<=0){
+
+            }
+        }
+        return false;
+    }
+
+    public boolean isErrorData(String str){
+        if(StringUtils.isBlank(str)||!str.contains(";")){
+            return true;
+        }
+        return false;
+    }
+
+
+
+    @Override
     public ZhCollectRecordDto getPointsById(Long id) {
         SimpleDateFormat sim=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -689,14 +721,24 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
             return null;
         }
         ZhCollectRecordDto zhCollectRecordDto=new ZhCollectRecordDto(zhCollectRecord);
+
         DensityDto densityDto=new DensityDto();
         densityDto.setCode(zhCollectRecord.getDeviceCode());
         densityDto.setStartDate(sim.format(zhCollectRecord.getStartTime()));
         if(zhCollectRecord.getEndTime()!=null){
             densityDto.setEndDate(sim.format(zhCollectRecord.getEndTime()));
         }
-        List<DensityVo> densityVos = searchMic(densityDto);
-        zhCollectRecordDto.setPoints(densityVos);
+
+        List<String> datas=new ArrayList<String>();
+        ZhFile zhFile = zhFileService.selectZhFileByCollectId(zhCollectRecord.getId());
+        if(zhFile!=null){
+            datas=readStrMic(zhFile.getPath());
+        }else{
+            datas=searchStrMic(densityDto);
+        }
+        zhCollectRecordDto.setDatas(datas);
+//        List<DensityVo> densityVos = searchMic(densityDto);
+//        zhCollectRecordDto.setPoints(densityVos);
         return zhCollectRecordDto;
     }
 
@@ -764,24 +806,29 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
     @Override
     public String exportData(Long id) {
         String profile = RuoYiConfig.getDownloadPath();
-        ZhCollectRecordDto pointsById = getPointsById(id);
-        if(pointsById==null){
+        ZhCollectRecordDto zhCollectRecordDto = getPointsById(id);
+        if(zhCollectRecordDto==null){
             return null;
         }
-        List<DensityVo> points = pointsById.getPoints();
+//        List<DensityVo> points = zhCollectRecordDto.getPoints();
+        List<String> datas = zhCollectRecordDto.getDatas();
         SimpleDateFormat sdfday=new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat sdfhour=new SimpleDateFormat("HH：mm：ss");
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String timestr="-"+pointsById.getPointName()+sdfday.format(pointsById.getStartTime())+"("+sdfhour.format(pointsById.getStartTime())+"-";
-        if(pointsById.getEndTime()==null){
+
+        String timestr="-"+zhCollectRecordDto.getPointName()+sdfday.format(zhCollectRecordDto.getStartTime())+"("+sdfhour.format(zhCollectRecordDto.getStartTime())+"-";
+        if(zhCollectRecordDto.getEndTime()==null){
             timestr+=sdfhour.format(new Date());
         }else{
-            timestr+=sdfhour.format(pointsById.getEndTime());
+            timestr+=sdfhour.format(zhCollectRecordDto.getEndTime());
         }
         timestr+=")"+".txt";
 //        String fileName=pointsById.getPointName()+"走航"+sdf.format(pointsById.getStartTime())+".txt";
         String fileName=timestr;
-        createFileName(points,fileName);
+        List<List<String>> dataList = new ArrayList<>();
+        dataList.add(datas);
+//        createFileName(points,fileName);
+        createFileNameByDatas(dataList,fileName);
 //        BufferedWriter fileWriter = null;
 //        try {
 //            fileWriter=new BufferedWriter (new OutputStreamWriter (new FileOutputStream (profile+""+fileName,true),"GBK"));

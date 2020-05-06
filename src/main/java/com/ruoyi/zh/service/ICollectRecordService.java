@@ -4,7 +4,6 @@ import com.ruoyi.mina.DensityVo;
 import com.ruoyi.zh.domain.ZhCollectRecord;
 import com.ruoyi.zh.dto.DensityDto;
 import com.ruoyi.zh.dto.ZhCollectRecordDto;
-import io.swagger.models.auth.In;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -91,6 +90,8 @@ public interface ICollectRecordService
     public List<Long> importListData(String deviceCode,List<MultipartFile> files,String pointname);
 
     public List<ZhCollectRecordDto> readListData(String deviceCode,List<MultipartFile> files,String pointname);
+
+    public boolean checkFiles(List<ZhCollectRecordDto> zhCollectRecordDtos);
 
     public ZhCollectRecordDto getPointsById(Long id);
 
