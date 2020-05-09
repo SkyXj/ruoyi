@@ -48,7 +48,7 @@ public class DeviceController extends BaseController
     /**
      * 导出走航列表
      */
-//    @PreAuthorize("@ss.hasPermi('zh:device:export')")
+    @PreAuthorize("@ss.hasPermi('zh:device:export')")
     @Log(title = "走航", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
     public AjaxResult export(ZhDevice zhDevice)
