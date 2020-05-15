@@ -144,26 +144,6 @@ public class MinaClientConfig {
         // 绑定过滤器链
         connector.setFilterChainBuilder(defaultIoFilterChainBuilder);
 
-//        connector.getFilterChain().addFirst("reconnection", new IoFilterAdapter() {
-//            @Override
-//            public void sessionClosed(NextFilter nextFilter, IoSession ioSession) throws Exception {
-//                for(;;){
-//                    try{
-//                        Thread.sleep(3000);
-//                        ConnectFuture future = connector.connect();
-//                        future.awaitUninterruptibly();// 等待连接创建成功
-//                        SessionManage.session = future.getSession();// 获取会话
-//                        if(SessionManage.session.isConnected()){
-//                            log.info("断线重连["+ connector.getDefaultRemoteAddress().getHostName() +":"+ connector.getDefaultRemoteAddress().getPort()+"]成功");
-//                            break;
-//                        }
-//                    }catch(Exception ex){
-//                        log.info("重连服务器登录失败,3秒再连接一次:" + ex.getMessage());
-//                    }
-//                }
-//            }
-//        });
-
         // 添加重连监听
         connector.addListener(new IoListener() {
             @Override

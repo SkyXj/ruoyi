@@ -3,6 +3,7 @@ package com.ruoyi.zh.service;
 import com.ruoyi.mina.DensityVo;
 import com.ruoyi.zh.domain.ZhCollectRecord;
 import com.ruoyi.zh.dto.DensityDto;
+import com.ruoyi.zh.dto.OperationData;
 import com.ruoyi.zh.dto.ZhCollectRecordDto;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -100,6 +101,10 @@ public interface ICollectRecordService
     public List<ZhCollectRecordDto> getPointsStrByIds(Long[] ids);
 
     public String exportData(Long id);
+
+    public String exportOperationData(OperationData operationData);
+
+    public String exportOperationDataByIds(List<OperationData> operationDatas);
 
     public String exportDataByIds(Long[] ids);
 

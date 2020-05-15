@@ -7,6 +7,7 @@ import com.github.pagehelper.Page;
 import com.ruoyi.mina.DensityVo;
 import com.ruoyi.zh.domain.TestExcel;
 import com.ruoyi.zh.dto.DensityDto;
+import com.ruoyi.zh.dto.OperationData;
 import com.ruoyi.zh.dto.ZhCollectRecordDto;
 import com.ruoyi.zh.tool.UserInfoUtil;
 import io.swagger.annotations.ApiOperation;
@@ -198,6 +199,20 @@ public class CollectRecordController extends BaseController
     @ApiOperation("导出历史走航数据")
     public AjaxResult exportData(@RequestParam(value="id") Long id){
         AjaxResult ajaxResult=AjaxResult.success(zhCollectRecordService.exportData(id));
+        return  ajaxResult;
+    }
+
+    @PostMapping("/exportOperationData")
+    @ApiOperation("导出编辑后的走航数据")
+    public AjaxResult exportOperationData(@RequestBody OperationData operationData){
+        AjaxResult ajaxResult=AjaxResult.success(zhCollectRecordService.exportOperationData(operationData));
+        return  ajaxResult;
+    }
+
+    @PostMapping("/exportOperationDataByIds")
+    @ApiOperation("导出编辑后的走航数据")
+    public AjaxResult exportOperationDataByIds(@RequestBody List<OperationData> operationDatas){
+        AjaxResult ajaxResult=AjaxResult.success(zhCollectRecordService.exportOperationDataByIds(operationDatas));
         return  ajaxResult;
     }
 

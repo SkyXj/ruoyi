@@ -13,6 +13,8 @@ import com.ruoyi.zh.domain.DensityRealTime;
 import com.ruoyi.zh.domain.ZhCollectRecord;
 import com.ruoyi.zh.domain.ZhFile;
 import com.ruoyi.zh.dto.DensityDto;
+import com.ruoyi.zh.dto.OperationData;
+import com.ruoyi.zh.dto.Range;
 import com.ruoyi.zh.dto.ZhCollectRecordDto;
 import com.ruoyi.zh.mapper.CollectRecordMapper;
 import com.ruoyi.zh.service.IDensityLogService;
@@ -823,48 +825,119 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
             timestr+=sdfhour.format(zhCollectRecordDto.getEndTime());
         }
         timestr+=")"+".txt";
-//        String fileName=pointsById.getPointName()+"走航"+sdf.format(pointsById.getStartTime())+".txt";
         String fileName=timestr;
         List<List<String>> dataList = new ArrayList<>();
         dataList.add(datas);
-//        createFileName(points,fileName);
         createFileNameByDatas(dataList,fileName);
-//        BufferedWriter fileWriter = null;
-//        try {
-//            fileWriter=new BufferedWriter (new OutputStreamWriter (new FileOutputStream (profile+""+fileName,true),"GBK"));
-////            fileWriter = new FileWriter(profile+"/"+fileName);//创建文本文件
-//            for (int i = 0; i <points.size(); i++) {
-//                StringBuffer sb1=new StringBuffer();
-//
-//                StringBuffer sb=new StringBuffer();
-//                sb1.append("时间;经度;纬度;");
-//                sb.append(points.get(i).getTime()+";"+points.get(i).getLng()+";"+points.get(i).getLat()+";");
-//                int tempindex=0;
-//                for (DensityVo.KV value : points.get(i).getValues()) {
-//                    sb1.append(value.getName());
-//                    sb.append(value.getValue());
-//                    if(tempindex<points.get(i).getValues().size()-1){
-//                        if(i==0){
-//                            sb1.append(";");
-//                        }
-//                        sb.append(";");
-//                    }
-//                    tempindex++;
-//                }
-//                if(i==0){
-//                    fileWriter.write(sb1.toString()+"\r\n");//写入 \r\n换行
-//                }
-//                fileWriter.write(sb.toString()+"\r\n");//写入 \r\n换行
-//            }
-//            fileWriter.flush();
-//            fileWriter.close();
-//        } catch (IOException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
         return fileName;
     }
 
+    @Override
+    public String exportOperationData(OperationData operationData) {
+        ZhCollectRecordDto zhCollectRecordDto = getPointsById(operationData.getId());
+        if(zhCollectRecordDto==null){
+            return null;
+        }
+//        List<DensityVo> points = zhCollectRecordDto.getPoints();
+        List<String> datas = zhCollectRecordDto.getDatas();
+
+        List<String> result=new ArrayList<>();
+        result.add(datas.get(0));
+        List<Range> ranges = operationData.getRanges();
+        for (int i = 1; i < datas.size(); i++) {
+            boolean flag=true;
+            for (Range range:ranges){
+                List<Integer> indexs = range.getIndexs();
+                Integer type = range.getType();
+                //反选
+                if(type==0){
+                    //不在则为false
+                    if(i<indexs.get(0)||i>indexs.get(1)){
+                        flag=false;
+                    }
+                }else{
+                    if(indexs.contains(i)){
+                        flag=false;
+                    }
+                    //正选
+                    if(i<indexs.get(1)&&i>indexs.get(0)){
+                        flag=false;
+                    }
+                }
+            }
+            if(flag){
+                result.add(datas.get(i));
+            }
+        }
+        SimpleDateFormat sdfday=new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdfhour=new SimpleDateFormat("HH：mm：ss");
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        String timestr="-"+zhCollectRecordDto.getPointName()+sdfday.format(zhCollectRecordDto.getStartTime())+"("+sdfhour.format(zhCollectRecordDto.getStartTime())+"-";
+        if(zhCollectRecordDto.getEndTime()==null){
+            timestr+=sdfhour.format(new Date());
+        }else{
+            timestr+=sdfhour.format(zhCollectRecordDto.getEndTime());
+        }
+        timestr+=")"+".txt";
+        String fileName=timestr;
+        List<List<String>> dataList = new ArrayList<>();
+//        dataList.add(datas);
+        dataList.add(result);
+        createFileNameByDatas(dataList,fileName);
+        return fileName;
+    }
+
+    @Override
+    public String exportOperationDataByIds(List<OperationData> operationDatas) {
+        List<List<String>>  datas=new ArrayList<>();
+        if(operationDatas==null||operationDatas.size()<=0){
+            return null;
+        }
+        for (OperationData operationData:operationDatas) {
+            List<String> datasByOperationData = getDatasByOperationData(operationData);
+            datas.add(datasByOperationData);
+        }
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH：mm：ss");
+        String fileName="合并文件"+sdf.format(new Date())+".txt";
+        createFileNameByDatas(datas,fileName);
+        return fileName;
+    }
+
+    public List<String> getDatasByOperationData(OperationData operationData){
+        ZhCollectRecordDto zhCollectRecordDto = getPointsById(operationData.getId());
+        if(zhCollectRecordDto==null){
+            return null;
+        }
+        List<String> datas = zhCollectRecordDto.getDatas();
+
+        List<String> result=new ArrayList<>();
+        result.add(datas.get(0));
+        List<Range> ranges = operationData.getRanges();
+        for (int i = 1; i < datas.size(); i++) {
+            boolean flag=true;
+            for (Range range:ranges){
+                List<Integer> indexs = range.getIndexs();
+                Integer type = range.getType();
+                //反选
+                if(type==0){
+                    //不在则为false
+                    if(i<indexs.get(0)||i>indexs.get(1)){
+                        flag=false;
+                    }
+                }else{
+                    //正选
+                    if(i<=indexs.get(1)&&i>=indexs.get(0)){
+                        flag=false;
+                    }
+                }
+            }
+            if(flag){
+                result.add(datas.get(i));
+            }
+        }
+        return result;
+    }
 
     public void createFileName(List<DensityVo> points,String fileName){
         String profile = RuoYiConfig.getDownloadPath();
