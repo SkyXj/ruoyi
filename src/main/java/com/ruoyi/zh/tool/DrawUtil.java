@@ -97,6 +97,18 @@ public class DrawUtil {
         return dRotateAngle;
     }
 
+    public static double getK(double x1, double y1, double x2, double y2){
+        return (y1-y2)/(x1-x2);
+    }
+
+    public static double getB(double x1, double y1, double x2, double y2){
+        double k=getK(x1,y1,x2,y2);
+        double b=y1-k*x1;
+        return b;
+    }
+    public static double getYByX(double k,double b,double x1){
+        return x1*k+b;
+    }
 
 
     public static void main(String[] args) {
@@ -109,6 +121,24 @@ public class DrawUtil {
 //        System.out.println(result2[1]);
 //        System.out.print(result3[0]+",");
 //        System.out.println(result3[1]);
-        System.out.println(GetDistance(113.5949783333333,23.20435,113.5844433333333,23.200555));
+//        System.out.println(GetDistance(113.5949783333333,23.20435,113.5844433333333,23.200555));
+        boolean dsaf=false||true;
+        System.out.println(dsaf);
+        double y1=113.918;
+        double x1=35.3051;
+
+        double y2=113.919;
+        double x2=35.3055;
+
+        double k=getK(x1,y1,x2,y2);
+        double b=getB(x1,y1,x2,y2);
+
+        int size=3;
+        double d = (x2 - x1) / 4;
+        for (int i = 1; i <= size; i++) {
+            double x=x1+d*i;
+            double y=getYByX(k,b,x);
+            System.out.println(x+":"+y);
+        }
     }
 }

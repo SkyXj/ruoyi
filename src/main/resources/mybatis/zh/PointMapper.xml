@@ -26,7 +26,7 @@
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
             <if test="lng != null  and lng != ''"> and lng = #{lng}</if>
             <if test="lat != null  and lat != ''"> and lat = #{lat}</if>
-            <if test="createBy != null "> and create_by = #{createBy}</if>
+            <if test="createBy != null "> and (create_by = #{createBy} or create_by is null)</if>
         </where>
     </select>
 

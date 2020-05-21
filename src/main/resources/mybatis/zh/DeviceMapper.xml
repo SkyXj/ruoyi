@@ -38,7 +38,7 @@
             <if test="correctStatus != null "> and correct_status = #{correctStatus}</if>
             <if test="weatherStatus != null "> and weather_status = #{weatherStatus}</if>
             <if test="gpsStatus != null "> and gps_status = #{gpsStatus}</if>
-            <if test="createBy != null "> and create_by = #{createBy}</if>
+            <if test="createBy != null "> and (create_by = #{createBy} or create_by is null)</if>
         </where>
     </select>
 

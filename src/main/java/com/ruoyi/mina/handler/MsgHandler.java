@@ -15,6 +15,7 @@ import com.ruoyi.mina.entity.StatusDetail;
 import com.ruoyi.webSocket.WebSocketServer;
 import com.ruoyi.zh.domain.ZhCollectRecord;
 import com.ruoyi.zh.service.ICollectRecordService;
+import com.ruoyi.zh.tool.DrawUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,6 @@ import java.util.*;
 @Component
 public class MsgHandler {
 
-
     private static final Logger logger = LogManager.getLogger(MsgHandler.class);
 
     public static List<DensityVo> list;
@@ -41,6 +41,9 @@ public class MsgHandler {
 
     public static InfluxdbUtils influxdbUtils;
 
+
+    public static List<DensityVo> records=new ArrayList<>();
+
     //经度和纬度
     public static double lng=0.0;
     public static double lat=0.0;
@@ -48,6 +51,10 @@ public class MsgHandler {
     public static boolean gpsAvailability=false;
 
     public static ICollectRecordService collectRecordService;
+
+    private static Integer startIndex=20;
+
+    private static Integer endIndex=60;
 
     @Autowired
     public  void setList(List<DensityVo> list)
@@ -61,12 +68,20 @@ public class MsgHandler {
         MsgHandler.collectRecordService = collectRecordService;
     }
 
-
+    //是否测试环境
     public static String env;
+
+    //是否本地模拟gps信号缺失
+    public static boolean gpsSimulate;
 
     @Value("${voyage.env}")
     public void setEnv(String env){
         MsgHandler.env = env;
+    }
+
+    @Value("${voyage.gpsSimulate}")
+    public void setGpsSimulate(boolean gpsSimulate){
+        MsgHandler.gpsSimulate = gpsSimulate;
     }
 
     @Autowired
@@ -75,12 +90,12 @@ public class MsgHandler {
     {
         MsgHandler.testTxt = txt;
     }
+
     @Autowired
-//    @Qualifier(value = "influxdbUtils")
     public void setInfluxdbUtils(InfluxdbUtils influxdbUtils){
         MsgHandler.influxdbUtils=influxdbUtils;
     }
-
+    //测试数据记录下标
     private static Integer index=0;
 
     public static void dealWith(Object message){
@@ -104,88 +119,15 @@ public class MsgHandler {
             index=0;
             startCollect(msg);
         }else if(cmd[0]== Cmd.MIC_Collect.getCmd()){
+            //接收浓度数据
             saveAndSendMicData(msg);
-//            //浓度数据
-//            //时间
-//            byte[] times=ByteUtils.subByte(msgbody,0,16);
-//            long datetime = ByteUtils.getDate(times);
-//            //物质浓度
-//            int materialLength=24+128;
-//            int count=(datalength-16)/(materialLength);
-//            List<BatchData> batchDatas=new ArrayList<>();
-//            DensityVo densityVo=new DensityVo();
-//            densityVo.setCollectId(SessionManage.status.getCollectId());
-//            densityVo.setLng(MsgHandler.lng+"");
-//            densityVo.setLat(MsgHandler.lat+"");
-//            densityVo.setCollectId(SessionManage.status.getCollectId());
-//            SimpleDateFormat sim=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss");
-//            Date date=new Date(datetime);
-//            densityVo.setTime(sim.format(date));
-//            List<DensityVo.KV> values=new ArrayList<>();
-//            for (int i = 0; i < count; i++) {
-//                DensityVo.KV kv=densityVo.new KV();
-//                byte[] meterialBytes = ByteUtils.subByte(msgbody, 16 + i * materialLength, materialLength);
-//                Material meterial=new Material(meterialBytes);
-//                if(meterial.getSzMatName().equals("TVOC")){
-//                    densityVo.setTvoc(meterial.getdPotencyUgm3());
-//                }
-//                kv.setName(meterial.getSzMatName());
-//                kv.setValue(meterial.getdPotencyUgm3());
-//                values.add(kv);
-////                System.out.println(meterial.toString());
-//                BatchData batchData=new BatchData();
-//                Map<String, String> tags = new HashMap<>(5);
-//                tags.put("code", SessionManage.status.getDevicecode());
-//                tags.put("name", meterial.getSzMatName());
-//
-//                Map<String, Object> fileds = new HashMap<>(4);
-//                fileds.put("value",meterial.getdPotencyUgm3());
-//
-//                batchData.setTags(tags);
-//                batchData.setFields(fileds);
-//                batchData.setTime(datetime);
-//                batchData.setTable("DensityRealtime");
-//                batchDatas.add(batchData);
-//            }
-//            densityVo.setValues(values);
-//            densityVo.setThisDatas();
-//            if(MsgHandler.gpsAvailability==true||env.equals("localtest")){
-//                influxdbUtils.batchInsertAndTime(batchDatas);
-//            }
-//            //是更新因子数目
-//            if(!SessionManage.status.isSaveFatorCount()){
-//                ZhCollectRecord zhCollectRecord=new ZhCollectRecord();
-//                zhCollectRecord.setId(SessionManage.status.getCollectId());
-//                zhCollectRecord.setFactorCount(values.size());
-//                collectRecordService.updateCollectRecord(zhCollectRecord);
-//                SessionManage.status.setSaveFatorCount(true);
-//            }
-//            //插入定位点
-//            Map<String, String> logTags = new HashMap<>(5);
-//            logTags.put("code", SessionManage.status.getDevicecode());
-//            Map<String, Object> logFileds = new HashMap<>(4);
-//            logFileds.put("lng", MsgHandler.lng);
-//            logFileds.put("lat", MsgHandler.lat);
-//            if(MsgHandler.gpsAvailability==true||env.equals("localtest")){
-//                influxdbUtils.insertAndTime(logTags, "DensityLog", logFileds, datetime);
-//            }
-//            try {
-//                if(MsgHandler.gpsAvailability==true||env.equals("localtest")){
-//                    WebSocketServer.sendInfo(JSONObject.toJSONString(densityVo),"2");
-//                }
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
         }else if(cmd[0]== Cmd.StopCollect.getCmd()){
             stopCollect(msg);
         }else if(cmd[0]== Cmd.StartCorrect.getCmd()){
-//            msg.setBytes(msgbody);
             startCorrect(msg);
         }else if(cmd[0]== Cmd.StartCorrectStatus.getCmd()){
-            msg.setBytes(msgbody);
             StartCorrectStatus(msg);
         }else if(cmd[0]== Cmd.StartWeather.getCmd()){
-//            msg.setBytes(msgbody);
             StartWeather(msg);
         }else if(cmd[0]== Cmd.StopWeather.getCmd()){
             StopWeather(msg);
@@ -198,69 +140,6 @@ public class MsgHandler {
             System.out.println("设置方法");
         }else if(cmd[0]== Cmd.StartGps.getCmd()){
             changeGps(msg);
-//            byte enable = msgbody[0];
-//            byte[] times=ByteUtils.subByte(msgbody,1,16);
-//            long datetime = ByteUtils.getDate(times);
-//            //gps 状态
-//            StatusDetail statusDetail=null;
-//            if(enable==1){
-//                System.out.println("有效gps");
-//                statusDetail=new StatusDetail(true,true);
-//                String gpsinfo=new String(ByteUtils.subByte(msgbody,17,datalength-17));
-////                String gpsinfo="$GNGGA,081649.000,2309.244790,N,11329.332827,E,1,16,0.963,22.613,M,0,M,,*52";
-////                System.out.println("gps信息："+gpsinfo);
-//                if(!gpsinfo.isEmpty()){
-//                    String[] split = gpsinfo.split(",");
-//                    String lngdirection=split[5];
-//                    String lngstr=lngdirection.equals("E")?split[4]:"-"+split[4];
-//
-//                    String latdirection=split[3];
-//                    String latstr=latdirection.equals("N")?split[2]:"-"+split[2];
-////                    long time=getGpsTime(split[2]);
-//                    //经度
-//                    double lng=Double.parseDouble(lngstr.substring(0,3))+Double.parseDouble(lngstr.substring(3,lngstr.length()))/60;
-//                    MsgHandler.lng=lng;
-//                    //纬度
-//                    double lat=Double.parseDouble(latstr.substring(0,2))+Double.parseDouble(latstr.substring(2,latstr.length()))/60;
-//
-//                    MsgHandler.lat=lat;
-//
-//                    MsgHandler.gpsAvailability=true;
-////                    Map<String, String> tags = new HashMap<>(5);
-////                    tags.put("code", SessionManage.status.getDevicecode());
-////                    Map<String, Object> fileds = new HashMap<>(4);
-////                    fileds.put("lng",lng);
-////                    fileds.put("lat",lat);
-////
-////                    influxdbUtils.insertAndTime(tags,"DensityLog", fileds,datetime);
-//                }
-//            }else{
-//                MsgHandler.gpsAvailability=false;
-//                //本地测试用
-//                if(MsgHandler.env.equals("localtest")){
-//                    if(index<list.size()-1){
-//                        index++;
-//                    }else{
-//                        index=0;
-//                    }
-//                    statusDetail=new StatusDetail(true,false);
-//
-//                    MsgHandler.lng=Double.parseDouble(list.get(index).getLng());
-//                    MsgHandler.lat=Double.parseDouble(list.get(index).getLat());
-//                }
-//                //本地测试用
-//
-//                //测试无效数据,暂时先用本地测试数据代替
-////                Map<String, String> tags = new HashMap<>(5);
-////                tags.put("code", SessionManage.status.getDevicecode());
-////                Map<String, Object> fileds = new HashMap<>(4);
-////                fileds.put("lng",Double.parseDouble(list.get(index).getLng()));
-////                fileds.put("lat",Double.parseDouble(list.get(index).getLat()));
-////                influxdbUtils.insertAndTime(tags,"DensityLog", fileds,datetime);
-//            }
-//            SessionManage.status.setGpsStatus(statusDetail);
-//            //通知前端
-//            StartGps(msg);
         }else if(cmd[0]== Cmd.StopGps.getCmd()){
             StopGps(msg);
         }
@@ -274,10 +153,13 @@ public class MsgHandler {
         //时间
         byte[] times=ByteUtils.subByte(msgbody,0,16);
         long datetime = ByteUtils.getDate(times);
-        //物质浓度
+        //每一个物质浓度长度
         int materialLength=24+128;
+        //物质个数
         int count=(datalength-16)/(materialLength);
+
         List<BatchData> batchDatas=new ArrayList<>();
+
         DensityVo densityVo=new DensityVo();
         densityVo.setCollectId(SessionManage.status.getCollectId());
         densityVo.setLng(MsgHandler.lng+"");
@@ -286,6 +168,7 @@ public class MsgHandler {
         SimpleDateFormat sim=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.sss");
         Date date=new Date(datetime);
         densityVo.setTime(sim.format(date));
+        densityVo.setDateTime(datetime);
         List<DensityVo.KV> values=new ArrayList<>();
         for (int i = 0; i < count; i++) {
             DensityVo.KV kv=densityVo.new KV();
@@ -314,10 +197,20 @@ public class MsgHandler {
         }
         densityVo.setValues(values);
         densityVo.setThisDatas();
-        if(MsgHandler.gpsAvailability==true||env.equals("localtest")){
-            influxdbUtils.batchInsertAndTime(batchDatas);
+//        densityVo.setBatchDatas(batchDatas);
+        boolean isValid;
+        if(env.equals("localtest")){
+            isValid=MsgHandler.gpsAvailability==true||gpsSimulate;
+        }else{
+            isValid=MsgHandler.gpsAvailability==true;
         }
-        //是更新因子数目
+        //插入浓度数据
+        influxdbUtils.batchInsertAndTime(batchDatas);
+        //如果gps有效或者是本地测试
+//        if(isValid){
+//            influxdbUtils.batchInsertAndTime(batchDatas);
+//        }
+        //是否更新因子数目
         if(!SessionManage.status.isSaveFatorCount()){
             ZhCollectRecord zhCollectRecord=new ZhCollectRecord();
             zhCollectRecord.setId(SessionManage.status.getCollectId());
@@ -325,18 +218,76 @@ public class MsgHandler {
             collectRecordService.updateCollectRecord(zhCollectRecord);
             SessionManage.status.setSaveFatorCount(true);
         }
-        //插入定位点
-        Map<String, String> logTags = new HashMap<>(5);
-        logTags.put("code", SessionManage.status.getDevicecode());
-        Map<String, Object> logFileds = new HashMap<>(4);
-        logFileds.put("lng", MsgHandler.lng);
-        logFileds.put("lat", MsgHandler.lat);
-        if(MsgHandler.gpsAvailability==true||env.equals("localtest")){
+        if(isValid){
+            //插入定位点
+            Map<String, String> logTags = new HashMap<>(5);
+            logTags.put("code", SessionManage.status.getDevicecode());
+            Map<String, Object> logFileds = new HashMap<>(4);
+            logFileds.put("lng", MsgHandler.lng);
+            logFileds.put("lat", MsgHandler.lat);
             influxdbUtils.insertAndTime(logTags, "DensityLog", logFileds, datetime);
         }
         try {
-            if(MsgHandler.gpsAvailability==true||env.equals("localtest")){
-                WebSocketServer.sendInfo(JSONObject.toJSONString(densityVo),"2");
+            if(isValid){
+                MsgHandler.records.add(densityVo);
+                if(MsgHandler.records.size()==1){
+                    densityVo.setCode(200);
+                    WebSocketServer.sendInfo(JSONObject.toJSONString(densityVo),"2");
+                }else if(MsgHandler.records.size()==2){
+                    densityVo.setCode(200);
+                    MsgHandler.records.remove(records.size()-2);
+                    WebSocketServer.sendInfo(JSONObject.toJSONString(densityVo),"2");
+                }else if(MsgHandler.records.size()>2){
+                    //插值
+                    DensityVo densityVo1 = MsgHandler.records.get(0);
+                    DensityVo densityVo2 = MsgHandler.records.get(MsgHandler.records.size() - 1);
+
+                    DensityVo densityVoSend = MsgHandler.records.get(1);
+                    List<String> datas=new ArrayList<>();
+                    double y1=Double.parseDouble(densityVo1.getLng());
+                    double x1=Double.parseDouble(densityVo1.getLat());
+                    double y2=Double.parseDouble(densityVo2.getLng());
+                    double x2=Double.parseDouble(densityVo2.getLat());
+                    double k=DrawUtil.getK(x1,y1,x2,y2);
+                    double b=DrawUtil.getB(x1,y1,x2,y2);
+                    double d=(x2-x1)/(MsgHandler.records.size()-1);
+                    for (int i = 1; i < MsgHandler.records.size()-1; i++) {
+                        double x=x1+i*d;
+                        double y=DrawUtil.getYByX(k,b,x);
+                        List<String> datas1 = MsgHandler.records.get(i).getDatas();
+                        if(i==1){
+                            datas.add(datas1.get(0));
+                        }
+                        String str = datas1.get(1);
+                        String[] split = str.split(";");
+                        split[1]=y+"";
+                        split[2]=x+"";
+                        datas.add(String.join(";",split));
+                        //插入插值后的定位点
+                        Map<String, String> logTags = new HashMap<>(5);
+                        logTags.put("code", SessionManage.status.getDevicecode());
+                        Map<String, Object> logFileds = new HashMap<>(4);
+                        logFileds.put("lng", y);
+                        logFileds.put("lat", x);
+                        logger.info("补全"+x+";"+y+";"+MsgHandler.records.get(i).getTvoc());
+                        influxdbUtils.insertAndTime(logTags, "DensityLog", logFileds, MsgHandler.records.get(i).getDateTime());
+                    }
+                    densityVoSend.setDatas(datas);
+                    //拟合的数据
+                    densityVoSend.setCode(201);
+                    WebSocketServer.sendInfo(JSONObject.toJSONString(densityVoSend),"2");
+                    MsgHandler.records=new ArrayList<>();
+                    //保留最近一次的有效gps
+                    MsgHandler.records.add(densityVoSend);
+                }
+            }else{
+                //前一个点必须有数据
+                if(MsgHandler.records.size()>0){
+                    MsgHandler.records.add(densityVo);
+                    DensityVo densityVotemp=new DensityVo();
+                    densityVotemp.setCode(401);
+                    WebSocketServer.sendInfo(JSONObject.toJSONString(densityVotemp),"2");
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -352,10 +303,9 @@ public class MsgHandler {
         //gps 状态
         StatusDetail statusDetail=null;
         if(enable==1){
-            System.out.println("有效gps");
+            logger.info("有效GPS");
             statusDetail=new StatusDetail(true,true);
             String gpsinfo=new String(ByteUtils.subByte(msgbody,17,datalength-17));
-
             if(!gpsinfo.isEmpty()){
                 String[] split = gpsinfo.split(",");
                 String lngdirection=split[5];
@@ -380,10 +330,21 @@ public class MsgHandler {
                 }else{
                     index=0;
                 }
+                if(index>startIndex&&index<endIndex){
+                    MsgHandler.gpsSimulate=false;
+                    MsgHandler.lng=0.0;
+                    MsgHandler.lat=0.0;
+                    logger.info("GPS信号中断");
+                }else{
+                    MsgHandler.gpsSimulate=true;
+                    MsgHandler.lng=Double.parseDouble(list.get(index).getLng());
+                    MsgHandler.lat=Double.parseDouble(list.get(index).getLat());
+                }
                 statusDetail=new StatusDetail(true,false);
-
-                MsgHandler.lng=Double.parseDouble(list.get(index).getLng());
-                MsgHandler.lat=Double.parseDouble(list.get(index).getLat());
+            }else{
+                MsgHandler.lng=0.0;
+                MsgHandler.lat=0.0;
+                statusDetail=new StatusDetail(false,false);
             }
         }
         SessionManage.status.setGpsStatus(statusDetail);

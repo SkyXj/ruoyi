@@ -1,5 +1,6 @@
 package com.ruoyi.mina;
 
+import com.ruoyi.framework.influxdb.BatchData;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.List;
 @Data
 public class DensityVo implements Comparable<DensityVo>{
     private String time;
+    private Long dateTime;
     private String areaname;
     private String sitename;
     private String lng;
@@ -26,6 +28,8 @@ public class DensityVo implements Comparable<DensityVo>{
     private String name;
     private Long collectId;
     private List<String> datas;
+    private Integer code;
+//    private List<BatchData> batchDatas;
 
     @Override
     public int compareTo(DensityVo o) {
