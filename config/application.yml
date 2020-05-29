@@ -1,0 +1,25 @@
+ruoyi: {name: RuoYi, version: 2.0.0, copyrightYear: 2019, demoEnabled: true, profile: /home/ruoyi/uploadPath,
+  addressEnabled: true}
+server:
+  port: 8756
+  servlet: {context-path: /ruoyi/}
+  tomcat: {uri-encoding: UTF-8, max-threads: 800, min-spare-threads: 30}
+logging:
+  level: {com.ruoyi: debug, org.springframework: warn}
+spring:
+  messages: {basename: i18n/messages}
+  profiles: {active: dev}
+  servlet:
+    multipart: {max-file-size: 10MB, max-request-size: 20MB}
+  devtools:
+    restart: {enabled: false}
+token: {header: Authorization, secret: abcdefghijklmnopqrstuvwxyz, expireTime: 1200}
+mybatis: {typeAliasesPackage: 'com.ruoyi.project.**.domain,com.ruoyi.zh.**.domain',
+  mapperLocations: 'classpath*:mybatis/**/*Mapper.xml', configLocation: 'classpath:mybatis/mybatis-config.xml'}
+pagehelper: {helperDialect: mysql, reasonable: true, supportMethodsArguments: true,
+  params: count=countSql}
+xss: {enabled: true, excludes: /system/notice/*, urlPatterns: '/system/*,/monitor/*,/tool/*,/send/*'}
+gen: {author: ruoyi, packageName: com.ruoyi.zh, autoRemovePre: false, tablePrefix: zh_}
+mina:
+  client: {port: 8089, host: localhost}
+update: {sqlfile: voyage5-28.sql, isupdate: true}

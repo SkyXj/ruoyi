@@ -52,9 +52,9 @@ public class MsgHandler {
 
     public static ICollectRecordService collectRecordService;
 
-    private static Integer startIndex=20;
+    private static Integer startIndex=190;
 
-    private static Integer endIndex=60;
+    private static Integer endIndex=210;
 
     @Autowired
     public  void setList(List<DensityVo> list)
@@ -96,7 +96,7 @@ public class MsgHandler {
         MsgHandler.influxdbUtils=influxdbUtils;
     }
     //测试数据记录下标
-    private static Integer index=0;
+    private static Integer index=170;
 
     public static void dealWith(Object message){
         byte[] bytes=(byte[])message;
@@ -116,7 +116,7 @@ public class MsgHandler {
         //开始采集
         if(cmd[0]== Cmd.StartCollect.getValue()){
 //            msg.setBytes(msgbody);
-            index=0;
+            index=170;
             startCollect(msg);
         }else if(cmd[0]== Cmd.MIC_Collect.getCmd()){
             //接收浓度数据

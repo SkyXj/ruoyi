@@ -56,8 +56,11 @@ public class SendMessageController {
     public AjaxResult start(
             @RequestParam(value = "pointname") String pointname,
             @RequestParam(value = "code") String code) {
-        SessionManage.status.setDevicecode(code);
+        //开启gps
+        this.getGps();
 
+        //当前设备编码
+        SessionManage.status.setDevicecode(code);
         Msg msg = new Msg();
         //经纬度
         msg.setBody("");
@@ -69,9 +72,6 @@ public class SendMessageController {
         byte[] lat_bytes = new byte[10];
         msg.setBytes(ByteUtils.concat(lng_bytes, lat_bytes));
         SessionManage.sendMsg(msg);
-
-        //开启gps
-        this.getGps();
         //关闭最近的走航记录
         zhCollectRecordService.closeRecord();
 

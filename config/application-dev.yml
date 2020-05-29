@@ -3,15 +3,6 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
-    data-username: root
-    data-password: 123456
-    schema-username: root
-    schema-password: 123456
-    platform: mysql
-    continue-on-error: true
-    schema: classpath:test.sql
-      #      - classpath:test1.sql
-    initialization-mode: always
     druid:
       # 主库数据源
       master:

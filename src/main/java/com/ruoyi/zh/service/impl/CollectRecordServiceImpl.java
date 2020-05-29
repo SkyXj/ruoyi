@@ -4,6 +4,7 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.IdUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.TimeTool;
+import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.config.RuoYiConfig;
 import com.ruoyi.framework.influxdb.BatchData;
 import com.ruoyi.framework.influxdb.InfluxdbUtils;
@@ -571,11 +572,6 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
     public List<ZhCollectRecordDto> readListData(String deviceCode, List<MultipartFile> files, String pointname) {
         List<ZhCollectRecordDto> collectRecordDtos=new ArrayList<>();
         String jar_parent_path="";
-//        try {
-//            jar_parent_path = new File(ResourceUtils.getURL("classpath:").getPath()).getParentFile().getParentFile().getParent();
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
         jar_parent_path=RuoYiConfig.getProfile();
         String rootPath=jar_parent_path+File.separator+"importData"+File.separator+DateUtils.getDate();
         File fileRoot=new File(rootPath);
@@ -598,7 +594,6 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
             zhFile.setCreateBy(UserInfoUtil.getUserName());
             //保存本地文件
             File fileLocal=new File(filePath);
-
             try {
                 file.transferTo(fileLocal);
             } catch (IOException e) {
@@ -608,9 +603,10 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
             Date endTime = null;
             ZhCollectRecord collectionRecord=null;
             Integer suffixcount=3;
-
             try {
-//                BufferedReader bf = new BufferedReader(new InputStreamReader(file.getInputStream(), "GBK"));
+                if(suffix=="xls"){
+                    continue;
+                }
                 BufferedReader bf = new BufferedReader(new InputStreamReader(new FileInputStream(fileLocal), "GBK"));
                 String temp = null;
                 int index = 1;
