@@ -5,10 +5,12 @@ import com.ruoyi.common.utils.IdUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.TimeTool;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.common.utils.poi.ExcelUtilNoClass;
 import com.ruoyi.framework.config.RuoYiConfig;
 import com.ruoyi.framework.influxdb.BatchData;
 import com.ruoyi.framework.influxdb.InfluxdbUtils;
 import com.ruoyi.mina.DensityVo;
+import com.ruoyi.mina.handler.MsgHandler;
 import com.ruoyi.zh.domain.DensityLog;
 import com.ruoyi.zh.domain.DensityRealTime;
 import com.ruoyi.zh.domain.ZhCollectRecord;
@@ -22,6 +24,7 @@ import com.ruoyi.zh.service.IDensityLogService;
 import com.ruoyi.zh.service.IDensityRealTimeService;
 import com.ruoyi.zh.service.ICollectRecordService;
 import com.ruoyi.zh.service.IZhFileService;
+import com.ruoyi.zh.tool.DrawUtil;
 import com.ruoyi.zh.tool.UserInfoUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -584,8 +587,8 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
             //文件名
             String fileOldName=file.getOriginalFilename();
             //文件后缀名
-            String suffix = fileOldName.substring(fileOldName.lastIndexOf(".") + 1);
-            String fileNewName=IdUtils.fastSimpleUUID()+ "." +suffix;
+            String postfix = fileOldName.substring(fileOldName.lastIndexOf(".") + 1);
+            String fileNewName=IdUtils.fastSimpleUUID()+ "." +postfix;
             String filePath=rootPath+File.separator+fileNewName;
             zhFile.setFileName(fileOldName);
             zhFile.setPath(filePath);
@@ -604,54 +607,85 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
             ZhCollectRecord collectionRecord=null;
             Integer suffixcount=3;
             try {
-                if(suffix=="xls"){
-                    continue;
-                }
-                BufferedReader bf = new BufferedReader(new InputStreamReader(new FileInputStream(fileLocal), "GBK"));
                 String temp = null;
                 int index = 1;
                 // 按行读取字符串
                 String[] names = null;
-                while ((temp = bf.readLine()) != null) {
-                    if(isErrorData(temp)){
-                        continue;
-                    }
-                    datas.add(temp);
-                    //标题
-                    if (index == 1) {
-                        if(!temp.contains("时间")){
-                            suffixcount=2;
-                        }
-                        if(temp.contains("经度;纬度;")){
-                            names = temp.split(";");
-                        }
-                    } else {
-                        //浓度值
-                        String[] values = temp.split(";");
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-                        Date time=null;
-                        if(values[0].contains("-")){
-                            time = sdf.parse(values[0]);
-                        }else if(values[0].contains("/")){
-                            time = sdf1.parse(values[0]);
-                        }
-//                        Date time = sdf.parse(values[0]);
-                        //判断起始时间
-                        if(time!=null){
-                            startTime = startTime == null ? time : startTime;
-                            endTime = endTime == null ? time : endTime;
-                            if (startTime.getTime() > time.getTime()) {
-                                startTime = time;
-                            }
-                            if (endTime.getTime() < time.getTime()) {
-                                endTime = time;
-                            }
-                        }
-                    }
-                    index++;
+                datas = readLocalFile(filePath);
+                names=datas.get(0).split(";");
+                if(!names[0].equals("时间")){
+                    suffixcount=2;
                 }
-                bf.close();
+                for (int i = 1; i < datas.size(); i++) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+                    String[] values = datas.get(i).split(";");
+                    if("".equals(values[suffixcount-2])){
+                        values[suffixcount-2]="0";
+                    }
+                    if("".equals(values[suffixcount-1])){
+                        values[suffixcount-1]="0";
+                    }
+                    datas.set(i,String.join(";",values));
+                    Date time=null;
+                    if(values[0].contains("-")){
+                        time = sdf.parse(values[0]);
+                    }else if(values[0].contains("/")){
+                        time = sdf1.parse(values[0]);
+                    }
+                    if(time!=null){
+                        startTime = startTime == null ? time : startTime;
+                        endTime = endTime == null ? time : endTime;
+                        if (startTime.getTime() > time.getTime()) {
+                            startTime = time;
+                        }
+                        if (endTime.getTime() < time.getTime()) {
+                            endTime = time;
+                        }
+                    }
+                }
+
+//                BufferedReader bf = new BufferedReader(new InputStreamReader(new FileInputStream(fileLocal), "GBK"));
+//                while ((temp = bf.readLine()) != null) {
+//                    if(isErrorData(temp)){
+//                        continue;
+//                    }
+//                    datas.add(temp);
+//                    //标题
+//                    if (index == 1) {
+//                        if(!temp.contains("时间")){
+//                            suffixcount=2;
+//                        }
+//                        if(temp.contains("经度;纬度;")){
+//                            names = temp.split(";");
+//                        }
+//                    } else {
+//                        //浓度值
+//                        String[] values = temp.split(";");
+//                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//                        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+//                        Date time=null;
+//                        if(values[0].contains("-")){
+//                            time = sdf.parse(values[0]);
+//                        }else if(values[0].contains("/")){
+//                            time = sdf1.parse(values[0]);
+//                        }
+////                        Date time = sdf.parse(values[0]);
+//                        //判断起始时间
+//                        if(time!=null){
+//                            startTime = startTime == null ? time : startTime;
+//                            endTime = endTime == null ? time : endTime;
+//                            if (startTime.getTime() > time.getTime()) {
+//                                startTime = time;
+//                            }
+//                            if (endTime.getTime() < time.getTime()) {
+//                                endTime = time;
+//                            }
+//                        }
+//                    }
+//                    index++;
+//                }
+//                bf.close();
                 //插入走航记录
                 if(names!=null&&names.length>=3){
                     collectionRecord = new ZhCollectRecord();
@@ -686,7 +720,20 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
         }
         return collectRecordDtos;
     }
-
+    
+    public List<String> readLocalFile(String path) throws Exception {
+        List<String> list=new ArrayList<>();
+        if(path.endsWith("txt")){
+            list=readStrMic(path);
+        }else{
+            ExcelUtilNoClass excelUtilNoClass=new ExcelUtilNoClass();
+            list=excelUtilNoClass.importExcel(new FileInputStream(new File(path)));
+        }
+        return list;
+    };
+    
+    
+    
     @Override
     public boolean checkFiles(List<ZhCollectRecordDto> zhCollectRecordDtos) {
         if(zhCollectRecordDtos==null||zhCollectRecordDtos.size()<=0){
@@ -730,7 +777,12 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
         List<String> datas=new ArrayList<String>();
         ZhFile zhFile = zhFileService.selectZhFileByCollectId(zhCollectRecord.getId());
         if(zhFile!=null){
-            datas=readStrMic(zhFile.getPath());
+//            datas=readStrMic(zhFile.getPath());
+            try {
+                datas=readLocalFile(zhFile.getPath());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }else{
             datas=searchStrMic(densityDto);
         }
@@ -835,7 +887,12 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
             return null;
         }
 //        List<DensityVo> points = zhCollectRecordDto.getPoints();
-        List<String> datas = zhCollectRecordDto.getDatas();
+        List<String> datas =null;
+        if(operationData.getIsCorrect()==1){
+            datas =correctData(zhCollectRecordDto.getDatas()) ;
+        }else{
+            datas=zhCollectRecordDto.getDatas();
+        }
 
         List<String> result=new ArrayList<>();
         result.add(datas.get(0));
@@ -900,12 +957,72 @@ public class CollectRecordServiceImpl implements ICollectRecordService {
         return fileName;
     }
 
+    public List<String> correctData(List<String> datas){
+        List<String> result=new ArrayList<>();
+        String[] names=datas.get(0).split(";");
+        Integer startindex=3;
+        if(!"时间".equals(names[0])){
+            startindex=2;
+        }
+        result.add(datas.get(0));
+        List<String> temp=new ArrayList<>();
+        for (int i = 1; i < datas.size(); i++) {
+            String[] point=datas.get(i).split(";");
+            if(!isError(point[startindex-1])&&!isError(point[startindex-2])){
+                result.add(datas.get(i));
+                temp.add(datas.get(i));
+                if(temp.size()==2){
+                    temp.remove(0);
+                }else if(temp.size()>2){
+                    String[] point1=temp.get(0).split(";");
+                    String[] point2=temp.get(temp.size()-1).split(";");
+                    double y1=Double.parseDouble(point1[startindex-1]);
+                    double x1=Double.parseDouble(point1[startindex-2]);
+                    double y2=Double.parseDouble(point2[startindex-1]);
+                    double x2=Double.parseDouble(point2[startindex-2]);
+                    double k= DrawUtil.getK(x1,y1,x2,y2);
+                    double b=DrawUtil.getB(x1,y1,x2,y2);
+                    double d=(x2-x1)/(temp.size()-1);
+                    for (int j = 0; j < temp.size()-1; j++) {
+                        String[] temppoint = temp.get(j).split(";");
+                        double x=x1+j*d;
+                        double y=DrawUtil.getYByX(k,b,x);
+                        temppoint[startindex-1]=y+"";
+                        temppoint[startindex-2]=x+"";
+                        result.add(result.size()-1,String.join(";",temppoint));
+                    }
+                    temp=new ArrayList<>();
+                    temp.add(datas.get(i));
+                }
+            }else{
+                if(temp.size()>0){
+                    temp.add(datas.get(i));
+                }
+            }
+        }
+        return result;
+    }
+
+
+    public boolean isError(String str){
+        if("".equals(str)||str==null){
+            return true;
+        }
+        return false;
+    }
+
     public List<String> getDatasByOperationData(OperationData operationData){
         ZhCollectRecordDto zhCollectRecordDto = getPointsById(operationData.getId());
         if(zhCollectRecordDto==null){
             return null;
         }
-        List<String> datas = zhCollectRecordDto.getDatas();
+//        List<String> datas = zhCollectRecordDto.getDatas();
+        List<String> datas =null;
+        if(operationData.getIsCorrect()==1){
+            datas =correctData(zhCollectRecordDto.getDatas()) ;
+        }else{
+            datas=zhCollectRecordDto.getDatas();
+        }
 
         List<String> result=new ArrayList<>();
         result.add(datas.get(0));

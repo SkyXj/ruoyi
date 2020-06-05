@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
@@ -26,9 +28,9 @@ import java.util.concurrent.CountDownLatch;
  * @Version 1.0
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes ={RuoYiApplication.class,WebSocketConfig.class},webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(classes = {RuoYiApplication.class, WebSocketConfig.class}, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class Test {
-//    @Autowired
+    //    @Autowired
 //    ICollectRecordService collectRecordService;
 //
 //    /**

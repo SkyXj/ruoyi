@@ -50,6 +50,22 @@ public class ExcelUtilNoClass {
     {
         return importExcel(StringUtils.EMPTY, is);
     }
+
+    /**
+     * 创建Workbook对象
+     * @param is
+     * @param postfix
+     * @return
+     */
+    public void createWb(InputStream is,String postfix) throws Exception {
+        if(postfix!=null||postfix.equals(".xls")||postfix.equals(".csv")){
+            this.wb=new HSSFWorkbook(is);
+        }else{
+            this.wb=WorkbookFactory.create(is);
+        }
+    }
+
+
     /**
      * 对excel表单指定表格索引名转换成list
      *
@@ -60,6 +76,7 @@ public class ExcelUtilNoClass {
     public List<String> importExcel(String sheetName, InputStream is) throws Exception
     {
         this.wb = WorkbookFactory.create(is);
+//        createWb(is,".xls");
         List<String> result=new ArrayList<>();
         Sheet sheet = null;
         if (StringUtils.isNotEmpty(sheetName))
@@ -161,7 +178,7 @@ public class ExcelUtilNoClass {
                     {
                         if ((Double) val % 1 > 0)
                         {
-                            val = new DecimalFormat("0.00").format(val);
+                            val = new DecimalFormat("0.0000000").format(val);
                         }
                         else
                         {
@@ -206,11 +223,11 @@ public class ExcelUtilNoClass {
         ExcelUtilNoClass excelUtilNoClass=new ExcelUtilNoClass();
         try {
 //            File file=new File("C:\\Users\\hxsdd-20\\Desktop\\test2.xlsx");
-            File file=new File("C:\\Users\\hxsdd-20\\Desktop\\test1.xls");
-            excelUtilNoClass.createworkbook(new FileInputStream(file));
-//            InputStream inputStream=new FileInputStream(file);
-//            List<String> list = excelUtilNoClass.importExcel(inputStream);
-//            list.forEach(System.out::println);
+            File file=new File("C:\\Users\\hxsdd-20\\Desktop\\test3.xls");
+//            excelUtilNoClass.createworkbook(new FileInputStream(file));
+            InputStream inputStream=new FileInputStream(file);
+            List<String> list = excelUtilNoClass.importExcel(inputStream);
+            list.forEach(System.out::println);
         } catch (Exception e) {
             e.printStackTrace();
         }

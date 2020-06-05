@@ -12,6 +12,7 @@ import java.util.List;
 public class OperationData {
     private Long id;
     private List<Range> ranges;
+    private Integer isCorrect;
 
     public Long getId() {
         return id;
@@ -27,5 +28,13 @@ public class OperationData {
 
     public void setRanges(List<Range> ranges) {
         this.ranges = ranges;
+    }
+
+    public Integer getIsCorrect() {
+        return isCorrect;
+    }
+
+    public void setIsCorrect(Integer isCorrect) {
+        this.isCorrect = isCorrect;
     }
 }

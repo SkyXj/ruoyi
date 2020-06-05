@@ -22,4 +22,4 @@ xss: {enabled: true, excludes: /system/notice/*, urlPatterns: '/system/*,/monito
 gen: {author: ruoyi, packageName: com.ruoyi.zh, autoRemovePre: false, tablePrefix: zh_}
 mina:
   client: {port: 8089, host: localhost}
-update: {sqlfile: voyage5-28.sql, isupdate: true}
+update: {sqlfile: voyage5-28.sql, isupdate: false}

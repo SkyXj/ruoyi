@@ -1,6 +1,8 @@
 package com.ruoyi.zh.tool;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Copyright © 广州禾信仪器股份有限公司. All rights reserved.
@@ -122,23 +124,27 @@ public class DrawUtil {
 //        System.out.print(result3[0]+",");
 //        System.out.println(result3[1]);
 //        System.out.println(GetDistance(113.5949783333333,23.20435,113.5844433333333,23.200555));
-        boolean dsaf=false||true;
-        System.out.println(dsaf);
-        double y1=113.918;
-        double x1=35.3051;
-
-        double y2=113.919;
-        double x2=35.3055;
-
-        double k=getK(x1,y1,x2,y2);
-        double b=getB(x1,y1,x2,y2);
-
-        int size=3;
-        double d = (x2 - x1) / 4;
-        for (int i = 1; i <= size; i++) {
-            double x=x1+d*i;
-            double y=getYByX(k,b,x);
-            System.out.println(x+":"+y);
-        }
+//        boolean dsaf=false||true;
+//        System.out.println(dsaf);
+//        double y1=113.918;
+//        double x1=35.3051;
+//
+//        double y2=113.919;
+//        double x2=35.3055;
+//
+//        double k=getK(x1,y1,x2,y2);
+//        double b=getB(x1,y1,x2,y2);
+//
+//        int size=3;
+//        double d = (x2 - x1) / 4;
+//        for (int i = 1; i <= size; i++) {
+//            double x=x1+d*i;
+//            double y=getYByX(k,b,x);
+//            System.out.println(x+":"+y);
+//        }
+        List<String> list=new ArrayList<>();
+        list.add("sdfa");
+        list.add(list.size()-1,"dsaf");
+        list.forEach(System.out::println);
     }
 }
