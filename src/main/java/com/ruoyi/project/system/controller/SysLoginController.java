@@ -93,7 +93,7 @@ public class SysLoginController
         return AjaxResult.success(menuService.buildMenus(menus));
     }
 
-    @GetMapping("test")
+    @GetMapping("/test")
     public AjaxResult test(){
         AjaxResult ajax = AjaxResult.success();
         ajax.put("data", "test");

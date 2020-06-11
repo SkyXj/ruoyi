@@ -1,5 +1,6 @@
 package com.ruoyi.framework.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -35,4 +36,5 @@ public class AjaxCorsFilter extends CorsFilter {
         source.registerCorsConfiguration("/**", corsConfig);
         return source;
     }
+
 }
