@@ -1,5 +1,6 @@
 package com.ruoyi.webSocket;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
@@ -12,6 +13,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 @ServerEndpoint(value ="/websocket/{sid}",configurator = WebSocketConfig.class)
 @Component
+@Slf4j
 public class WebSocketServer {
 
 //    private static WebSocketServer webSocketServer;
@@ -75,6 +77,7 @@ public class WebSocketServer {
      * 实现服务器主动推送
      */
     public void sendMessage(String message) throws IOException {
+        log.info(message);
         this.session.getBasicRemote().sendText(message);
     }
 
@@ -83,7 +86,9 @@ public class WebSocketServer {
      * 群发自定义消息
      */
     public static void sendInfo(String message, @PathParam("sid") String sid) throws IOException {
-        System.out.println("推送消息到窗口" + sid + "，推送内容:" + message);
+        if(sid.equals("2")){
+            log.info("推送消息到窗口" + sid + "，推送内容:" + message);
+        }
         for (WebSocketServer item : webSocketSet) {
             try {
                 //这里可以设定只推送给这个sid的，为null则全部推送

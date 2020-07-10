@@ -120,7 +120,12 @@ public class MsgHandler {
             startCollect(msg);
         }else if(cmd[0]== Cmd.MIC_Collect.getCmd()){
             //接收浓度数据
-            saveAndSendMicData(msg);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    saveAndSendMicData(msg);
+                }
+            }).start();
         }else if(cmd[0]== Cmd.StopCollect.getCmd()){
             stopCollect(msg);
         }else if(cmd[0]== Cmd.StartCorrect.getCmd()){
@@ -139,7 +144,14 @@ public class MsgHandler {
         }else if(cmd[0]== Cmd.SetMethod.getCmd()){
             System.out.println("设置方法");
         }else if(cmd[0]== Cmd.StartGps.getCmd()){
-            changeGps(msg);
+//            changeGps(msg);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    logger.info("gps传输时间");
+                    changeGps(msg);
+                }
+            }).start();
         }else if(cmd[0]== Cmd.StopGps.getCmd()){
             StopGps(msg);
         }
@@ -284,10 +296,11 @@ public class MsgHandler {
                 //前一个点必须有数据
                 if(MsgHandler.records.size()>0){
                     MsgHandler.records.add(densityVo);
-                    DensityVo densityVotemp=new DensityVo();
-                    densityVotemp.setCode(401);
-                    WebSocketServer.sendInfo(JSONObject.toJSONString(densityVotemp),"2");
                 }
+                DensityVo densityVotemp=new DensityVo();
+                densityVotemp.setCode(401);
+                //主要是为了发送401给前端,通知gps此时开始缺失
+                WebSocketServer.sendInfo(JSONObject.toJSONString(densityVotemp),"2");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -303,9 +316,9 @@ public class MsgHandler {
         //gps 状态
         StatusDetail statusDetail=null;
         if(enable==1){
-            logger.info("有效GPS");
             statusDetail=new StatusDetail(true,true);
             String gpsinfo=new String(ByteUtils.subByte(msgbody,17,datalength-17));
+            logger.info("原始gps"+gpsinfo);
             if(!gpsinfo.isEmpty()){
                 String[] split = gpsinfo.split(",");
                 String lngdirection=split[5];
@@ -320,8 +333,10 @@ public class MsgHandler {
                 double lat=Double.parseDouble(latstr.substring(0,2))+Double.parseDouble(latstr.substring(2,latstr.length()))/60;
                 MsgHandler.lat=lat;
                 MsgHandler.gpsAvailability=true;
+                logger.info("有效GPS,lng:"+MsgHandler.lng+",lat:"+MsgHandler.lat);
             }
         }else{
+
             MsgHandler.gpsAvailability=false;
             //本地测试用
             if(MsgHandler.env.equals("localtest")){
@@ -330,6 +345,7 @@ public class MsgHandler {
                 }else{
                     index=0;
                 }
+                //模拟拟合
                 if(index>startIndex&&index<endIndex){
                     MsgHandler.gpsSimulate=false;
                     MsgHandler.lng=0.0;
@@ -340,6 +356,10 @@ public class MsgHandler {
                     MsgHandler.lng=Double.parseDouble(list.get(index).getLng());
                     MsgHandler.lat=Double.parseDouble(list.get(index).getLat());
                 }
+//                MsgHandler.gpsSimulate=true;
+//                MsgHandler.lng=Double.parseDouble(list.get(index).getLng());
+//                MsgHandler.lat=Double.parseDouble(list.get(index).getLat());
+
                 statusDetail=new StatusDetail(true,false);
             }else{
                 MsgHandler.lng=0.0;
@@ -347,6 +367,7 @@ public class MsgHandler {
                 statusDetail=new StatusDetail(false,false);
             }
         }
+        logger.info("GPS------------------------------"+MsgHandler.lng+":"+MsgHandler.lat);
         SessionManage.status.setGpsStatus(statusDetail);
         //通知前端
         StartGps(msg);

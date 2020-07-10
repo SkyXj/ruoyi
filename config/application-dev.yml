@@ -87,7 +87,7 @@ influxdb:
 voyage:
   env: localtest
   #本地模拟gps 信号丢失
-  gpsSimulate: true
+  gpsSimulate: false
 #  env: localreal
 #influxdb:
 #    username: root
