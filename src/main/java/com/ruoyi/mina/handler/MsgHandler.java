@@ -227,6 +227,11 @@ public class MsgHandler {
             ZhCollectRecord zhCollectRecord=new ZhCollectRecord();
             zhCollectRecord.setId(SessionManage.status.getCollectId());
             zhCollectRecord.setFactorCount(values.size());
+            List<String> datas = densityVo.getDatas();
+            if(datas!=null&&datas.size()>0){
+                String names = datas.get(0);
+                zhCollectRecord.setRemark(names);
+            }
             collectRecordService.updateCollectRecord(zhCollectRecord);
             SessionManage.status.setSaveFatorCount(true);
         }

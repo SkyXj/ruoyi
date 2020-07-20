@@ -82,6 +82,8 @@ public interface ICollectRecordService
 
     public List<String> searchStrMic(DensityDto densityDto);
 
+    public List<String> searchStrMic(DensityDto densityDto,String names);
+
     public List<String> readStrMic(String filePath);
 
     public ZhCollectRecordDto getRecently();
