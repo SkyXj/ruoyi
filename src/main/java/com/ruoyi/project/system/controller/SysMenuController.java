@@ -105,7 +105,7 @@ public class SysMenuController extends BaseController
     }
 
     /**
-     * 修改菜单
+     * 修改菜单getRouters
      */
     @PreAuthorize("@ss.hasPermi('system:menu:edit')")
     @Log(title = "菜单管理", businessType = BusinessType.UPDATE)
