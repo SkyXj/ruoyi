@@ -48,6 +48,10 @@ public class ZhFactorDto implements Serializable {
 
     private String colorStr;
 
+    private Long threshold;
+
+    private String simpleColorJson;
+
     public ZhFactorDto(){}
 
     public ZhFactorDto(ZhFactor zhFactor,ZhColor zhColor){

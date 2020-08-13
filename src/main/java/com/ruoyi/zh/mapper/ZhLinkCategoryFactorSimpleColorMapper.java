@@ -7,7 +7,7 @@ import java.util.List;
  * 物质因子颜色关联Mapper接口
  * 
  * @author ruoyi
- * @date 2020-03-04
+ * @date 2020-08-10
  */
 public interface ZhLinkCategoryFactorSimpleColorMapper 
 {

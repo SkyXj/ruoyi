@@ -12,7 +12,7 @@ import com.ruoyi.zh.service.IZhLinkCategoryFactorSimpleColorService;
  * 物质因子颜色关联Service业务层处理
  * 
  * @author ruoyi
- * @date 2020-03-04
+ * @date 2020-08-10
  */
 @Service
 public class ZhLinkCategoryFactorSimpleColorServiceImpl implements IZhLinkCategoryFactorSimpleColorService 

@@ -27,6 +27,8 @@ public interface ZhCategoryMapper
      */
     public List<ZhCategory> selectZhCategoryList(ZhCategory zhCategory);
 
+    public List<ZhCategory> getCategoryByIds(Long[] ids);
+
     /**
      * 新增颜色标准
      * 

@@ -1,21 +1,26 @@
 package com.ruoyi.zh.service.impl;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.zh.domain.ZhColor;
-import com.ruoyi.zh.domain.ZhFactor;
-import com.ruoyi.zh.domain.ZhLinkCategoryFactorColor;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.spring.SpringUtils;
+import com.ruoyi.framework.config.RuoYiConfig;
+import com.ruoyi.framework.web.domain.AjaxResult;
+import com.ruoyi.zh.domain.*;
 import com.ruoyi.zh.dto.ZhCategoryDto;
 import com.ruoyi.zh.dto.ZhFactorDto;
-import com.ruoyi.zh.mapper.ZhColorMapper;
-import com.ruoyi.zh.mapper.ZhFactorMapper;
-import com.ruoyi.zh.mapper.ZhLinkCategoryFactorColorMapper;
+import com.ruoyi.zh.mapper.*;
+import com.ruoyi.zh.service.IZhLinkCategoryFactorSimpleColorService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.zh.mapper.ZhCategoryMapper;
-import com.ruoyi.zh.domain.ZhCategory;
 import com.ruoyi.zh.service.IZhCategoryService;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 颜色标准Service业务层处理
@@ -24,6 +29,7 @@ import com.ruoyi.zh.service.IZhCategoryService;
  * @date 2020-03-04
  */
 @Service
+@Slf4j
 public class ZhCategoryServiceImpl implements IZhCategoryService 
 {
     @Autowired
@@ -34,6 +40,9 @@ public class ZhCategoryServiceImpl implements IZhCategoryService
 
     @Autowired
     private ZhLinkCategoryFactorColorMapper zhLinkCategoryFactorColorMapper;
+
+    @Autowired
+    private ZhLinkCategoryFactorSimpleColorMapper zhLinkCategoryFactorSimpleColorMapper;
 
     @Autowired
     private ZhColorMapper zhColorMapper;
@@ -50,6 +59,75 @@ public class ZhCategoryServiceImpl implements IZhCategoryService
         return zhCategoryMapper.selectZhCategoryById(id);
     }
 
+
+    @Override
+    public AjaxResult exportByIds(Long[] ids)
+    {
+        String profile = RuoYiConfig.getDownloadPath();
+        File downloaPath = new File(profile);
+        if (!downloaPath.exists()) {
+            downloaPath.mkdirs();
+        }
+        List<ZhCategory> zhCategories = zhCategoryMapper.getCategoryByIds(ids);
+        List<ZhCategoryDto> result=new ArrayList<>();
+        if(zhCategories==null||zhCategories.size()<=0){
+            return AjaxResult.error();
+        }
+        for (ZhCategory category:zhCategories) {
+            ZhCategoryDto zhCategoryDto=new ZhCategoryDto();
+            Long id = category.getId();
+            zhCategoryDto.setId(id);
+            zhCategoryDto.setName(category.getName());
+            ZhLinkCategoryFactorColor categoryFactorColor=new ZhLinkCategoryFactorColor();
+            categoryFactorColor.setCategoryId(id);
+            List<ZhLinkCategoryFactorColor> zhLinkCategoryFactorColors = zhLinkCategoryFactorColorMapper.selectZhLinkCategoryFactorColorList(categoryFactorColor);
+            if(zhLinkCategoryFactorColors==null||zhLinkCategoryFactorColors.size()<=0){
+                continue;
+            }
+            List<ZhFactorDto> zhFactorDtos=new ArrayList<>();
+            for (ZhLinkCategoryFactorColor color: zhLinkCategoryFactorColors) {
+                ZhFactorDto zhFactorDto=new ZhFactorDto();
+                ZhLinkCategoryFactorSimpleColor cer=new ZhLinkCategoryFactorSimpleColor();
+                cer.setFactorName(color.getFactorName());
+                cer.setCategoryId(id);
+
+                zhFactorDto.setColorStr(color.getColorStr());
+                zhFactorDto.setName(color.getFactorName());
+                zhFactorDto.setId(color.getId());
+
+                List<ZhLinkCategoryFactorSimpleColor> zhLinkCategoryFactorSimpleColors = zhLinkCategoryFactorSimpleColorMapper.selectZhLinkCategoryFactorSimpleColorList(cer);
+                if(zhLinkCategoryFactorSimpleColors==null||zhLinkCategoryFactorSimpleColors.size()<=0){
+                    zhFactorDtos.add(zhFactorDto);
+                    continue;
+                }
+                ZhLinkCategoryFactorSimpleColor color1 = zhLinkCategoryFactorSimpleColors.get(0);
+                zhFactorDto.setSimpleColorJson(color1.getSimpleColorJson());
+                zhFactorDto.setThreshold(color1.getThreshold());
+                zhFactorDtos.add(zhFactorDto);
+            }
+            zhCategoryDto.setFactors(zhFactorDtos);
+            result.add(zhCategoryDto);
+        }
+        BufferedWriter bufferedWriter=null;
+        String filename=System.currentTimeMillis()+".txt";
+        String filePath=profile+filename;
+        try {
+            bufferedWriter=new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(filePath)),"GBK"));
+            for (int i = 0; i < result.size(); i++) {
+                String str = JSONObject.toJSONString(result.get(i));
+                bufferedWriter.write(str);
+                if(i<result.size()-1){
+                    //写入 \r\n换行
+                    bufferedWriter.write("\r\n");
+                }
+            }
+            bufferedWriter.flush();
+            bufferedWriter.close();
+        } catch (IOException e) {
+            log.error("导出文件发生错误："+e.getMessage());
+        }
+        return AjaxResult.success(filename);
+    }
     /**
      * 查询颜色标准列表
      * 
@@ -61,6 +139,103 @@ public class ZhCategoryServiceImpl implements IZhCategoryService
     {
         return zhCategoryMapper.selectZhCategoryList(zhCategory);
     }
+
+    @Override
+    public List<ZhCategoryDto> getAll(ZhCategory zhCategory) {
+        List<ZhCategory> zhCategories = zhCategoryMapper.selectZhCategoryList(zhCategory);
+        List<ZhCategoryDto> result=new ArrayList<>();
+        if(zhCategories==null||zhCategories.size()<=0){
+            return new ArrayList<ZhCategoryDto>();
+        }
+        for (ZhCategory category:zhCategories ) {
+            ZhCategoryDto zhCategoryDto=new ZhCategoryDto();
+            Long id = category.getId();
+            zhCategoryDto.setId(id);
+            zhCategoryDto.setName(category.getName());
+            ZhLinkCategoryFactorColor categoryFactorColor=new ZhLinkCategoryFactorColor();
+            categoryFactorColor.setCategoryId(id);
+            List<ZhLinkCategoryFactorColor> zhLinkCategoryFactorColors = zhLinkCategoryFactorColorMapper.selectZhLinkCategoryFactorColorList(categoryFactorColor);
+            if(zhLinkCategoryFactorColors==null||zhLinkCategoryFactorColors.size()<=0){
+                continue;
+            }
+            List<ZhFactorDto> zhFactorDtos=new ArrayList<>();
+            for (ZhLinkCategoryFactorColor color: zhLinkCategoryFactorColors) {
+                ZhFactorDto zhFactorDto=new ZhFactorDto();
+                ZhLinkCategoryFactorSimpleColor cer=new ZhLinkCategoryFactorSimpleColor();
+                cer.setFactorName(color.getFactorName());
+                cer.setCategoryId(id);
+
+                zhFactorDto.setColorStr(color.getColorStr());
+                zhFactorDto.setName(color.getFactorName());
+                zhFactorDto.setId(color.getId());
+
+
+                List<ZhLinkCategoryFactorSimpleColor> zhLinkCategoryFactorSimpleColors = zhLinkCategoryFactorSimpleColorMapper.selectZhLinkCategoryFactorSimpleColorList(cer);
+                if(zhLinkCategoryFactorSimpleColors==null||zhLinkCategoryFactorSimpleColors.size()<=0){
+                    zhFactorDtos.add(zhFactorDto);
+                    continue;
+                }
+                ZhLinkCategoryFactorSimpleColor color1 = zhLinkCategoryFactorSimpleColors.get(0);
+                zhFactorDto.setSimpleColorJson(color1.getSimpleColorJson());
+                zhFactorDto.setThreshold(color1.getThreshold());
+                zhFactorDtos.add(zhFactorDto);
+            }
+            zhCategoryDto.setFactors(zhFactorDtos);
+            result.add(zhCategoryDto);
+        }
+        return result;
+    }
+
+    @Override
+    public AjaxResult importData(List<MultipartFile> files) {
+        if(files==null||files.size()<=0){
+            return AjaxResult.error("文件为空");
+        }
+        List<ZhCategoryDto> zhCategoryDtos=new ArrayList<>();
+        for (MultipartFile file: files) {
+            try {
+                BufferedReader buff=new BufferedReader(new InputStreamReader(file.getInputStream(),"GBK"));
+                String temp=null;
+                while ((temp=buff.readLine())!=null){
+                    ZhCategoryDto zhCategoryDto = JSONObject.parseObject(temp, ZhCategoryDto.class);
+                    zhCategoryDtos.add(zhCategoryDto);
+                }
+
+            } catch (IOException e) {
+                return AjaxResult.error("格式错误");
+            }
+        }
+        if(zhCategoryDtos==null||zhCategoryDtos.size()<=0){
+            return AjaxResult.error("无数据");
+        }
+        for (ZhCategoryDto zhCategoryDto : zhCategoryDtos) {
+            ZhCategory zhCategory=new ZhCategory();
+            zhCategory.setName(zhCategoryDto.getName());
+            int i = zhCategoryMapper.insertZhCategory(zhCategory);
+            List<ZhFactorDto> factors = zhCategoryDto.getFactors();
+            if(factors==null||factors.size()==0){
+                continue;
+            }
+            for (ZhFactorDto factorDto : factors) {
+                ZhLinkCategoryFactorColor zhLinkCategoryFactorColor=new ZhLinkCategoryFactorColor();
+                zhLinkCategoryFactorColor.setFactorName(factorDto.getName());
+                zhLinkCategoryFactorColor.setCategoryId(zhCategory.getId());
+                zhLinkCategoryFactorColor.setColorStr(factorDto.getColorStr());
+                if(StringUtils.isBlank(factorDto.getSimpleColorJson())){
+                    continue;
+                }
+                ZhLinkCategoryFactorSimpleColor zhLinkCategoryFactorSimpleColor=new ZhLinkCategoryFactorSimpleColor();
+                zhLinkCategoryFactorSimpleColor.setCategoryId(zhCategory.getId());
+                zhLinkCategoryFactorSimpleColor.setFactorName(factorDto.getName());
+                zhLinkCategoryFactorSimpleColor.setSimpleColorJson(factorDto.getSimpleColorJson());
+                zhLinkCategoryFactorSimpleColor.setThreshold(factorDto.getThreshold());
+                int i1 = zhLinkCategoryFactorColorMapper.insertZhLinkCategoryFactorColor(zhLinkCategoryFactorColor);
+                int i2 = zhLinkCategoryFactorSimpleColorMapper.insertZhLinkCategoryFactorSimpleColor(zhLinkCategoryFactorSimpleColor);
+            }
+        }
+        return AjaxResult.success();
+    }
+
 
     /**
      * 新增颜色标准
@@ -100,6 +275,12 @@ public class ZhCategoryServiceImpl implements IZhCategoryService
         return zhCategoryMapper.deleteZhCategoryByIds(ids);
     }
 
+    @Override
+    public List<ZhCategory> getCategoryByIds(Long[] ids)
+    {
+        return zhCategoryMapper.getCategoryByIds(ids);
+    }
+
     /**
      * 删除颜色标准信息
      * 
@@ -127,10 +308,10 @@ public class ZhCategoryServiceImpl implements IZhCategoryService
             return  zhCategoryDto;
         }
         for (ZhLinkCategoryFactorColor linkCategoryFactorColor: zhLinkCategoryFactorColors) {
-            ZhFactor zhFactor = zhFactorMapper.selectZhFactorById(linkCategoryFactorColor.getFactorId());
-            ZhColor zhColor = zhColorMapper.selectZhColorById(linkCategoryFactorColor.getColorId());
-            ZhFactorDto zhFactorDto=new ZhFactorDto(zhFactor,zhColor);
-            zhFactorDtos.add(zhFactorDto);
+//            ZhFactor zhFactor = zhFactorMapper.selectZhFactorById(linkCategoryFactorColor.getFactorId());
+//            ZhColor zhColor = zhColorMapper.selectZhColorById(linkCategoryFactorColor.getColorId());
+//            ZhFactorDto zhFactorDto=new ZhFactorDto(zhFactor,zhColor);
+//            zhFactorDtos.add(zhFactorDto);
         }
         zhCategoryDto.setFactors(zhFactorDtos);
         return zhCategoryDto;

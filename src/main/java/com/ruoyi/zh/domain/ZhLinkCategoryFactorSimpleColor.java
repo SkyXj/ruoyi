@@ -9,7 +9,7 @@ import com.ruoyi.framework.web.domain.BaseEntity;
  * 物质因子颜色关联对象 zh_link_category_factor_simple_color
  * 
  * @author ruoyi
- * @date 2020-03-04
+ * @date 2020-08-10
  */
 public class ZhLinkCategoryFactorSimpleColor extends BaseEntity
 {
@@ -22,13 +22,17 @@ public class ZhLinkCategoryFactorSimpleColor extends BaseEntity
     @Excel(name = "标准编号")
     private Long categoryId;
 
-    /** 因子编号 */
-    @Excel(name = "因子编号")
-    private Long factorId;
+    /** 因子名称 */
+    @Excel(name = "因子名称")
+    private String factorName;
 
     /** 单个颜色编号 */
     @Excel(name = "单个颜色编号")
-    private Long simpleColorId;
+    private String simpleColorJson;
+
+    /** 阈值 */
+    @Excel(name = "阈值")
+    private Long threshold;
 
     public void setId(Long id) 
     {
@@ -48,23 +52,32 @@ public class ZhLinkCategoryFactorSimpleColor extends BaseEntity
     {
         return categoryId;
     }
-    public void setFactorId(Long factorId) 
+    public void setFactorName(String factorName) 
     {
-        this.factorId = factorId;
+        this.factorName = factorName;
     }
 
-    public Long getFactorId() 
+    public String getFactorName() 
     {
-        return factorId;
+        return factorName;
     }
-    public void setSimpleColorId(Long simpleColorId) 
+    public void setSimpleColorJson(String simpleColorJson) 
     {
-        this.simpleColorId = simpleColorId;
+        this.simpleColorJson = simpleColorJson;
     }
 
-    public Long getSimpleColorId() 
+    public String getSimpleColorJson() 
     {
-        return simpleColorId;
+        return simpleColorJson;
+    }
+    public void setThreshold(Long threshold) 
+    {
+        this.threshold = threshold;
+    }
+
+    public Long getThreshold() 
+    {
+        return threshold;
     }
 
     @Override
@@ -72,8 +85,9 @@ public class ZhLinkCategoryFactorSimpleColor extends BaseEntity
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("id", getId())
             .append("categoryId", getCategoryId())
-            .append("factorId", getFactorId())
-            .append("simpleColorId", getSimpleColorId())
+            .append("factorName", getFactorName())
+            .append("simpleColorJson", getSimpleColorJson())
+            .append("threshold", getThreshold())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())
             .append("updateBy", getUpdateBy())

@@ -1,7 +1,9 @@
 package com.ruoyi.zh.service;
 
+import com.ruoyi.framework.web.domain.AjaxResult;
 import com.ruoyi.zh.domain.ZhCategory;
 import com.ruoyi.zh.dto.ZhCategoryDto;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,6 +23,7 @@ public interface IZhCategoryService
      */
     public ZhCategory selectZhCategoryById(Long id);
 
+    public AjaxResult exportByIds(Long[] ids);
     /**
      * 查询颜色标准列表
      * 
@@ -28,6 +31,10 @@ public interface IZhCategoryService
      * @return 颜色标准集合
      */
     public List<ZhCategory> selectZhCategoryList(ZhCategory zhCategory);
+
+    public List<ZhCategoryDto> getAll(ZhCategory zhCategory);
+
+    public AjaxResult importData(List<MultipartFile> files);
 
     /**
      * 新增颜色标准
@@ -52,6 +59,8 @@ public interface IZhCategoryService
      * @return 结果
      */
     public int deleteZhCategoryByIds(Long[] ids);
+
+    public List<ZhCategory> getCategoryByIds(Long[] ids);
 
     /**
      * 删除颜色标准信息

@@ -7,8 +7,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="ZhLinkCategoryFactorColor" id="ZhLinkCategoryFactorColorResult">
         <result property="id"    column="id"    />
         <result property="categoryId"    column="category_id"    />
-        <result property="factorId"    column="factor_id"    />
-        <result property="colorId"    column="color_id"    />
+        <result property="factorName"    column="factor_name"    />
+        <result property="colorStr"    column="color_str"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
@@ -16,15 +16,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectZhLinkCategoryFactorColorVo">
-        select id, category_id, factor_id, color_id, create_by, create_time, update_by, update_time from zh_link_category_factor_color
+        select id, category_id, factor_name, color_str, create_by, create_time, update_by, update_time from zh_link_category_factor_color
     </sql>
 
     <select id="selectZhLinkCategoryFactorColorList" parameterType="ZhLinkCategoryFactorColor" resultMap="ZhLinkCategoryFactorColorResult">
         <include refid="selectZhLinkCategoryFactorColorVo"/>
         <where>  
             <if test="categoryId != null "> and category_id = #{categoryId}</if>
-            <if test="factorId != null "> and factor_id = #{factorId}</if>
-            <if test="colorId != null "> and color_id = #{colorId}</if>
+            <if test="factorName != null  and factorName != ''"> and factor_name like concat('%', #{factorName}, '%')</if>
+            <if test="colorStr != null  and colorStr != ''"> and color_str = #{colorStr}</if>
         </where>
     </select>
     
@@ -37,8 +37,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into zh_link_category_factor_color
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="categoryId != null ">category_id,</if>
-            <if test="factorId != null ">factor_id,</if>
-            <if test="colorId != null ">color_id,</if>
+            <if test="factorName != null  and factorName != ''">factor_name,</if>
+            <if test="colorStr != null  and colorStr != ''">color_str,</if>
             <if test="createBy != null  and createBy != ''">create_by,</if>
             <if test="createTime != null ">create_time,</if>
             <if test="updateBy != null  and updateBy != ''">update_by,</if>
@@ -46,8 +46,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="categoryId != null ">#{categoryId},</if>
-            <if test="factorId != null ">#{factorId},</if>
-            <if test="colorId != null ">#{colorId},</if>
+            <if test="factorName != null  and factorName != ''">#{factorName},</if>
+            <if test="colorStr != null  and colorStr != ''">#{colorStr},</if>
             <if test="createBy != null  and createBy != ''">#{createBy},</if>
             <if test="createTime != null ">#{createTime},</if>
             <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
@@ -59,8 +59,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update zh_link_category_factor_color
         <trim prefix="SET" suffixOverrides=",">
             <if test="categoryId != null ">category_id = #{categoryId},</if>
-            <if test="factorId != null ">factor_id = #{factorId},</if>
-            <if test="colorId != null ">color_id = #{colorId},</if>
+            <if test="factorName != null  and factorName != ''">factor_name = #{factorName},</if>
+            <if test="colorStr != null  and colorStr != ''">color_str = #{colorStr},</if>
             <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
             <if test="createTime != null ">create_time = #{createTime},</if>
             <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>

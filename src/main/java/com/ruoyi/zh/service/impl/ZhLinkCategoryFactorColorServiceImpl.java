@@ -2,10 +2,6 @@ package com.ruoyi.zh.service.impl;
 
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.zh.domain.ZhColor;
-import com.ruoyi.zh.dto.ZhFactorDto;
-import com.ruoyi.zh.mapper.ZhColorMapper;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.zh.mapper.ZhLinkCategoryFactorColorMapper;
@@ -16,16 +12,14 @@ import com.ruoyi.zh.service.IZhLinkCategoryFactorColorService;
  * 物质因子颜色关联Service业务层处理
  * 
  * @author ruoyi
- * @date 2020-03-04
+ * @date 2020-08-10
  */
 @Service
-public class ZhLinkCategoryFactorColorServiceImpl implements IZhLinkCategoryFactorColorService
+public class ZhLinkCategoryFactorColorServiceImpl implements IZhLinkCategoryFactorColorService 
 {
     @Autowired
     private ZhLinkCategoryFactorColorMapper zhLinkCategoryFactorColorMapper;
 
-    @Autowired
-    private ZhColorMapper zhColorMapper;
     /**
      * 查询物质因子颜色关联
      * 
@@ -98,49 +92,5 @@ public class ZhLinkCategoryFactorColorServiceImpl implements IZhLinkCategoryFact
     public int deleteZhLinkCategoryFactorColorById(Long id)
     {
         return zhLinkCategoryFactorColorMapper.deleteZhLinkCategoryFactorColorById(id);
-    }
-
-    @Override
-    public int insertOrUpdate(Long categoryId, Long factorId, String colortStr) {
-        ZhLinkCategoryFactorColor zhLinkCategoryFactorColor=new ZhLinkCategoryFactorColor();
-        zhLinkCategoryFactorColor.setCategoryId(categoryId);
-        zhLinkCategoryFactorColor.setFactorId(factorId);
-        List<ZhLinkCategoryFactorColor> zhLinkCategoryFactorColors = zhLinkCategoryFactorColorMapper.selectZhLinkCategoryFactorColorList(zhLinkCategoryFactorColor);
-        if(zhLinkCategoryFactorColors!=null&&zhLinkCategoryFactorColors.size()>0){
-            //修改
-            zhLinkCategoryFactorColor=zhLinkCategoryFactorColors.get(0);
-        }
-
-        ZhColor zhColor=new ZhColor();
-        zhColor.setColorStr(colortStr);
-        List<ZhColor> zhColors = zhColorMapper.selectZhColorList(zhColor);
-        if(zhColors!=null&&zhColors.size()>0){
-            zhLinkCategoryFactorColor.setColorId(zhColors.get(0).getId());
-        }else{
-            zhColorMapper.insertZhColor(zhColor);
-            zhLinkCategoryFactorColor.setColorId(zhColor.getId());
-        }
-        int result=0;
-        if(zhLinkCategoryFactorColor.getId()!=null){
-            result=zhLinkCategoryFactorColorMapper.updateZhLinkCategoryFactorColor(zhLinkCategoryFactorColor);
-        }else{
-            result=zhLinkCategoryFactorColorMapper.insertZhLinkCategoryFactorColor(zhLinkCategoryFactorColor);
-        }
-        return result;
-    }
-
-    @Override
-    public int delete(Long categoryId, Long factorId) {
-        int result=0;
-        ZhLinkCategoryFactorColor zhLinkCategoryFactorColor=new ZhLinkCategoryFactorColor();
-        zhLinkCategoryFactorColor.setCategoryId(categoryId);
-        zhLinkCategoryFactorColor.setFactorId(factorId);
-        List<ZhLinkCategoryFactorColor> zhLinkCategoryFactorColors = zhLinkCategoryFactorColorMapper.selectZhLinkCategoryFactorColorList(zhLinkCategoryFactorColor);
-        if(zhLinkCategoryFactorColors!=null&&zhLinkCategoryFactorColors.size()>0){
-            //删除
-            zhLinkCategoryFactorColor=zhLinkCategoryFactorColors.get(0);
-            result=zhLinkCategoryFactorColorMapper.deleteZhLinkCategoryFactorColorById(zhLinkCategoryFactorColor.getId());
-        }
-        return result;
     }
 }

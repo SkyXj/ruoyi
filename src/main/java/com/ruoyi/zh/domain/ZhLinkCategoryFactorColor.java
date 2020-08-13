@@ -9,7 +9,7 @@ import com.ruoyi.framework.web.domain.BaseEntity;
  * 物质因子颜色关联对象 zh_link_category_factor_color
  * 
  * @author ruoyi
- * @date 2020-03-04
+ * @date 2020-08-10
  */
 public class ZhLinkCategoryFactorColor extends BaseEntity
 {
@@ -22,13 +22,13 @@ public class ZhLinkCategoryFactorColor extends BaseEntity
     @Excel(name = "标准编号")
     private Long categoryId;
 
-    /** 因子编号 */
-    @Excel(name = "因子编号")
-    private Long factorId;
+    /** 因子名称 */
+    @Excel(name = "因子名称")
+    private String factorName;
 
-    /** 颜色编号 */
-    @Excel(name = "颜色编号")
-    private Long colorId;
+    /** 颜色字符串 */
+    @Excel(name = "颜色字符串")
+    private String colorStr;
 
     public void setId(Long id) 
     {
@@ -48,23 +48,23 @@ public class ZhLinkCategoryFactorColor extends BaseEntity
     {
         return categoryId;
     }
-    public void setFactorId(Long factorId) 
+    public void setFactorName(String factorName) 
     {
-        this.factorId = factorId;
+        this.factorName = factorName;
     }
 
-    public Long getFactorId() 
+    public String getFactorName() 
     {
-        return factorId;
+        return factorName;
     }
-    public void setColorId(Long colorId) 
+    public void setColorStr(String colorStr) 
     {
-        this.colorId = colorId;
+        this.colorStr = colorStr;
     }
 
-    public Long getColorId() 
+    public String getColorStr() 
     {
-        return colorId;
+        return colorStr;
     }
 
     @Override
@@ -72,8 +72,8 @@ public class ZhLinkCategoryFactorColor extends BaseEntity
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("id", getId())
             .append("categoryId", getCategoryId())
-            .append("factorId", getFactorId())
-            .append("colorId", getColorId())
+            .append("factorName", getFactorName())
+            .append("colorStr", getColorStr())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())
             .append("updateBy", getUpdateBy())

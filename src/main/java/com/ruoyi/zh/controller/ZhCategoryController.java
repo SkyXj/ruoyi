@@ -2,18 +2,12 @@ package com.ruoyi.zh.controller;
 
 import java.util.List;
 
+import com.ruoyi.zh.dto.ZhCategoryDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.ruoyi.framework.aspectj.lang.annotation.Log;
 import com.ruoyi.framework.aspectj.lang.enums.BusinessType;
 import com.ruoyi.zh.domain.ZhCategory;
@@ -22,6 +16,7 @@ import com.ruoyi.framework.web.controller.BaseController;
 import com.ruoyi.framework.web.domain.AjaxResult;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.web.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 颜色标准Controller
@@ -48,6 +43,29 @@ public class ZhCategoryController extends BaseController
         startPage();
         List<ZhCategory> list = zhCategoryService.selectZhCategoryList(zhCategory);
         return getDataTable(list);
+    }
+
+    @GetMapping("/all")
+    @ApiOperation("获取所有标准")
+    public AjaxResult all()
+    {
+        List<ZhCategoryDto> list = zhCategoryService.getAll(null);
+        return AjaxResult.success(list);
+    }
+
+    @GetMapping("/exportByIds/{ids}")
+    @ApiOperation("导出标准")
+    public AjaxResult exportByIds(@PathVariable Long[] ids)
+    {
+        return zhCategoryService.exportByIds(ids);
+//        return AjaxResult.success(filename);
+    }
+
+    @PostMapping("/importData")
+    @ApiOperation("导出标准")
+    public AjaxResult importData(@RequestParam(value="files") List<MultipartFile> files)
+    {
+        return zhCategoryService.importData(files);
     }
 
     /**
