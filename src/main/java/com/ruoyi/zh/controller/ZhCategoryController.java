@@ -62,7 +62,7 @@ public class ZhCategoryController extends BaseController
     }
 
     @PostMapping("/importData")
-    @ApiOperation("导出标准")
+    @ApiOperation("导入标准")
     public AjaxResult importData(@RequestParam(value="files") List<MultipartFile> files)
     {
         return zhCategoryService.importData(files);

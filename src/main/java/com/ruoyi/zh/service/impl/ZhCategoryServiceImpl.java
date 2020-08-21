@@ -138,11 +138,14 @@ public class ZhCategoryServiceImpl implements IZhCategoryService
     @Override
     public List<ZhCategory> selectZhCategoryList(ZhCategory zhCategory)
     {
+        zhCategory.setCreateBy(UserInfoUtil.getUserName());
         return zhCategoryMapper.selectZhCategoryList(zhCategory);
     }
 
     @Override
     public List<ZhCategoryDto> getAll(ZhCategory zhCategory) {
+        zhCategory=new ZhCategory();
+        zhCategory.setCreateBy(UserInfoUtil.getUserName());
         List<ZhCategory> zhCategories = zhCategoryMapper.selectZhCategoryList(zhCategory);
         List<ZhCategoryDto> result=new ArrayList<>();
         if(zhCategories==null||zhCategories.size()<=0){
