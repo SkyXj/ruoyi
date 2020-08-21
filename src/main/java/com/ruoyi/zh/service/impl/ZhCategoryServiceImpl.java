@@ -16,6 +16,7 @@ import com.ruoyi.zh.dto.ZhCategoryDto;
 import com.ruoyi.zh.dto.ZhFactorDto;
 import com.ruoyi.zh.mapper.*;
 import com.ruoyi.zh.service.IZhLinkCategoryFactorSimpleColorService;
+import com.ruoyi.zh.tool.UserInfoUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -188,52 +189,68 @@ public class ZhCategoryServiceImpl implements IZhCategoryService
 
     @Override
     public AjaxResult importData(List<MultipartFile> files) {
-        if(files==null||files.size()<=0){
-            return AjaxResult.error("文件为空");
-        }
-        List<ZhCategoryDto> zhCategoryDtos=new ArrayList<>();
-        for (MultipartFile file: files) {
-            try {
-                BufferedReader buff=new BufferedReader(new InputStreamReader(file.getInputStream(),"GBK"));
-                String temp=null;
-                while ((temp=buff.readLine())!=null){
-                    ZhCategoryDto zhCategoryDto = JSONObject.parseObject(temp, ZhCategoryDto.class);
-                    zhCategoryDtos.add(zhCategoryDto);
-                }
+        try {
+            if(files==null||files.size()<=0){
+                return AjaxResult.error("文件为空");
+            }
+            List<ZhCategoryDto> zhCategoryDtos=new ArrayList<>();
+            for (MultipartFile file: files) {
+                try {
+                    BufferedReader buff=new BufferedReader(new InputStreamReader(file.getInputStream(),"GBK"));
+                    String temp=null;
+                    while ((temp=buff.readLine())!=null){
+                        ZhCategoryDto zhCategoryDto = JSONObject.parseObject(temp, ZhCategoryDto.class);
+                        zhCategoryDtos.add(zhCategoryDto);
+                    }
 
-            } catch (IOException e) {
-                return AjaxResult.error("格式错误");
+                } catch (IOException e) {
+                    return AjaxResult.error("格式错误");
+                }
             }
-        }
-        if(zhCategoryDtos==null||zhCategoryDtos.size()<=0){
-            return AjaxResult.error("无数据");
-        }
-        for (ZhCategoryDto zhCategoryDto : zhCategoryDtos) {
-            ZhCategory zhCategory=new ZhCategory();
-            zhCategory.setName(zhCategoryDto.getName());
-            int i = zhCategoryMapper.insertZhCategory(zhCategory);
-            List<ZhFactorDto> factors = zhCategoryDto.getFactors();
-            if(factors==null||factors.size()==0){
-                continue;
+            if(zhCategoryDtos==null||zhCategoryDtos.size()<=0){
+                return AjaxResult.error("无数据");
             }
-            for (ZhFactorDto factorDto : factors) {
-                ZhLinkCategoryFactorColor zhLinkCategoryFactorColor=new ZhLinkCategoryFactorColor();
-                zhLinkCategoryFactorColor.setFactorName(factorDto.getName());
-                zhLinkCategoryFactorColor.setCategoryId(zhCategory.getId());
-                zhLinkCategoryFactorColor.setColorStr(factorDto.getColorStr());
-                if(StringUtils.isBlank(factorDto.getSimpleColorJson())){
+            for (ZhCategoryDto zhCategoryDto : zhCategoryDtos) {
+                ZhCategory zhCategory=new ZhCategory();
+                zhCategory.setName(zhCategoryDto.getName());
+
+                zhCategory.setCreateTime(DateUtils.getNowDate());
+                zhCategory.setCreateBy(UserInfoUtil.getUserName());
+
+                int i = zhCategoryMapper.insertZhCategory(zhCategory);
+                List<ZhFactorDto> factors = zhCategoryDto.getFactors();
+                if(factors==null||factors.size()==0){
                     continue;
                 }
-                ZhLinkCategoryFactorSimpleColor zhLinkCategoryFactorSimpleColor=new ZhLinkCategoryFactorSimpleColor();
-                zhLinkCategoryFactorSimpleColor.setCategoryId(zhCategory.getId());
-                zhLinkCategoryFactorSimpleColor.setFactorName(factorDto.getName());
-                zhLinkCategoryFactorSimpleColor.setSimpleColorJson(factorDto.getSimpleColorJson());
-                zhLinkCategoryFactorSimpleColor.setThreshold(factorDto.getThreshold());
-                int i1 = zhLinkCategoryFactorColorMapper.insertZhLinkCategoryFactorColor(zhLinkCategoryFactorColor);
-                int i2 = zhLinkCategoryFactorSimpleColorMapper.insertZhLinkCategoryFactorSimpleColor(zhLinkCategoryFactorSimpleColor);
+                for (ZhFactorDto factorDto : factors) {
+                    ZhLinkCategoryFactorColor zhLinkCategoryFactorColor=new ZhLinkCategoryFactorColor();
+                    zhLinkCategoryFactorColor.setFactorName(factorDto.getName());
+                    zhLinkCategoryFactorColor.setCategoryId(zhCategory.getId());
+                    zhLinkCategoryFactorColor.setColorStr(factorDto.getColorStr());
+
+                    zhLinkCategoryFactorColor.setCreateTime(DateUtils.getNowDate());
+                    zhLinkCategoryFactorColor.setCreateBy(UserInfoUtil.getUserName());
+
+                    int i1 = zhLinkCategoryFactorColorMapper.insertZhLinkCategoryFactorColor(zhLinkCategoryFactorColor);
+                    if(StringUtils.isBlank(factorDto.getSimpleColorJson())){
+                        continue;
+                    }
+                    ZhLinkCategoryFactorSimpleColor zhLinkCategoryFactorSimpleColor=new ZhLinkCategoryFactorSimpleColor();
+                    zhLinkCategoryFactorSimpleColor.setCategoryId(zhCategory.getId());
+                    zhLinkCategoryFactorSimpleColor.setFactorName(factorDto.getName());
+                    zhLinkCategoryFactorSimpleColor.setSimpleColorJson(factorDto.getSimpleColorJson());
+                    zhLinkCategoryFactorSimpleColor.setThreshold(factorDto.getThreshold());
+
+                    zhLinkCategoryFactorSimpleColor.setCreateTime(DateUtils.getNowDate());
+                    zhLinkCategoryFactorSimpleColor.setCreateBy(UserInfoUtil.getUserName());
+                    int i2 = zhLinkCategoryFactorSimpleColorMapper.insertZhLinkCategoryFactorSimpleColor(zhLinkCategoryFactorSimpleColor);
+                }
             }
+            return AjaxResult.success();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return AjaxResult.error();
         }
-        return AjaxResult.success();
     }
 
 
@@ -247,6 +264,7 @@ public class ZhCategoryServiceImpl implements IZhCategoryService
     public int insertZhCategory(ZhCategory zhCategory)
     {
         zhCategory.setCreateTime(DateUtils.getNowDate());
+        zhCategory.setCreateBy(UserInfoUtil.getUserName());
         return zhCategoryMapper.insertZhCategory(zhCategory);
     }
 
@@ -260,6 +278,7 @@ public class ZhCategoryServiceImpl implements IZhCategoryService
     public int updateZhCategory(ZhCategory zhCategory)
     {
         zhCategory.setUpdateTime(DateUtils.getNowDate());
+        zhCategory.setUpdateBy(UserInfoUtil.getUserName());
         return zhCategoryMapper.updateZhCategory(zhCategory);
     }
 
